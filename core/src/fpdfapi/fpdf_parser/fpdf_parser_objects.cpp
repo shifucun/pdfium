@@ -7,9 +7,6 @@
 #include "../../../include/fpdfapi/fpdf_parser.h"
 void CPDF_Object::Release()
 {
-    if (this == NULL) {
-        return;
-    }
     if (m_ObjNum) {
         return;
     }
@@ -411,7 +408,8 @@ CPDF_Array::~CPDF_Array()
     int size = m_Objects.GetSize();
     CPDF_Object** pList = (CPDF_Object**)m_Objects.GetData();
     for (int i = 0; i < size; i ++) {
-        pList[i]->Release();
+		if (pList[i])
+			pList[i]->Release();
     }
 }
 CFX_FloatRect CPDF_Array::GetRect()
@@ -522,7 +520,8 @@ void CPDF_Array::RemoveAt(FX_DWORD i)
         return;
     }
     CPDF_Object* p = (CPDF_Object*)m_Objects.GetAt(i);
-    p->Release();
+	if (p)
+		p->Release();
     m_Objects.RemoveAt(i);
 }
 void CPDF_Array::SetAt(FX_DWORD i, CPDF_Object* pObj, CPDF_IndirectObjects* pObjs)
@@ -533,7 +532,8 @@ void CPDF_Array::SetAt(FX_DWORD i, CPDF_Object* pObj, CPDF_IndirectObjects* pObj
         return;
     }
     CPDF_Object* pOld = (CPDF_Object*)m_Objects.GetAt(i);
-    pOld->Release();
+	if (pOld)
+		pOld->Release();
     if (pObj->GetObjNum()) {
         ASSERT(pObjs != NULL);
         pObj = CPDF_Reference::Create(pObjs, pObj->GetObjNum());
@@ -601,7 +601,8 @@ CPDF_Dictionary::~CPDF_Dictionary()
     FX_POSITION pos = m_Map.GetStartPosition();
     while (pos) {
         FX_LPVOID value = m_Map.GetNextValue(pos);
-        ((CPDF_Object*)value)->Release();
+		if (value)
+			((CPDF_Object*)value)->Release();
     }
 }
 FX_POSITION CPDF_Dictionary::GetStartPos() const
@@ -801,9 +802,8 @@ void CPDF_Dictionary::SetAt(FX_BSTR key, CPDF_Object* pObj, CPDF_IndirectObjects
     if (p == pObj) {
         return;
     }
-    if (p) {
+    if (p)
         p->Release();
-    }
     if (pObj) {
         if (pObj->GetObjNum()) {
             ASSERT(pObjs != NULL);

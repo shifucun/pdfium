@@ -311,7 +311,8 @@ int	CPDF_PageOrganizer::GetNewObjId(CPDF_Document *pDoc, CFX_MapPtrToPtr* pMapPt
 	else
 	{
 		CPDF_Object* pClone  = pRef->GetDirect()->Clone();
-		if(!pClone)			return 0;
+		if(!pClone)			
+			return 0;
 		
 		if(pClone->GetType() == PDFOBJ_DICTIONARY)
 		{

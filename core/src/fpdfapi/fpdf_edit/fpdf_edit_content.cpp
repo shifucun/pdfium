@@ -94,7 +94,8 @@ void CPDF_PageContentGenerate::ProcessImage(CFX_ByteTextBuf& buf, CPDF_ImageObje
         FX_DWORD dwSavedObjNum = pStream->GetObjNum();
         CFX_ByteString name = RealizeResource(pStream, "XObject");
         if (dwSavedObjNum == 0) {
-            pImageObj->m_pImage->Release();
+			if (pImageObj->m_pImage)
+				pImageObj->m_pImage->Release();
             pImageObj->m_pImage = m_pDocument->GetPageData()->GetImage(pStream);
         }
         buf << "/" << PDF_NameEncode(name) << " Do Q\n";

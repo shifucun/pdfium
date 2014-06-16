@@ -140,7 +140,8 @@ int CPDF_StreamContentParser::GetNextParamPos()
             m_ParamStartPos = 0;
         }
         if (m_ParamBuf1[m_ParamStartPos].m_Type == 0) {
-            m_ParamBuf1[m_ParamStartPos].m_pObject->Release();
+			if (CPDF_Object* pObject = m_ParamBuf1[m_ParamStartPos].m_pObject)
+				pObject->Release();
         }
         return m_ParamStartPos;
     }
@@ -187,7 +188,8 @@ void CPDF_StreamContentParser::ClearAllParams()
     FX_DWORD index = m_ParamStartPos;
     for (FX_DWORD i = 0; i < m_ParamCount; i ++) {
         if (m_ParamBuf1[index].m_Type == 0) {
-            m_ParamBuf1[index].m_pObject->Release();
+			if (CPDF_Object* pObject = m_ParamBuf1[index].m_pObject)
+				pObject->Release();
         }
         index ++;
         if (index == PARAM_BUF_SIZE) {

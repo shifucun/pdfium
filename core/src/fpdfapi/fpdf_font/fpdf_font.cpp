@@ -78,7 +78,9 @@ void CPDF_FontGlobals::Clear(void* key)
         CFX_StockFontArray* pStockFonts = (CFX_StockFontArray*)value;
         for (int i = 0; i < 14; i ++) {
             if (pStockFonts->m_pStockFonts[i]) {
-                pStockFonts->m_pStockFonts[i]->GetFontDict()->Release();
+				CPDF_Dictionary* pFontDict = pStockFonts->m_pStockFonts[i]->GetFontDict();
+				if (pFontDict)
+					pFontDict->Release();
                 delete pStockFonts->m_pStockFonts[i];
             }
         }
@@ -97,7 +99,9 @@ void CPDF_FontGlobals::ClearAll()
             CFX_StockFontArray* pStockFonts = (CFX_StockFontArray*)value;
             for (int i = 0; i < 14; i ++) {
                 if (pStockFonts->m_pStockFonts[i]) {
-                    pStockFonts->m_pStockFonts[i]->GetFontDict()->Release();
+					CPDF_Dictionary* pFontDict = pStockFonts->m_pStockFonts[i]->GetFontDict();
+					if (pFontDict)
+						pFontDict->Release();
                     delete pStockFonts->m_pStockFonts[i];
                 }
             }

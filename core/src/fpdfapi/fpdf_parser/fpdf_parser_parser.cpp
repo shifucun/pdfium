@@ -78,7 +78,7 @@ void CPDF_Parser::CloseParser(FX_BOOL bReParse)
     }
     ReleaseEncryptHandler();
     SetEncryptDictionary(NULL);
-    if (m_bOwnFileRead && m_Syntax.m_pFileAccess != NULL) {
+    if (m_bOwnFileRead && m_Syntax.m_pFileAccess) {
         m_Syntax.m_pFileAccess->Release();
         m_Syntax.m_pFileAccess = NULL;
     }
@@ -95,8 +95,10 @@ void CPDF_Parser::CloseParser(FX_BOOL bReParse)
     m_V5Type.RemoveAll();
     m_ObjVersion.RemoveAll();
     FX_INT32 iLen = m_Trailers.GetSize();
+	CPDF_Dictionary* trailer;
     for (FX_INT32 i = 0; i < iLen; ++i) {
-        m_Trailers.GetAt(i)->Release();
+		if (trailer = m_Trailers.GetAt(i))
+			trailer->Release();
     }
     m_Trailers.RemoveAll();
     if (m_pLinearized) {
@@ -2150,7 +2152,8 @@ CPDF_Object* CPDF_SyntaxParser::GetObject(CPDF_IndirectObjects* pObjList, FX_DWO
             FX_BOOL bIsNumber;
             CFX_ByteString key = GetNextWord(bIsNumber);
             if (key.IsEmpty()) {
-                pDict->Release();
+				if (pDict)
+					pDict->Release();
                 return NULL;
             }
             FX_FILESIZE SavedPos = m_Pos - key.GetLength();
@@ -2206,7 +2209,8 @@ CPDF_Object* CPDF_SyntaxParser::GetObject(CPDF_IndirectObjects* pObjList, FX_DWO
             if (pStream) {
                 return pStream;
             }
-            pDict->Release();
+			if (pDict)
+				pDict->Release();
             return NULL;
         } else {
             m_Pos = SavedPos;
@@ -2307,7 +2311,8 @@ CPDF_Object* CPDF_SyntaxParser::GetObjectByStrict(CPDF_IndirectObjects* pObjList
                 if (m_WordBuffer[0] == ']') {
                     return pArray;
                 }
-                pArray->Release();
+				if (pArray)
+					pArray->Release();
                 return NULL;
             }
             pArray->Add(pObj);
@@ -2332,7 +2337,8 @@ CPDF_Object* CPDF_SyntaxParser::GetObjectByStrict(CPDF_IndirectObjects* pObjList
             FX_FILESIZE SavedPos = m_Pos;
             CFX_ByteString key = GetNextWord(bIsNumber);
             if (key.IsEmpty()) {
-                pDict->Release();
+				if (pDict)
+					pDict->Release();
                 return NULL;
             }
             if (key == FX_BSTRC(">>")) {
@@ -2348,7 +2354,8 @@ CPDF_Object* CPDF_SyntaxParser::GetObjectByStrict(CPDF_IndirectObjects* pObjList
             key = PDF_NameDecode(key);
             CPDF_Object* pObj = GetObject(pObjList, objnum, gennum, level + 1);
             if (pObj == NULL) {
-                pDict->Release();
+				if (pDict)
+					pDict->Release();
                 FX_BYTE ch;
                 while (1) {
                     if (!GetNextChar(ch)) {
@@ -2380,7 +2387,8 @@ CPDF_Object* CPDF_SyntaxParser::GetObjectByStrict(CPDF_IndirectObjects* pObjList
             if (pStream) {
                 return pStream;
             }
-            pDict->Release();
+			if (pDict)
+				pDict->Release();
             return NULL;
         } else {
             m_Pos = SavedPos;
