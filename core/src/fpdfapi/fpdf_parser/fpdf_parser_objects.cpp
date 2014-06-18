@@ -105,9 +105,6 @@ FX_FLOAT CPDF_Object::GetNumber16() const
 }
 int CPDF_Object::GetInteger() const
 {
-    if (this == NULL) {
-        return 0;
-    }
     switch (m_Type) {
         case PDFOBJ_BOOLEAN:
             return ((CPDF_Boolean*)this)->m_bValue;

@@ -112,8 +112,8 @@ DLLEXPORT int STDCALL FPDFPage_GetRotation(FPDF_PAGE page)
 	int rotate = 0;
 	if(pDict != NULL)
 	{
-		if(pDict->KeyExist("Rotate"))
-			rotate = pDict->GetElement("Rotate")->GetDirect()->GetInteger() / 90;
+		if (pDict->KeyExist("Rotate"))
+			rotate = pDict->GetElement("Rotate")->GetDirect()? pDict->GetElement("Rotate")->GetDirect()->GetInteger() / 90 : 0;
 		else
 		{
 			if(pDict->KeyExist("Parent"))
@@ -123,7 +123,7 @@ DLLEXPORT int STDCALL FPDFPage_GetRotation(FPDF_PAGE page)
 				{
 					if(pPages->KeyExist("Rotate"))
 					{
-						rotate = pPages->GetElement("Rotate")->GetDirect()->GetInteger() / 90;
+						rotate = pPages->GetElement("Rotate")->GetDirect()? pPages->GetElement("Rotate")->GetDirect()->GetInteger() / 90 : 0;
 						break;
 					}
 					else if(pPages->KeyExist("Parent"))

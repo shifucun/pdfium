@@ -14,7 +14,7 @@ FX_BOOL FPDF_GenerateAP(CPDF_Document* pDoc, CPDF_Dictionary* pAnnotDict)
         return FALSE;
     }
     CFX_ByteString field_type = FPDF_GetFieldAttr(pAnnotDict, "FT")->GetString();
-    FX_DWORD flags = FPDF_GetFieldAttr(pAnnotDict, "Ff")->GetInteger();
+	FX_DWORD flags = FPDF_GetFieldAttr(pAnnotDict, "Ff")? FPDF_GetFieldAttr(pAnnotDict, "Ff")->GetInteger() : 0;
     if (field_type == "Tx") {
         return CPVT_GenerateAP::GenerateTextFieldAP(pDoc, pAnnotDict);
     } else if (field_type == "Ch") {
@@ -431,9 +431,9 @@ static FX_BOOL GenerateWidgetAP(CPDF_Document* pDoc, CPDF_Dictionary* pAnnotDict
     switch (nWidgetType) {
         case 0: {
                 CFX_WideString swValue = FPDF_GetFieldAttr(pAnnotDict, "V")->GetUnicodeText();
-                FX_INT32 nAlign = FPDF_GetFieldAttr(pAnnotDict, "Q")->GetInteger();
-                FX_DWORD dwFlags = FPDF_GetFieldAttr(pAnnotDict, "Ff")->GetInteger();
-                FX_DWORD dwMaxLen = FPDF_GetFieldAttr(pAnnotDict, "MaxLen")->GetInteger();
+				FX_INT32 nAlign = FPDF_GetFieldAttr(pAnnotDict, "Q")? FPDF_GetFieldAttr(pAnnotDict, "Q")->GetInteger() : 0;
+				FX_DWORD dwFlags = FPDF_GetFieldAttr(pAnnotDict, "Ff")? FPDF_GetFieldAttr(pAnnotDict, "Ff")->GetInteger() : 0;
+				FX_DWORD dwMaxLen = FPDF_GetFieldAttr(pAnnotDict, "MaxLen") ? FPDF_GetFieldAttr(pAnnotDict, "MaxLen")->GetInteger() : 0;
                 CPVT_FontMap map(pDoc, pStreamDict->GetDict("Resources"), pDefFont, sFontName.Right(sFontName.GetLength() - 1));
                 CPVT_Provider prd(&map);
                 CPDF_VariableText vt;
@@ -538,7 +538,7 @@ static FX_BOOL GenerateWidgetAP(CPDF_Document* pDoc, CPDF_Dictionary* pAnnotDict
                 CPVT_Provider prd(&map);
                 CPDF_Array * pOpts = FPDF_GetFieldAttr(pAnnotDict, "Opt")->GetArray();
                 CPDF_Array * pSels = FPDF_GetFieldAttr(pAnnotDict, "I")->GetArray();
-                FX_INT32 nTop = FPDF_GetFieldAttr(pAnnotDict, "TI")->GetInteger();
+				FX_INT32 nTop = FPDF_GetFieldAttr(pAnnotDict, "TI") ? FPDF_GetFieldAttr(pAnnotDict, "TI")->GetInteger() : 0;
                 CFX_ByteTextBuf sBody;
                 if (pOpts) {
                     FX_FLOAT fy = rcBody.top;

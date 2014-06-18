@@ -33,7 +33,7 @@ CPDF_FormField::~CPDF_FormField()
 void CPDF_FormField::SyncFieldFlags()
 {
     CFX_ByteString type_name = FPDF_GetFieldAttr(m_pDict, "FT")->GetString();
-    FX_DWORD flags = FPDF_GetFieldAttr(m_pDict, "Ff")->GetInteger();
+	FX_DWORD flags = FPDF_GetFieldAttr(m_pDict, "Ff")? FPDF_GetFieldAttr(m_pDict, "Ff")->GetInteger() : 0;
     m_Flags = 0;
     if (flags & 1) {
         m_Flags |= FORMFIELD_READONLY;
