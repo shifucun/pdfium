@@ -191,19 +191,22 @@ void FPDF_FileSpec_SetWin32Path(CPDF_Object* pFileSpec, const CFX_WideString& fi
 CFX_WideString	FPDF_FileSpec_GetWin32Path(const CPDF_Object* pFileSpec)
 {
     CFX_WideString wsFileName;
-    if (pFileSpec->GetType() == PDFOBJ_DICTIONARY) {
-        CPDF_Dictionary* pDict = (CPDF_Dictionary*)pFileSpec;
-        wsFileName = pDict->GetUnicodeText(FX_BSTRC("UF"));
-        if (wsFileName.IsEmpty()) {
-            wsFileName = CFX_WideString::FromLocal(pDict->GetString(FX_BSTRC("F")));
-        }
-        if (pDict->GetString(FX_BSTRC("FS")) == FX_BSTRC("URL")) {
-            return wsFileName;
-        }
-        if (wsFileName.IsEmpty() && pDict->KeyExist(FX_BSTRC("DOS"))) {
-            wsFileName = CFX_WideString::FromLocal(pDict->GetString(FX_BSTRC("DOS")));
-        }
-    } else {
+	if (pFileSpec->GetType() == PDFOBJ_DICTIONARY) {
+		CPDF_Dictionary* pDict = (CPDF_Dictionary*)pFileSpec;
+		wsFileName = pDict->GetUnicodeText(FX_BSTRC("UF"));
+		if (wsFileName.IsEmpty()) {
+			wsFileName = CFX_WideString::FromLocal(pDict->GetString(FX_BSTRC("F")));
+		}
+		if (pDict->GetString(FX_BSTRC("FS")) == FX_BSTRC("URL")) {
+			return wsFileName;
+		}
+		if (wsFileName.IsEmpty() && pDict->KeyExist(FX_BSTRC("DOS"))) {
+			wsFileName = CFX_WideString::FromLocal(pDict->GetString(FX_BSTRC("DOS")));
+		}
+	}
+	else if (!pFileSpec)
+		wsFileName = CFX_WideString();
+	else {
         wsFileName = CFX_WideString::FromLocal(pFileSpec->GetString());
     }
     if (wsFileName[0] != '/') {

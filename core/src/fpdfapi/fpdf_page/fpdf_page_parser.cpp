@@ -240,7 +240,7 @@ CFX_ByteString CPDF_StreamContentParser::GetString(FX_DWORD index)
     if (param.m_Type == PDFOBJ_NAME) {
         return CFX_ByteString(param.m_Name.m_Buffer, param.m_Name.m_Len);
     }
-    if (param.m_Type == 0) {
+    if (param.m_Type == 0 && param.m_pObject) {
         return param.m_pObject->GetString();
     }
     return CFX_ByteString();

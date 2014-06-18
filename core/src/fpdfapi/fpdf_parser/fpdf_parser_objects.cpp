@@ -455,11 +455,12 @@ CPDF_Object* CPDF_Array::GetElementValue(FX_DWORD i) const
 }
 CFX_ByteString CPDF_Array::GetString(FX_DWORD i) const
 {
-    if (this && i < (FX_DWORD)m_Objects.GetSize()) {
+    if (i < (FX_DWORD)m_Objects.GetSize()) {
         CPDF_Object* p = (CPDF_Object*)m_Objects.GetAt(i);
         return p->GetString();
     }
-    return CFX_ByteString();
+    else
+		return CFX_ByteString();
 }
 CFX_ByteStringC CPDF_Array::GetConstString(FX_DWORD i) const
 {
@@ -638,14 +639,12 @@ CPDF_Object* CPDF_Dictionary::GetElementValue(FX_BSTR key) const
 }
 CFX_ByteString CPDF_Dictionary::GetString(FX_BSTR key) const
 {
-    if (this) {
-        CPDF_Object* p = NULL;
-        m_Map.Lookup(key, (void*&)p);
-        if (p) {
-            return p->GetString();
-        }
-    }
-    return CFX_ByteString();
+    CPDF_Object* p = NULL;
+    m_Map.Lookup(key, (void*&)p);
+    if (p)
+        return p->GetString();
+	else
+		return CFX_ByteStringC();
 }
 CFX_ByteStringC CPDF_Dictionary::GetConstString(FX_BSTR key) const
 {

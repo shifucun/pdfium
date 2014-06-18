@@ -1078,7 +1078,7 @@ CPDF_ColorSpace* CPDF_ColorSpace::Load(CPDF_Document* pDoc, CPDF_Object* pObj)
         while (pos) {
             CFX_ByteString bsKey;
             CPDF_Object *pValue = pDict->GetNextElement(pos, bsKey);
-            if (pValue->GetType() == PDFOBJ_NAME) {
+            if (pValue && pValue->GetType() == PDFOBJ_NAME) {
                 pRet = _CSFromName(pValue->GetString());
             }
             if (pRet) {
