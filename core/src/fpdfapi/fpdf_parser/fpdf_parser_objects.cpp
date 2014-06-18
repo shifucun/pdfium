@@ -61,9 +61,6 @@ CFX_ByteString CPDF_Object::GetString() const
 }
 CFX_ByteStringC CPDF_Object::GetConstString() const
 {
-    if (this == NULL) {
-        return CFX_ByteStringC();
-    }
     switch (m_Type) {
         case PDFOBJ_STRING:
             return CFX_ByteStringC((FX_LPCBYTE)((CPDF_String*)this)->m_String, ((CPDF_String*)this)->m_String.GetLength());
@@ -85,9 +82,6 @@ CFX_ByteStringC CPDF_Object::GetConstString() const
 }
 FX_FLOAT CPDF_Object::GetNumber() const
 {
-    if (this == NULL) {
-        return 0;
-    }
     switch (m_Type) {
         case PDFOBJ_NUMBER:
             return ((CPDF_Number*)this)->GetNumber();

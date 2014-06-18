@@ -258,7 +258,7 @@ FX_FLOAT CPDF_StreamContentParser::GetNumber(FX_DWORD index)
     if (param.m_Type == PDFOBJ_NUMBER) {
         return param.m_Number.m_bInteger ? (FX_FLOAT)param.m_Number.m_Integer : param.m_Number.m_Float;
     }
-    if (param.m_Type == 0) {
+	if (param.m_Type == 0 && param.m_pObject) {
         return param.m_pObject->GetNumber();
     }
     return 0;
@@ -1449,6 +1449,7 @@ void CPDF_StreamContentParser::Handle_ShowText_Positioning()
     FX_FLOAT* pKerning = FX_Alloc(FX_FLOAT, nsegs);
     int iSegment = 0;
     FX_FLOAT fInitKerning = 0;
+	FX_FLOAT num;
     for (i = 0; i < n; i ++) {
         CPDF_Object* pObj = pArray->GetElementValue(i);
         if (pObj->GetType() == PDFOBJ_STRING) {
@@ -1459,10 +1460,11 @@ void CPDF_StreamContentParser::Handle_ShowText_Positioning()
             pStrs[iSegment] = str;
             pKerning[iSegment ++] = 0;
         } else {
+			num = pObj ? pObj->GetNumber() : 0;
             if (iSegment == 0) {
-                fInitKerning += pObj->GetNumber();
+                fInitKerning += num;
             } else {
-                pKerning[iSegment - 1] += pObj->GetNumber();
+                pKerning[iSegment - 1] += num;
             }
         }
     }
