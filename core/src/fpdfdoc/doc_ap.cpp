@@ -10,7 +10,7 @@
 #include "../../include/fpdfdoc/fpdf_ap.h"
 FX_BOOL FPDF_GenerateAP(CPDF_Document* pDoc, CPDF_Dictionary* pAnnotDict)
 {
-    if (pAnnotDict->GetConstString("Subtype") != FX_BSTRC("Widget")) {
+	if (!pAnnotDict || pAnnotDict->GetConstString("Subtype") != FX_BSTRC("Widget")) {
         return FALSE;
     }
     CFX_ByteString field_type = FPDF_GetFieldAttr(pAnnotDict, "FT")->GetString();

@@ -592,7 +592,7 @@ CPDF_Object* CPDF_StreamParser::ReadNextObject(FX_BOOL bAllowNestedArray, FX_BOO
             return CPDF_String::Create(ReadHexString(), TRUE);
         }
         CPDF_Dictionary* pDict = CPDF_Dictionary::Create();
-        while (pDict) {//BOXU
+        while (pDict) {
             GetNextWord(bIsNumber);
             if (m_WordSize == 0) {
                 pDict->Release();

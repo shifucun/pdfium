@@ -165,7 +165,7 @@ void CPDF_Annot::ClearCachedAP()
 }
 CFX_ByteString CPDF_Annot::GetSubType() const
 {
-    return m_pAnnotDict->GetConstString(FX_BSTRC("Subtype"));
+	return m_pAnnotDict ? m_pAnnotDict->GetConstString(FX_BSTRC("Subtype")) : CFX_ByteStringC();
 }
 void CPDF_Annot::GetRect(CPDF_Rect& rect) const
 {

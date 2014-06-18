@@ -36,9 +36,6 @@ void CPDF_Object::Destroy()
 }
 CFX_ByteString CPDF_Object::GetString() const
 {
-    if (this == NULL) {
-        return CFX_ByteString();
-    }
     switch (m_Type) {
         case PDFOBJ_BOOLEAN:
             return ((CPDF_Boolean*)this)->m_bValue ? "true" : "false";
@@ -464,11 +461,10 @@ CFX_ByteString CPDF_Array::GetString(FX_DWORD i) const
 }
 CFX_ByteStringC CPDF_Array::GetConstString(FX_DWORD i) const
 {
-    if (this && i < (FX_DWORD)m_Objects.GetSize()) {
+    if (i < (FX_DWORD)m_Objects.GetSize()) {
         CPDF_Object* p = (CPDF_Object*)m_Objects.GetAt(i);
         return p->GetConstString();
     }
-    return CFX_ByteStringC();
 }
 int CPDF_Array::GetInteger(FX_DWORD i) const
 {
@@ -648,14 +644,12 @@ CFX_ByteString CPDF_Dictionary::GetString(FX_BSTR key) const
 }
 CFX_ByteStringC CPDF_Dictionary::GetConstString(FX_BSTR key) const
 {
-    if (this) {
-        CPDF_Object* p = NULL;
-        m_Map.Lookup(key, (void*&)p);
-        if (p) {
-            return p->GetConstString();
-        }
-    }
-    return CFX_ByteStringC();
+    CPDF_Object* p = NULL;
+    m_Map.Lookup(key, (void*&)p);
+    if (p)
+        return p->GetConstString();
+	else
+		return CFX_ByteStringC();
 }
 CFX_WideString CPDF_Dictionary::GetUnicodeText(FX_BSTR key, CFX_CharMap* pCharMap) const
 {
@@ -686,14 +680,12 @@ CFX_ByteString CPDF_Dictionary::GetString(FX_BSTR key, FX_BSTR def) const
 }
 CFX_ByteStringC CPDF_Dictionary::GetConstString(FX_BSTR key, FX_BSTR def) const
 {
-    if (this) {
-        CPDF_Object* p = NULL;
-        m_Map.Lookup(key, (void*&)p);
-        if (p) {
-            return p->GetConstString();
-        }
-    }
-    return CFX_ByteStringC(def);
+    CPDF_Object* p = NULL;
+    m_Map.Lookup(key, (void*&)p);
+    if (p)
+        return p->GetConstString();
+	else
+		return CFX_ByteStringC(def);
 }
 int CPDF_Dictionary::GetInteger(FX_BSTR key) const
 {

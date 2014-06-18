@@ -730,7 +730,7 @@ void CPDF_StreamContentParser::Handle_ExecuteXObject()
         m_bResourceMissing = TRUE;
         return;
     }
-    CFX_ByteStringC type = pXObject->GetDict()->GetConstString(FX_BSTRC("Subtype"));
+	CFX_ByteStringC type = pXObject->GetDict() ? pXObject->GetDict()->GetConstString(FX_BSTRC("Subtype")) : CFX_ByteStringC();
     if (type == FX_BSTRC("Image")) {
         if (m_Options.m_bTextOnly) {
             return;
