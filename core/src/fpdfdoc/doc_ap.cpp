@@ -430,7 +430,7 @@ static FX_BOOL GenerateWidgetAP(CPDF_Document* pDoc, CPDF_Dictionary* pAnnotDict
     }
     switch (nWidgetType) {
         case 0: {
-                CFX_WideString swValue = FPDF_GetFieldAttr(pAnnotDict, "V")->GetUnicodeText();
+				CFX_WideString swValue = FPDF_GetFieldAttr(pAnnotDict, "V")? FPDF_GetFieldAttr(pAnnotDict, "V")->GetUnicodeText() : CFX_WideString();
 				FX_INT32 nAlign = FPDF_GetFieldAttr(pAnnotDict, "Q")? FPDF_GetFieldAttr(pAnnotDict, "Q")->GetInteger() : 0;
 				FX_DWORD dwFlags = FPDF_GetFieldAttr(pAnnotDict, "Ff")? FPDF_GetFieldAttr(pAnnotDict, "Ff")->GetInteger() : 0;
 				FX_DWORD dwMaxLen = FPDF_GetFieldAttr(pAnnotDict, "MaxLen") ? FPDF_GetFieldAttr(pAnnotDict, "MaxLen")->GetInteger() : 0;
@@ -482,7 +482,7 @@ static FX_BOOL GenerateWidgetAP(CPDF_Document* pDoc, CPDF_Dictionary* pAnnotDict
             }
             break;
         case 1: {
-                CFX_WideString swValue = FPDF_GetFieldAttr(pAnnotDict, "V")->GetUnicodeText();
+				CFX_WideString swValue = FPDF_GetFieldAttr(pAnnotDict, "V") ? FPDF_GetFieldAttr(pAnnotDict, "V")->GetUnicodeText() : CFX_WideString();
                 CPVT_FontMap map(pDoc, pStreamDict->GetDict("Resources"), pDefFont, sFontName.Right(sFontName.GetLength() - 1));
                 CPVT_Provider prd(&map);
                 CPDF_VariableText vt;

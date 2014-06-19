@@ -485,7 +485,8 @@ int CPDF_FormField::GetSelectedIndex(int index)
         if (index < 0) {
             return -1;
         }
-        sel_value = ((CPDF_Array*)pValue)->GetElementValue(index)->GetUnicodeText();
+		CPDF_Object* elementValue = ((CPDF_Array*)pValue)->GetElementValue(index);
+        sel_value = elementValue ? elementValue->GetUnicodeText() : CFX_WideString();
     }
     if (index < CountSelectedOptions()) {
         int iOptIndex = GetSelectedOptionIndex(index);

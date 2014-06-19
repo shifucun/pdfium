@@ -1526,7 +1526,7 @@ void CPDF_InterForm::FDF_ImportField(CPDF_Dictionary* pFieldDict, const CFX_Wide
     if (!parent_name.IsEmpty()) {
         name = parent_name + L".";
     }
-    name += pFieldDict->GetUnicodeText("T");
+	name += pFieldDict ? pFieldDict->GetUnicodeText("T") : CFX_WideString();
     CPDF_Array* pKids = pFieldDict->GetArray("Kids");
     if (pKids) {
         for (FX_DWORD i = 0; i < pKids->GetCount(); i ++) {

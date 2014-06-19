@@ -310,9 +310,6 @@ CPDF_Object* CPDF_Object::CloneRef(CPDF_IndirectObjects* pDoc) const
 }
 CFX_WideString CPDF_Object::GetUnicodeText(CFX_CharMap* pCharMap) const
 {
-    if (this == NULL) {
-        return CFX_WideString();
-    }
     if (m_Type == PDFOBJ_STRING) {
         return PDF_DecodeText(((CPDF_String*)this)->m_String, pCharMap);
     } else if (m_Type == PDFOBJ_STREAM) {
