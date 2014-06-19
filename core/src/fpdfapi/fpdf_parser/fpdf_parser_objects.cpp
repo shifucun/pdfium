@@ -390,7 +390,7 @@ CPDF_Array::~CPDF_Array()
 CFX_FloatRect CPDF_Array::GetRect()
 {
     CFX_FloatRect rect;
-    if (this == NULL || m_Type != PDFOBJ_ARRAY || m_Objects.GetSize() != 4) {
+    if (m_Type != PDFOBJ_ARRAY || m_Objects.GetSize() != 4) {
         return rect;
     }
     rect.left = GetNumber(0);
