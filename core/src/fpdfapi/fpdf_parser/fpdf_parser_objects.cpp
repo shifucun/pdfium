@@ -303,9 +303,6 @@ CPDF_Object* CPDF_Object::CloneInternal(FX_BOOL bDirect, CFX_MapPtrToPtr* visite
 }
 CPDF_Object* CPDF_Object::CloneRef(CPDF_IndirectObjects* pDoc) const
 {
-    if (this == NULL) {
-        return NULL;
-    }
     if (m_ObjNum) {
         return FX_NEW CPDF_Reference(pDoc, m_ObjNum);
     }
