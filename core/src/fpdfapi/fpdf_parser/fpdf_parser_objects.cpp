@@ -186,11 +186,11 @@ FX_BOOL CPDF_Object::IsIdentical(CPDF_Object* pOther) const
     if (this == pOther) {
         return TRUE;
     }
-    if (this == NULL || pOther == NULL) {
+    if (pOther == NULL) {
         return FALSE;
     }
     if (pOther->m_Type != m_Type) {
-        if (m_Type == PDFOBJ_REFERENCE) {
+		if (m_Type == PDFOBJ_REFERENCE && GetDirect()) {
             return GetDirect()->IsIdentical(pOther);
         } else if (pOther->m_Type == PDFOBJ_REFERENCE) {
             return IsIdentical(pOther->GetDirect());
@@ -836,6 +836,8 @@ FX_BOOL CPDF_Dictionary::Identical(CPDF_Dictionary* pOther) const
         CFX_ByteString key;
         FX_LPVOID value;
         m_Map.GetNextAssoc(pos, key, value);
+		if (!value)
+			return FALSE;
         if (!((CPDF_Object*)value)->IsIdentical(pOther->GetElement(key))) {
             return FALSE;
         }
