@@ -203,7 +203,7 @@ static void _InsertWidthArray(HDC hDC, int start, int end, CPDF_Array* pWidthArr
             break;
         }
     if (i == size) {
-        int first = pWidthArray->GetInteger(pWidthArray->GetCount() - 1);
+		int first = pWidthArray ? pWidthArray->GetInteger(pWidthArray->GetCount() - 1) : 0;
         pWidthArray->AddInteger(first + size - 1);
         pWidthArray->AddInteger(*widths);
     } else {
@@ -587,7 +587,7 @@ static void _InsertWidthArray(CTFontRef font, int start, int end, CPDF_Array* pW
             break;
         }
     if (i == size) {
-        int first = pWidthArray->GetInteger(pWidthArray->GetCount() - 1);
+		int first = pWidthArray ? pWidthArray->GetInteger(pWidthArray->GetCount() - 1) : 0;
         pWidthArray->AddInteger(first + size - 1);
         pWidthArray->AddInteger(*widths);
     } else {
@@ -856,7 +856,7 @@ static void _InsertWidthArray1(CFX_Font* pFont, IFX_FontEncoding* pEncoding, FX_
             break;
         }
     if (i == size) {
-        int first = pWidthArray->GetInteger(pWidthArray->GetCount() - 1);
+		int first = pWidthArray ? pWidthArray->GetInteger(pWidthArray->GetCount() - 1) : 0;
         pWidthArray->AddInteger(first + size - 1);
         pWidthArray->AddInteger(*widths);
     } else {

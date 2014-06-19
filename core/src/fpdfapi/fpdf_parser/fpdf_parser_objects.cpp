@@ -442,7 +442,7 @@ CFX_ByteStringC CPDF_Array::GetConstString(FX_DWORD i) const
 }
 int CPDF_Array::GetInteger(FX_DWORD i) const
 {
-    if (this == NULL || i >= (FX_DWORD)m_Objects.GetSize()) {
+    if (i >= (FX_DWORD)m_Objects.GetSize()) {
         return 0;
     }
     CPDF_Object* p = (CPDF_Object*)m_Objects.GetAt(i);
