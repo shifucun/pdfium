@@ -402,7 +402,7 @@ CFX_FloatRect CPDF_Array::GetRect()
 CFX_AffineMatrix CPDF_Array::GetMatrix()
 {
     CFX_AffineMatrix matrix;
-    if (this == NULL || m_Type != PDFOBJ_ARRAY || m_Objects.GetSize() != 6) {
+    if (m_Type != PDFOBJ_ARRAY || m_Objects.GetSize() != 6) {
         return matrix;
     }
     matrix.Set(GetNumber(0), GetNumber(1), GetNumber(2), GetNumber(3), GetNumber(4), GetNumber(5));
