@@ -2032,7 +2032,7 @@ void CPDF_Creator::InitID(FX_BOOL bDefault )
     if (!m_pIDArray) {
         FX_LPDWORD pBuffer = NULL;
         m_pIDArray = CPDF_Array::Create();
-        CPDF_Object* pID1 = pOldIDArray->GetElement(0);
+		CPDF_Object* pID1 = pOldIDArray ? pOldIDArray->GetElement(0) : NULL;
         if (pID1) {
             m_pIDArray->Add(pID1->Clone());
         } else {
