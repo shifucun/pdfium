@@ -324,9 +324,6 @@ CFX_WideString CPDF_Object::GetUnicodeText(CFX_CharMap* pCharMap) const
 }
 void CPDF_Object::SetUnicodeText(FX_LPCWSTR pUnicodes, int len)
 {
-    if (this == NULL) {
-        return;
-    }
     if (m_Type == PDFOBJ_STRING) {
         ((CPDF_String*)this)->m_String = PDF_EncodeText(pUnicodes, len);
     } else if (m_Type == PDFOBJ_STREAM) {
