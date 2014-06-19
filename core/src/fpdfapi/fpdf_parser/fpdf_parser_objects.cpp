@@ -417,9 +417,6 @@ CPDF_Object* CPDF_Array::GetElement(FX_DWORD i) const
 }
 CPDF_Object* CPDF_Array::GetElementValue(FX_DWORD i) const
 {
-    if (this == NULL) {
-        return NULL;
-    }
     if (i >= (FX_DWORD)m_Objects.GetSize()) {
         return NULL;
     }
