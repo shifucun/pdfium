@@ -304,7 +304,7 @@ FX_BOOL PDF_DataDecode(FX_LPCBYTE src_buf, FX_DWORD src_size, const CPDF_Diction
         }
     } else {
         DecoderList.Add(pDecoder->GetConstString());
-        ParamList.Add(pParams->GetDict());
+        ParamList.Add(pParams ? pParams->GetDict() : NULL);
     }
     FX_LPBYTE last_buf = (FX_LPBYTE)src_buf;
     FX_DWORD last_size = src_size;

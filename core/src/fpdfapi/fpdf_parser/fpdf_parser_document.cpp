@@ -61,11 +61,13 @@ void CPDF_Document::LoadAsynDoc(CPDF_Dictionary *pLinearized)
 {
     m_bLinearized = TRUE;
     m_LastObjNum = m_pParser->GetLastObjNum();
-    m_pRootDict = GetIndirectObject(m_pParser->GetRootObjNum())->GetDict();
+	CPDF_Object* indirectObj = GetIndirectObject(m_pParser->GetRootObjNum());
+    m_pRootDict = indirectObj ? indirectObj->GetDict() : NULL;
     if (m_pRootDict == NULL) {
         return;
     }
-    m_pInfoDict = GetIndirectObject(m_pParser->GetInfoObjNum())->GetDict();
+	indirectObj = GetIndirectObject(m_pParser->GetInfoObjNum());
+    m_pInfoDict = indirectObj ? indirectObj->GetDict() : NULL;
     CPDF_Array* pIDArray = m_pParser->GetIDArray();
     if (pIDArray) {
         m_ID1 = pIDArray->GetString(0);

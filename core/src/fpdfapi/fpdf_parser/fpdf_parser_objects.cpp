@@ -128,9 +128,6 @@ int CPDF_Object::GetInteger() const
 }
 CPDF_Dictionary* CPDF_Object::GetDict() const
 {
-    if (this == NULL) {
-        return NULL;
-    }
     switch (m_Type) {
         case PDFOBJ_DICTIONARY:
             return (CPDF_Dictionary*)this;

@@ -101,7 +101,7 @@ FX_BOOL CPDF_Image::LoadImageF(CPDF_Stream* pStream, FX_BOOL bInline)
         m_pInlineDict = NULL;
     }
     m_bInline = bInline;
-    CPDF_Dictionary* pDict = pStream->GetDict();
+    CPDF_Dictionary* pDict = pStream ? pStream->GetDict() : NULL;
     if (m_bInline) {
         m_pInlineDict = (CPDF_Dictionary*)pDict->Clone();
     }
