@@ -482,7 +482,8 @@ void CPDF_AllStates::ProcessExtGS(CPDF_Dictionary* pGS, CPDF_StreamContentParser
     FX_POSITION pos = pGS->GetStartPos();
     while (pos) {
         CFX_ByteString key_str;
-        CPDF_Object* pObject = pGS->GetNextElement(pos, key_str)->GetDirect();
+		CPDF_Object* pElement = pGS->GetNextElement(pos, key_str);
+        CPDF_Object* pObject = pElement ? pElement->GetDirect() : NULL;
         if (pObject == NULL) {
             continue;
         }

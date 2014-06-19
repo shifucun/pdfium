@@ -64,7 +64,7 @@ FX_BOOL CPDF_PageOrganizer::PDFDocInit(CPDF_Document *pDestPDFDoc, CPDF_Document
 		pNewRoot->SetAt("Type", new CPDF_Name("Catalog"));
 	}
 	
-	CPDF_Dictionary* pNewPages = (CPDF_Dictionary*)pNewRoot->GetElement("Pages")->GetDirect();
+	CPDF_Dictionary* pNewPages = (CPDF_Dictionary*)(pNewRoot->GetElement("Pages")? pNewRoot->GetElement("Pages")->GetDirect() : NULL);
 	if(!pNewPages)
 	{
 		pNewPages = new CPDF_Dictionary;

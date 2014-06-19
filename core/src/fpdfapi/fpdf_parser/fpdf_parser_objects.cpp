@@ -221,9 +221,6 @@ FX_BOOL CPDF_Object::IsIdentical(CPDF_Object* pOther) const
 }
 CPDF_Object* CPDF_Object::GetDirect() const
 {
-    if (this == NULL) {
-        return NULL;
-    }
     if (m_Type != PDFOBJ_REFERENCE) {
         return (CPDF_Object*)this;
     }
@@ -450,6 +447,8 @@ CFX_ByteStringC CPDF_Array::GetConstString(FX_DWORD i) const
         CPDF_Object* p = (CPDF_Object*)m_Objects.GetAt(i);
         return p->GetConstString();
     }
+	else
+		return CFX_ByteStringC();
 }
 int CPDF_Array::GetInteger(FX_DWORD i) const
 {
@@ -616,7 +615,7 @@ CPDF_Object* CPDF_Dictionary::GetElementValue(FX_BSTR key) const
     }
     CPDF_Object* p = NULL;
     m_Map.Lookup(key, (void*&)p);
-    return p->GetDirect();
+    return p ? p->GetDirect() : NULL;
 }
 CFX_ByteString CPDF_Dictionary::GetString(FX_BSTR key) const
 {
