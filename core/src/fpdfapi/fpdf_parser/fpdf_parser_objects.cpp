@@ -237,9 +237,6 @@ CPDF_Object* CPDF_Object::Clone(FX_BOOL bDirect) const
 }
 CPDF_Object* CPDF_Object::CloneInternal(FX_BOOL bDirect, CFX_MapPtrToPtr* visited) const
 {
-    if (this == NULL) {
-        return NULL;
-    }
     switch (m_Type) {
         case PDFOBJ_BOOLEAN:
             return FX_NEW CPDF_Boolean(((CPDF_Boolean*)this)->m_bValue);
@@ -279,7 +276,11 @@ CPDF_Object* CPDF_Object::CloneInternal(FX_BOOL bDirect, CFX_MapPtrToPtr* visite
                 CPDF_StreamAcc acc;
                 acc.LoadAllData(pThis, TRUE);
                 FX_DWORD streamSize = acc.GetSize();
-                CPDF_Stream* pObj = FX_NEW CPDF_Stream(acc.DetachData(), streamSize, (CPDF_Dictionary*)((CPDF_Object*)pThis->GetDict())->CloneInternal(bDirect, visited));
+				CPDF_Stream* pObj;
+				if (pThis->GetDict())
+					pObj = FX_NEW CPDF_Stream(acc.DetachData(), streamSize, (CPDF_Dictionary*)((CPDF_Object*)pThis->GetDict())->CloneInternal(bDirect, visited));
+				else
+					pObj = FX_NEW CPDF_Stream(acc.DetachData(), streamSize, NULL);
                 return pObj;
             }
         case PDFOBJ_REFERENCE: {
@@ -287,7 +288,11 @@ CPDF_Object* CPDF_Object::CloneInternal(FX_BOOL bDirect, CFX_MapPtrToPtr* visite
                 FX_DWORD obj_num = pRef->m_RefObjNum;
                 if (bDirect && !visited->GetValueAt((void*)(FX_UINTPTR)obj_num)) {
                     visited->SetAt((void*)(FX_UINTPTR)obj_num, (void*)1);
-                    CPDF_Object* ret = pRef->GetDirect()->CloneInternal(TRUE, visited);
+					CPDF_Object* ret;
+					if (pRef->GetDirect())
+						ret = pRef->GetDirect()->CloneInternal(TRUE, visited);
+					else
+						ret = NULL;
                     return ret;
                 } else {
                     return FX_NEW CPDF_Reference(pRef->m_pObjList, obj_num);
