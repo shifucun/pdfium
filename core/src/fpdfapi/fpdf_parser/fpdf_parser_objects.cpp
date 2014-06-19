@@ -149,13 +149,10 @@ CPDF_Dictionary* CPDF_Object::GetDict() const
 }
 CPDF_Array* CPDF_Object::GetArray() const
 {
-    if (this == NULL) {
-        return NULL;
-    }
-    if (m_Type == PDFOBJ_ARRAY) {
+    if (m_Type == PDFOBJ_ARRAY) 
         return (CPDF_Array*)this;
-    }
-    return NULL;
+	else
+		return NULL;
 }
 void CPDF_Object::SetString(const CFX_ByteString& str)
 {

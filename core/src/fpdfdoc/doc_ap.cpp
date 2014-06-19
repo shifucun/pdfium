@@ -536,8 +536,8 @@ static FX_BOOL GenerateWidgetAP(CPDF_Document* pDoc, CPDF_Dictionary* pAnnotDict
         case 2: {
                 CPVT_FontMap map(pDoc, pStreamDict->GetDict("Resources"), pDefFont, sFontName.Right(sFontName.GetLength() - 1));
                 CPVT_Provider prd(&map);
-                CPDF_Array * pOpts = FPDF_GetFieldAttr(pAnnotDict, "Opt")->GetArray();
-                CPDF_Array * pSels = FPDF_GetFieldAttr(pAnnotDict, "I")->GetArray();
+				CPDF_Array * pOpts = FPDF_GetFieldAttr(pAnnotDict, "Opt") ? FPDF_GetFieldAttr(pAnnotDict, "Opt")->GetArray() : NULL;
+				CPDF_Array * pSels = FPDF_GetFieldAttr(pAnnotDict, "I") ? FPDF_GetFieldAttr(pAnnotDict, "I")->GetArray() : NULL;
 				FX_INT32 nTop = FPDF_GetFieldAttr(pAnnotDict, "TI") ? FPDF_GetFieldAttr(pAnnotDict, "TI")->GetInteger() : 0;
                 CFX_ByteTextBuf sBody;
                 if (pOpts) {
