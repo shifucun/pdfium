@@ -591,9 +591,6 @@ CPDF_Object* CPDF_Dictionary::GetNextElement(FX_POSITION& pos, CFX_ByteString& k
 }
 CPDF_Object* CPDF_Dictionary::GetElement(FX_BSTR key) const
 {
-    if (this == NULL) {
-        return NULL;
-    }
     CPDF_Object* p = NULL;
     m_Map.Lookup(key, (void*&)p);
     return p;
@@ -614,7 +611,7 @@ CFX_ByteString CPDF_Dictionary::GetString(FX_BSTR key) const
     if (p)
         return p->GetString();
 	else
-		return CFX_ByteStringC();
+		return CFX_ByteString();
 }
 CFX_ByteStringC CPDF_Dictionary::GetConstString(FX_BSTR key) const
 {

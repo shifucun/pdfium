@@ -338,7 +338,7 @@ FX_BOOL CPDF_Document::IsContentUsedElsewhere(FX_DWORD objnum, CPDF_Dictionary* 
         if (pPageDict == pThisPageDict) {
             continue;
         }
-        CPDF_Object* pContents = pPageDict->GetElement(FX_BSTRC("Contents"));
+		CPDF_Object* pContents = pPageDict ? pPageDict->GetElement(FX_BSTRC("Contents")) : NULL;
         if (pContents == NULL) {
             continue;
         }
