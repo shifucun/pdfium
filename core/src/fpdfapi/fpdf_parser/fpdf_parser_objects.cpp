@@ -486,7 +486,7 @@ CPDF_Array* CPDF_Array::GetArray(FX_DWORD i) const
 }
 void CPDF_Array::RemoveAt(FX_DWORD i)
 {
-    ASSERT(this != NULL && m_Type == PDFOBJ_ARRAY);
+    ASSERT(m_Type == PDFOBJ_ARRAY);
     if (i >= (FX_DWORD)m_Objects.GetSize()) {
         return;
     }
@@ -497,7 +497,7 @@ void CPDF_Array::RemoveAt(FX_DWORD i)
 }
 void CPDF_Array::SetAt(FX_DWORD i, CPDF_Object* pObj, CPDF_IndirectObjects* pObjs)
 {
-    ASSERT(this != NULL && m_Type == PDFOBJ_ARRAY);
+    ASSERT(m_Type == PDFOBJ_ARRAY);
     ASSERT(i < (FX_DWORD)m_Objects.GetSize());
     if (i >= (FX_DWORD)m_Objects.GetSize()) {
         return;
@@ -531,29 +531,29 @@ void CPDF_Array::Add(CPDF_Object* pObj, CPDF_IndirectObjects* pObjs)
 }
 void CPDF_Array::AddName(const CFX_ByteString& str)
 {
-    ASSERT(this != NULL && m_Type == PDFOBJ_ARRAY);
+    ASSERT(m_Type == PDFOBJ_ARRAY);
     Add(FX_NEW CPDF_Name(str));
 }
 void CPDF_Array::AddString(const CFX_ByteString& str)
 {
-    ASSERT(this != NULL && m_Type == PDFOBJ_ARRAY);
+    ASSERT(m_Type == PDFOBJ_ARRAY);
     Add(FX_NEW CPDF_String(str));
 }
 void CPDF_Array::AddInteger(int i)
 {
-    ASSERT(this != NULL && m_Type == PDFOBJ_ARRAY);
+    ASSERT(m_Type == PDFOBJ_ARRAY);
     Add(FX_NEW CPDF_Number(i));
 }
 void CPDF_Array::AddNumber(FX_FLOAT f)
 {
-    ASSERT(this != NULL && m_Type == PDFOBJ_ARRAY);
+    ASSERT(m_Type == PDFOBJ_ARRAY);
     CPDF_Number* pNumber = FX_NEW CPDF_Number;
     pNumber->SetNumber(f);
     Add(pNumber);
 }
 void CPDF_Array::AddReference(CPDF_IndirectObjects* pDoc, FX_DWORD objnum)
 {
-    ASSERT(this != NULL && m_Type == PDFOBJ_ARRAY);
+    ASSERT(m_Type == PDFOBJ_ARRAY);
     Add(FX_NEW CPDF_Reference(pDoc, objnum));
 }
 FX_BOOL CPDF_Array::Identical(CPDF_Array* pOther) const
@@ -740,7 +740,7 @@ FX_BOOL CPDF_Dictionary::KeyExist(FX_BSTR key) const
 }
 void CPDF_Dictionary::SetAt(FX_BSTR key, CPDF_Object* pObj, CPDF_IndirectObjects* pObjs)
 {
-    ASSERT(this != NULL && m_Type == PDFOBJ_DICTIONARY);
+    ASSERT(m_Type == PDFOBJ_DICTIONARY);
     CPDF_Object* p = NULL;
     m_Map.Lookup(key, (void*&)p);
     if (p == pObj) {
@@ -760,12 +760,12 @@ void CPDF_Dictionary::SetAt(FX_BSTR key, CPDF_Object* pObj, CPDF_IndirectObjects
 }
 void CPDF_Dictionary::AddValue(FX_BSTR key, CPDF_Object* pObj)
 {
-    ASSERT(this != NULL && m_Type == PDFOBJ_DICTIONARY);
+    ASSERT(m_Type == PDFOBJ_DICTIONARY);
     m_Map.AddValue(key, pObj);
 }
 void CPDF_Dictionary::RemoveAt(FX_BSTR key)
 {
-    ASSERT(this != NULL && m_Type == PDFOBJ_DICTIONARY);
+    ASSERT(m_Type == PDFOBJ_DICTIONARY);
     CPDF_Object* p = NULL;
     m_Map.Lookup(key, (void*&)p);
     if (p == NULL) {
@@ -776,7 +776,7 @@ void CPDF_Dictionary::RemoveAt(FX_BSTR key)
 }
 void CPDF_Dictionary::ReplaceKey(FX_BSTR oldkey, FX_BSTR newkey)
 {
-    ASSERT(this != NULL && m_Type == PDFOBJ_DICTIONARY);
+    ASSERT(m_Type == PDFOBJ_DICTIONARY);
     CPDF_Object* p = NULL;
     m_Map.Lookup(oldkey, (void*&)p);
     if (p == NULL) {
