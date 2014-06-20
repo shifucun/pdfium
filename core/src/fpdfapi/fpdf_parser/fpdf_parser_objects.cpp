@@ -621,19 +621,16 @@ CFX_ByteStringC CPDF_Dictionary::GetConstString(FX_BSTR key) const
 }
 CFX_WideString CPDF_Dictionary::GetUnicodeText(FX_BSTR key, CFX_CharMap* pCharMap) const
 {
-    if (this) {
-        CPDF_Object* p = NULL;
-        m_Map.Lookup(key, (void*&)p);
-        if (p) {
-            if(p->GetType() == PDFOBJ_REFERENCE) {
-                p = ((CPDF_Reference*)p)->GetDirect();
-                return p->GetUnicodeText(pCharMap);
-            } else {
-                return p->GetUnicodeText(pCharMap);
-            }
+    CPDF_Object* p = NULL;
+    m_Map.Lookup(key, (void*&)p);
+    if (p) {
+        if(p->GetType() == PDFOBJ_REFERENCE) {
+            p = ((CPDF_Reference*)p)->GetDirect();
+            return p->GetUnicodeText(pCharMap);
+        } else {
+            return p->GetUnicodeText(pCharMap);
         }
     }
-    return CFX_WideString();
 }
 CFX_ByteString CPDF_Dictionary::GetString(FX_BSTR key, FX_BSTR def) const
 {
