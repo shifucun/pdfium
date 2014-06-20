@@ -671,12 +671,10 @@ int CPDF_Dictionary::GetInteger(FX_BSTR key, int def) const
 }
 FX_FLOAT CPDF_Dictionary::GetNumber(FX_BSTR key) const
 {
-    if (this) {
-        CPDF_Object* p = NULL;
-        m_Map.Lookup(key, (void*&)p);
-        if (p) {
-            return p->GetNumber();
-        }
+    CPDF_Object* p = NULL;
+    m_Map.Lookup(key, (void*&)p);
+    if (p) {
+        return p->GetNumber();
     }
     return 0;
 }
