@@ -27,7 +27,7 @@ FX_BOOL FPDF_GenerateAP(CPDF_Document* pDoc, CPDF_Dictionary* pAnnotDict)
         if (!(flags & (1 << 16))) {
             if (!pAnnotDict->KeyExist("AS")) {
                 if (CPDF_Dictionary* pParentDict = pAnnotDict->GetDict("Parent")) {
-                    if (pParentDict->KeyExist("AS")) {
+					if (pParentDict->KeyExist("AS")) {
                         pAnnotDict->SetAtString("AS", pParentDict->GetString("AS"));
                     }
                 }

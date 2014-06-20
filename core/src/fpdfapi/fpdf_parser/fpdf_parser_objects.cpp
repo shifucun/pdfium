@@ -735,9 +735,6 @@ CFX_AffineMatrix CPDF_Dictionary::GetMatrix(FX_BSTR key) const
 }
 FX_BOOL CPDF_Dictionary::KeyExist(FX_BSTR key) const
 {
-    if (this == NULL) {
-        return FALSE;
-    }
     FX_LPVOID value;
     return m_Map.Lookup(key, value);
 }
