@@ -680,12 +680,10 @@ FX_FLOAT CPDF_Dictionary::GetNumber(FX_BSTR key) const
 }
 FX_BOOL CPDF_Dictionary::GetBoolean(FX_BSTR key, FX_BOOL bDefault) const
 {
-    if (this) {
-        CPDF_Object* p = NULL;
-        m_Map.Lookup(key, (void*&)p);
-        if (p && p->GetType() == PDFOBJ_BOOLEAN) {
-            return p->GetInteger();
-        }
+    CPDF_Object* p = NULL;
+    m_Map.Lookup(key, (void*&)p);
+    if (p && p->GetType() == PDFOBJ_BOOLEAN) {
+        return p->GetInteger();
     }
     return bDefault;
 }
