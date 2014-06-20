@@ -653,23 +653,19 @@ CFX_ByteStringC CPDF_Dictionary::GetConstString(FX_BSTR key, FX_BSTR def) const
 }
 int CPDF_Dictionary::GetInteger(FX_BSTR key) const
 {
-    if (this) {
-        CPDF_Object* p = NULL;
-        m_Map.Lookup(key, (void*&)p);
-        if (p) {
-            return p->GetInteger();
-        }
+    CPDF_Object* p = NULL;
+    m_Map.Lookup(key, (void*&)p);
+    if (p) {
+        return p->GetInteger();
     }
     return 0;
 }
 int CPDF_Dictionary::GetInteger(FX_BSTR key, int def) const
 {
-    if (this) {
-        CPDF_Object* p = NULL;
-        m_Map.Lookup(key, (void*&)p);
-        if (p) {
-            return p->GetInteger();
-        }
+    CPDF_Object* p = NULL;
+    m_Map.Lookup(key, (void*&)p);
+    if (p) {
+        return p->GetInteger();
     }
     return def;
 }

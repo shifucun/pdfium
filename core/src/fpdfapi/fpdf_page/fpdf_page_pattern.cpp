@@ -144,7 +144,7 @@ FX_BOOL CPDF_MeshStream::Load(CPDF_Stream* pShadingStream, CPDF_Function** pFunc
     m_pFuncs = pFuncs;
     m_nFuncs = nFuncs;
     m_pCS = pCS;
-	CPDF_Dictionary* pDict = pShadingStream ? pShadingStream->GetDict() : NULL;
+	CPDF_Dictionary* pDict = pShadingStream->GetDict();
     m_nCoordBits = pDict->GetInteger(FX_BSTRC("BitsPerCoordinate"));
     m_nCompBits = pDict->GetInteger(FX_BSTRC("BitsPerComponent"));
     m_nFlagBits = pDict->GetInteger(FX_BSTRC("BitsPerFlag"));
