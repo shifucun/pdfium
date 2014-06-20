@@ -787,12 +787,6 @@ void CPDF_Dictionary::ReplaceKey(FX_BSTR oldkey, FX_BSTR newkey)
 }
 FX_BOOL CPDF_Dictionary::Identical(CPDF_Dictionary* pOther) const
 {
-    if (this == NULL) {
-        if (pOther == NULL) {
-            return TRUE;
-        }
-        return FALSE;
-    }
     if (pOther == NULL) {
         return FALSE;
     }
@@ -960,6 +954,9 @@ void CPDF_Stream::InitStream(IFX_FileRead *pFile, CPDF_Dictionary* pDict)
 }
 FX_BOOL CPDF_Stream::Identical(CPDF_Stream* pOther) const
 {
+	if (!m_pDict)
+		return pOther ? FALSE : TRUE;
+
     if (!m_pDict->Identical(pOther->m_pDict)) {
         return FALSE;
     }
