@@ -1482,7 +1482,8 @@ FX_INT32 CPDF_Creator::WriteDoc_Stage1(IFX_Pause *pPause)
         if (m_bSecurityChanged && (m_dwFlags & FPDFCREATE_NO_ORIGINAL) == 0) {
             m_dwFlags &= ~FPDFCREATE_INCREMENTAL;
         }
-        m_pMetadata = m_pDocument->GetRoot()->GetElementValue(FX_BSTRC("Metadata"));
+		CPDF_Dictionary* pDict = m_pDocument->GetRoot();
+        m_pMetadata = pDict ? pDict->GetElementValue(FX_BSTRC("Metadata")) : NULL;
         if (m_dwFlags & FPDFCREATE_OBJECTSTREAM) {
             m_pXRefStream = FX_NEW CPDF_XRefStream;
             m_pXRefStream->Start();

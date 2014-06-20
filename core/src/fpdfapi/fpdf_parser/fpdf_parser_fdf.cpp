@@ -111,7 +111,8 @@ FX_BOOL CFDF_Document::WriteBuf(CFX_ByteTextBuf& buf) const
 }
 CFX_WideString CFDF_Document::GetWin32Path() const
 {
-    CPDF_Object* pFileSpec = m_pRootDict->GetDict(FX_BSTRC("FDF"))->GetElementValue(FX_BSTRC("F"));
+	CPDF_Dictionary* pDict = m_pRootDict->GetDict(FX_BSTRC("FDF"));
+    CPDF_Object* pFileSpec = pDict ? pDict->GetElementValue(FX_BSTRC("F")) : NULL;
     if (pFileSpec == NULL) {
         return CFX_WideString();
     }

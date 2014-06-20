@@ -48,7 +48,7 @@ void CPDF_PageContentGenerate::GenerateContent()
         }
         ProcessImage(buf, (CPDF_ImageObject*)pPageObj);
     }
-    CPDF_Object* pContent = pPageDict->GetElementValue("Contents");
+	CPDF_Object* pContent = pPageDict ? pPageDict->GetElementValue("Contents") : NULL;
     if (pContent != NULL) {
         pPageDict->RemoveAt("Contents");
     }
@@ -120,7 +120,8 @@ void CPDF_PageContentGenerate::ProcessForm(CFX_ByteTextBuf& buf, FX_LPCBYTE data
 }
 void CPDF_PageContentGenerate::TransformContent(CFX_Matrix& matrix)
 {
-    CPDF_Object* pContent = m_pPage->m_pFormDict->GetElementValue("Contents");
+	CPDF_Dictionary* pDict = m_pPage->m_pFormDict;
+	CPDF_Object* pContent = pDict ? pDict->GetElementValue("Contents") : NULL;
     if (!pContent) {
         return;
     }

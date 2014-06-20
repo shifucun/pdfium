@@ -1699,7 +1699,7 @@ CPDF_Type3Char* CPDF_Type3Font::LoadChar(FX_DWORD charcode, int level)
     if (name == NULL) {
         return NULL;
     }
-    CPDF_Stream* pStream = (CPDF_Stream*)m_pCharProcs->GetElementValue(name);
+	CPDF_Stream* pStream = (CPDF_Stream*)(m_pCharProcs ? m_pCharProcs->GetElementValue(name) : NULL);
     if (pStream == NULL || pStream->GetType() != PDFOBJ_STREAM) {
         return NULL;
     }

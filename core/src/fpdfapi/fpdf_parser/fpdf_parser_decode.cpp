@@ -281,11 +281,11 @@ FX_BOOL PDF_DataDecode(FX_LPCBYTE src_buf, FX_DWORD src_size, const CPDF_Diction
                        CPDF_Dictionary*& pImageParms, FX_DWORD last_estimated_size, FX_BOOL bImageAcc)
 
 {
-    CPDF_Object* pDecoder = pDict->GetElementValue(FX_BSTRC("Filter"));
+	CPDF_Object* pDecoder = pDict ? pDict->GetElementValue(FX_BSTRC("Filter")) : NULL;
     if (pDecoder == NULL || (pDecoder->GetType() != PDFOBJ_ARRAY && pDecoder->GetType() != PDFOBJ_NAME)) {
         return FALSE;
     }
-    CPDF_Object* pParams = pDict->GetElementValue(FX_BSTRC("DecodeParms"));
+    CPDF_Object* pParams = pDict ? pDict->GetElementValue(FX_BSTRC("DecodeParms")) : NULL;
     CFX_ByteStringArray DecoderList;
     CFX_PtrArray ParamList;
     if (pDecoder->GetType() == PDFOBJ_ARRAY) {

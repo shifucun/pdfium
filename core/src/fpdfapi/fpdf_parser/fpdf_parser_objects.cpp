@@ -597,9 +597,6 @@ CPDF_Object* CPDF_Dictionary::GetElement(FX_BSTR key) const
 }
 CPDF_Object* CPDF_Dictionary::GetElementValue(FX_BSTR key) const
 {
-    if (this == NULL) {
-        return NULL;
-    }
     CPDF_Object* p = NULL;
     m_Map.Lookup(key, (void*&)p);
     return p ? p->GetDirect() : NULL;
