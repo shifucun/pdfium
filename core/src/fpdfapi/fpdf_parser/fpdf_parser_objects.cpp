@@ -631,17 +631,14 @@ CFX_WideString CPDF_Dictionary::GetUnicodeText(FX_BSTR key, CFX_CharMap* pCharMa
             return p->GetUnicodeText(pCharMap);
         }
     }
-	else
-		return CFX_WideString();
+	return CFX_WideString();
 }
 CFX_ByteString CPDF_Dictionary::GetString(FX_BSTR key, FX_BSTR def) const
 {
-    if (this) {
-        CPDF_Object* p = NULL;
-        m_Map.Lookup(key, (void*&)p);
-        if (p) {
-            return p->GetString();
-        }
+    CPDF_Object* p = NULL;
+    m_Map.Lookup(key, (void*&)p);
+    if (p) {
+        return p->GetString();
     }
     return CFX_ByteString(def);
 }

@@ -2843,7 +2843,7 @@ FX_BOOL CPDF_DataAvail::IsObjectsAvail(CFX_PtrArray& obj_array, FX_BOOL bParsePa
                 pObj = pObj->GetDict();
             case PDFOBJ_DICTIONARY: {
                     CPDF_Dictionary *pDict = pObj->GetDict();
-                    if (pDict->GetString("Type") == "Page" && !bParsePage) {
+                    if (pDict && pDict->GetString("Type") == "Page" && !bParsePage) {
                         continue;
                     }
                     FX_POSITION pos = pDict->GetStartPos();

@@ -1079,7 +1079,7 @@ void CPDF_FormField::LoadDA()
 {
     CFX_ByteString DA = FPDF_GetFieldAttr(m_pDict, "DA")->GetString();
     if (DA.IsEmpty()) {
-        DA = m_pForm->m_pFormDict->GetString("DA");
+		DA = m_pForm->m_pFormDict ? m_pForm->m_pFormDict->GetString("DA") : CFX_ByteString();
     }
     if (DA.IsEmpty()) {
         return;

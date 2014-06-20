@@ -194,8 +194,7 @@ CFX_WideString	FPDF_FileSpec_GetWin32Path(const CPDF_Object* pFileSpec)
     CFX_WideString wsFileName;
 	if (pFileSpec->GetType() == PDFOBJ_DICTIONARY) {
 		CPDF_Dictionary* pDict = (CPDF_Dictionary*)pFileSpec;
-		if (pDict)
-			wsFileName = pDict->GetUnicodeText(FX_BSTRC("UF"));
+		wsFileName = pDict->GetUnicodeText(FX_BSTRC("UF"));
 		if (wsFileName.IsEmpty()) {
 			wsFileName = CFX_WideString::FromLocal(pDict->GetString(FX_BSTRC("F")));
 		}
