@@ -450,7 +450,7 @@ int CPDF_Array::GetInteger(FX_DWORD i) const
 }
 FX_FLOAT CPDF_Array::GetNumber(FX_DWORD i) const
 {
-    if (this == NULL || i >= (FX_DWORD)m_Objects.GetSize()) {
+    if (i >= (FX_DWORD)m_Objects.GetSize()) {
         return 0;
     }
     CPDF_Object* p = (CPDF_Object*)m_Objects.GetAt(i);

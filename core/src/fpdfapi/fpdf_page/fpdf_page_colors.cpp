@@ -281,7 +281,7 @@ FX_BOOL CPDF_CalGray::v_Load(CPDF_Document* pDoc, CPDF_Array* pArray)
     CPDF_Array* pParam = pDict->GetArray(FX_BSTRC("WhitePoint"));
     int i;
     for (i = 0; i < 3; i ++) {
-        m_WhitePoint[i] = pParam->GetNumber(i);
+        m_WhitePoint[i] = pParam ? pParam->GetNumber(i) : 0;
     }
     pParam = pDict->GetArray(FX_BSTRC("BlackPoint"));
     for (i = 0; i < 3; i ++) {
@@ -340,7 +340,7 @@ FX_BOOL CPDF_CalRGB::v_Load(CPDF_Document* pDoc, CPDF_Array* pArray)
     CPDF_Array* pParam = pDict->GetArray(FX_BSTRC("WhitePoint"));
     int i;
     for (i = 0; i < 3; i ++) {
-        m_WhitePoint[i] = pParam->GetNumber(i);
+        m_WhitePoint[i] = pParam ? pParam->GetNumber(i) : 0;
     }
     pParam = pDict->GetArray(FX_BSTRC("BlackPoint"));
     for (i = 0; i < 3; i ++) {
@@ -438,7 +438,7 @@ FX_BOOL CPDF_LabCS::v_Load(CPDF_Document* pDoc, CPDF_Array* pArray)
     CPDF_Array* pParam = pDict->GetArray(FX_BSTRC("WhitePoint"));
     int i;
     for (i = 0; i < 3; i ++) {
-        m_WhitePoint[i] = pParam->GetNumber(i);
+        m_WhitePoint[i] = pParam ? pParam->GetNumber(i) : 0;
     }
     pParam = pDict->GetArray(FX_BSTRC("BlackPoint"));
     for (i = 0; i < 3; i ++) {
