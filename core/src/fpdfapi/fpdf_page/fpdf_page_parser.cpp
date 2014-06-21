@@ -1427,7 +1427,7 @@ void CPDF_StreamContentParser::Handle_ShowText()
 }
 void CPDF_StreamContentParser::Handle_ShowText_Positioning()
 {
-    CPDF_Array* pArray = GetObject(0)->GetArray();
+	CPDF_Array* pArray = GetObject(0) ? GetObject(0)->GetArray() : NULL;
     if (pArray == NULL) {
         return;
     }

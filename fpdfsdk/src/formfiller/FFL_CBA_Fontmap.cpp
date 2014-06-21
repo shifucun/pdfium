@@ -246,7 +246,7 @@ CPDF_Font* CBA_FontMap::GetAnnotDefaultFont(CFX_ByteString &sAlias)
 	{
 		if (sDA.IsEmpty())
 		{
-			sDA = FPDF_GetFieldAttr(pAcroFormDict, "DA")->GetString();	
+			sDA = FPDF_GetFieldAttr(pAcroFormDict, "DA") ? FPDF_GetFieldAttr(pAcroFormDict, "DA")->GetString() : CFX_ByteString();
 		}
 	}
 	

@@ -91,7 +91,7 @@ void CPDF_StreamContentParser::Handle_BeginImage()
         CPDF_Object* pObj = m_pSyntax->ReadNextObject();
         if (!key.IsEmpty()) {
             pDict->SetAt(key, pObj, m_pDocument);
-        } else {
+        } else if (pObj) {
             pObj->Release();
         }
     }
