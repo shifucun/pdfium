@@ -240,7 +240,7 @@ CPDF_Font* CBA_FontMap::GetAnnotDefaultFont(CFX_ByteString &sAlias)
 	
 	CFX_ByteString sDA;
 	
-	sDA = FPDF_GetFieldAttr(m_pAnnotDict, "DA")->GetString();
+	sDA = FPDF_GetFieldAttr(m_pAnnotDict, "DA") ? FPDF_GetFieldAttr(m_pAnnotDict, "DA")->GetString() : CFX_ByteString();
 
 	if (bWidget)
 	{

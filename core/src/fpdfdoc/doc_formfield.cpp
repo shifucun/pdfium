@@ -1077,7 +1077,7 @@ FX_BOOL CPDF_FormField::ClearSelectedOptions(FX_BOOL bNotify)
 }
 void CPDF_FormField::LoadDA()
 {
-    CFX_ByteString DA = FPDF_GetFieldAttr(m_pDict, "DA")->GetString();
+	CFX_ByteString DA = FPDF_GetFieldAttr(m_pDict, "DA") ? FPDF_GetFieldAttr(m_pDict, "DA")->GetString() : CFX_ByteString();
     if (DA.IsEmpty()) {
 		DA = m_pForm->m_pFormDict ? m_pForm->m_pFormDict->GetString("DA") : CFX_ByteString();
     }
