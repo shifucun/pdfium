@@ -356,7 +356,7 @@ FX_BOOL CPDF_FlateEncoder::Initialize(CPDF_Stream* pStream, FX_BOOL bFlateEncode
     m_bNewData = TRUE;
     m_bCloned = TRUE;
     ::FlateEncode(m_Acc.GetData(), m_Acc.GetSize(), m_pData, m_dwSize);
-	m_pDict = pStream && (CPDF_Dictionary*)pStream->GetDict() ? (CPDF_Dictionary*)pStream->GetDict()->Clone() : NULL;
+	m_pDict = (CPDF_Dictionary*)pStream->GetDict()->Clone();
     m_pDict->SetAtInteger("Length", m_dwSize);
     m_pDict->SetAtName("Filter", "FlateDecode");
     m_pDict->RemoveAt("DecodeParms");
