@@ -655,7 +655,7 @@ void CPDF_StreamContentParser::Handle_SetDash()
     if (m_Options.m_bTextOnly) {
         return;
     }
-    CPDF_Array* pArray = GetObject(1)->GetArray();
+	CPDF_Array* pArray = GetObject(1) ? GetObject(1)->GetArray() : NULL;
     if (pArray == NULL) {
         return;
     }
