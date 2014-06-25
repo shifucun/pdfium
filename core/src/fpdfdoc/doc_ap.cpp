@@ -253,7 +253,7 @@ static FX_BOOL GenerateWidgetAP(CPDF_Document* pDoc, CPDF_Dictionary* pAnnotDict
     if (!pFormDict) {
         return FALSE;
     }
-    CFX_ByteString DA = FPDF_GetFieldAttr(pAnnotDict, "DA")->GetString();
+    CFX_ByteString DA = FPDF_GetFieldAttr(pAnnotDict, "DA") ? FPDF_GetFieldAttr(pAnnotDict, "DA")->GetString() : CFX_ByteString();
     if (DA.IsEmpty()) {
         DA = pFormDict->GetString("DA");
     }
@@ -277,7 +277,7 @@ static FX_BOOL GenerateWidgetAP(CPDF_Document* pDoc, CPDF_Dictionary* pAnnotDict
         bUseFormRes = TRUE;
     }
     CPDF_Dictionary * pDRFontDict = NULL;
-    if ((pDRFontDict = pDRDict->GetDict("Font"))) {
+    if (pDRDict && (pDRFontDict = pDRDict->GetDict("Font"))) {
         pFontDict = pDRFontDict->GetDict(sFontName.Mid(1));
         if (!pFontDict && !bUseFormRes) {
             pDRDict = pFormDict->GetDict(FX_BSTRC("DR"));
@@ -434,7 +434,7 @@ static FX_BOOL GenerateWidgetAP(CPDF_Document* pDoc, CPDF_Dictionary* pAnnotDict
 				FX_INT32 nAlign = FPDF_GetFieldAttr(pAnnotDict, "Q")? FPDF_GetFieldAttr(pAnnotDict, "Q")->GetInteger() : 0;
 				FX_DWORD dwFlags = FPDF_GetFieldAttr(pAnnotDict, "Ff")? FPDF_GetFieldAttr(pAnnotDict, "Ff")->GetInteger() : 0;
 				FX_DWORD dwMaxLen = FPDF_GetFieldAttr(pAnnotDict, "MaxLen") ? FPDF_GetFieldAttr(pAnnotDict, "MaxLen")->GetInteger() : 0;
-                CPVT_FontMap map(pDoc, pStreamDict->GetDict("Resources"), pDefFont, sFontName.Right(sFontName.GetLength() - 1));
+                CPVT_FontMap map(pDoc, pStreamDict ? pStreamDict->GetDict("Resources") : NULL , pDefFont, sFontName.Right(sFontName.GetLength() - 1));
                 CPVT_Provider prd(&map);
                 CPDF_VariableText vt;
                 vt.SetProvider(&prd);
@@ -483,7 +483,7 @@ static FX_BOOL GenerateWidgetAP(CPDF_Document* pDoc, CPDF_Dictionary* pAnnotDict
             break;
         case 1: {
 				CFX_WideString swValue = FPDF_GetFieldAttr(pAnnotDict, "V") ? FPDF_GetFieldAttr(pAnnotDict, "V")->GetUnicodeText() : CFX_WideString();
-                CPVT_FontMap map(pDoc, pStreamDict->GetDict("Resources"), pDefFont, sFontName.Right(sFontName.GetLength() - 1));
+                CPVT_FontMap map(pDoc, pStreamDict ? pStreamDict->GetDict("Resources"):NULL, pDefFont, sFontName.Right(sFontName.GetLength() - 1));
                 CPVT_Provider prd(&map);
                 CPDF_VariableText vt;
                 vt.SetProvider(&prd);
@@ -534,7 +534,7 @@ static FX_BOOL GenerateWidgetAP(CPDF_Document* pDoc, CPDF_Dictionary* pAnnotDict
             }
             break;
         case 2: {
-                CPVT_FontMap map(pDoc, pStreamDict->GetDict("Resources"), pDefFont, sFontName.Right(sFontName.GetLength() - 1));
+                CPVT_FontMap map(pDoc, pStreamDict ? pStreamDict->GetDict("Resources"):NULL, pDefFont, sFontName.Right(sFontName.GetLength() - 1));
                 CPVT_Provider prd(&map);
 				CPDF_Array * pOpts = FPDF_GetFieldAttr(pAnnotDict, "Opt") ? FPDF_GetFieldAttr(pAnnotDict, "Opt")->GetArray() : NULL;
 				CPDF_Array * pSels = FPDF_GetFieldAttr(pAnnotDict, "I") ? FPDF_GetFieldAttr(pAnnotDict, "I")->GetArray() : NULL;
