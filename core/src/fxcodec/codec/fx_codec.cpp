@@ -1,7 +1,7 @@
 // Copyright 2014 PDFium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
- 
+
 // Original code copyright 2014 Foxit Software Inc. http://www.foxitsoftware.com
 
 #include "../../../include/fxcodec/fx_codec.h"
@@ -119,8 +119,7 @@ void CCodec_ScanlineDecoder::DownScale(int dest_width, int dest_height)
         FX_Free(m_pDataCache);
         m_pDataCache = NULL;
     }
-    m_pDataCache = (CCodec_ImageDataCache*)FXMEM_DefaultAlloc(
-                       sizeof(CCodec_ImageDataCache) + m_Pitch * m_OutputHeight, FXMEM_NONLEAVE);
+    m_pDataCache = (CCodec_ImageDataCache*)FX_AllocNL(FX_BYTE, sizeof(CCodec_ImageDataCache) + m_Pitch * m_OutputHeight);
     if (m_pDataCache == NULL) {
         return;
     }

@@ -10256,9 +10256,7 @@ OPJ_BOOL opj_j2k_write_tile (opj_j2k_t * p_j2k,
 
 #ifdef _FOXIT_MEM_MANAGER_
 /** Allocate number of bytes */
-void*	FXMEM_DefaultAlloc(int byte_size, int flags);
-void*	FXMEM_DefaultRealloc(void* pointer, int new_size, int flags);
-void	FXMEM_DefaultFree(void* pointer, int flags);
+#include "../../../../include/fxcrt/fx_memory.h"
 
 void* opj_malloc(size_t size)
 {
@@ -10271,7 +10269,7 @@ void* opj_calloc(size_t _NumOfElements, size_t _SizeOfElements)
 {
 	void* buffer = NULL;
 
-	if (_NumOfElements != 0 && _NumOfElements >= (size_t)-0x100 / _SizeOfElements) return NULL;
+	if (_NumOfElements != 0 && _NumOfElements >= (OPJ_UINT32)-0x100 / _SizeOfElements) return NULL;
 	if ((int)_NumOfElements < 0 || (int)_SizeOfElements < 0) return NULL;
 
 	buffer = FXMEM_DefaultAlloc(_NumOfElements * _SizeOfElements, 0);
@@ -10288,6 +10286,18 @@ void* opj_realloc(void * m, size_t s)
 }
 
 void opj_free(void * m)
+{
+	FXMEM_DefaultFree(m, 0);
+}
+
+void* opj_aligned_malloc(size_t size)
+{
+	if (size >= (size_t)-0x100 || (int)size < 0) return NULL;
+
+	return (void*)FX_AlignedAlloc(FX_BYTE, size, 16);
+}
+
+void opj_aligned_free(void* m)
 {
 	FXMEM_DefaultFree(m, 0);
 }

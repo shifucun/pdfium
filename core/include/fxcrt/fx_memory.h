@@ -1,7 +1,7 @@
 // Copyright 2014 PDFium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
- 
+
 // Original code copyright 2014 Foxit Software Inc. http://www.foxitsoftware.com
 
 #ifndef _FX_MEMORY_H_
@@ -9,56 +9,67 @@
 #ifndef _FX_SYSTEM_H_
 #include "fx_system.h"
 #endif
-#define FXMEM_NONLEAVE			1
-#define FXMEM_MOVABLE			2
-#define FXMEM_DISCARDABLE		4
 #ifdef __cplusplus
 extern "C" {
 #endif
-typedef struct _FXMEM_SystemMgr {
-
-    void* (*Alloc)(struct _FXMEM_SystemMgr* pMgr, size_t size, int flags);
-
-    void* (*AllocDebug)(struct _FXMEM_SystemMgr* pMgr, size_t size, int flags, FX_LPCSTR file, int line);
-
-    void* (*Realloc)(struct _FXMEM_SystemMgr* pMgr, void* pointer, size_t size, int flags);
-
-    void* (*ReallocDebug)(struct _FXMEM_SystemMgr* pMgr, void* pointer, size_t size, int flags, FX_LPCSTR file, int line);
-
-    void* (*Lock)(struct _FXMEM_SystemMgr* pMgr, void* handle);
-
-    void  (*Unlock)(struct _FXMEM_SystemMgr* pMgr, void* handle);
-
-    void  (*Free)(struct _FXMEM_SystemMgr* pMgr, void* pointer, int flags);
-
-    void  (*Purge)(struct _FXMEM_SystemMgr* pMgr);
-
-    void  (*CollectAll)(struct _FXMEM_SystemMgr* pMgr);
-
-
-    void* user;
-} FXMEM_SystemMgr;
-FX_DEFINEHANDLE(FXMEM_FoxitMgr)
-typedef struct _FXMEM_SystemMgr2 {
-
-    FX_BOOL	(*More)(struct _FXMEM_SystemMgr2* pMgr, size_t alloc_size, void** new_memory, size_t* new_size);
-
-    void	(*Free)(struct _FXMEM_SystemMgr2* pMgr, void* memory);
-} FXMEM_SystemMgr2;
-FXMEM_FoxitMgr* FXMEM_CreateMemoryMgr(size_t size, FX_BOOL extensible);
-void	FXMEM_DestroyFoxitMgr(FXMEM_FoxitMgr* pFoxitMgr);
+#define FX_Alloc(type, size)						(type*)malloc(sizeof(type) * (size))
+#if _FXM_PLATFORM_ == _FXM_PLATFORM_WINDOWS_
+	#define FX_AlignedAlloc(type, size, align)			(type*)_aligned_malloc(sizeof(type) * (size), align)
+#else
+	#define FX_AlignedAlloc(type, size, align)			(type*)memalign(align, sizeof(type) * (size))
+#endif
+#define FX_Realloc(type, ptr, size)					(type*)realloc(ptr, sizeof(type) * (size))
+#define FX_AllocNL(type, size)						FX_Alloc(type, size)
+#define FX_ReallocNL(type, ptr, size)				FX_Realloc(type, ptr, size)
+#define FX_Free(ptr)								free(ptr)
 void*	FXMEM_DefaultAlloc(size_t byte_size, int flags);
-void*	FXMEM_DefaultAlloc2(size_t units, size_t unit_size, int flags);
 void*	FXMEM_DefaultRealloc(void* pointer, size_t new_size, int flags);
-void*	FXMEM_DefaultRealloc2(void* pointer, size_t units, size_t unit_size, int flags);
 void	FXMEM_DefaultFree(void* pointer, int flags);
-#define FX_Alloc(type, size)			(type*)FXMEM_DefaultAlloc2(size, sizeof(type), 0)
-#define FX_Realloc(type, ptr, size)		(type*)FXMEM_DefaultRealloc2(ptr, size, sizeof(type), 0)
-#define FX_AllocNL(type, size)			(type*)FXMEM_DefaultAlloc2(size, sizeof(type), FXMEM_NONLEAVE)
-#define FX_ReallocNL(type, ptr, size)	(type*)FXMEM_DefaultRealloc2(ptr, size, sizeof(type), FXMEM_NONLEAVE)
-#define FX_Free(pointer) FXMEM_DefaultFree(pointer, 0)
 #ifdef __cplusplus
 }
+#endif
+#ifdef __cplusplus
+class CFX_Object
+{
+public:
+    void*			operator new (size_t size, FX_LPCSTR file, int line)
+    {
+        return malloc(size);
+    }
+    void			operator delete (void* p, FX_LPCSTR file, int line)
+    {
+        free(p);
+    }
+    void*			operator new (size_t size)
+    {
+        return malloc(size);
+    }
+    void			operator delete (void* p)
+    {
+        free(p);
+    }
+    void*			operator new[] (size_t size, FX_LPCSTR file, int line)
+    {
+        return malloc(size);
+    }
+    void			operator delete[] (void* p, FX_LPCSTR file, int line)
+    {
+        free(p);
+    }
+    void*			operator new[] (size_t size)
+    {
+        return malloc(size);
+    }
+    void			operator delete[] (void* p)
+    {
+        free(p);
+    }
+    void*			operator new (size_t, void* buf)
+    {
+        return buf;
+    }
+    void			operator delete (void*, void*)							{}
+};
 #endif
 #ifdef __cplusplus
 #if defined(_DEBUG)
@@ -67,33 +78,6 @@ void	FXMEM_DefaultFree(void* pointer, int flags);
 
 #define FX_NEW new
 #endif
-class CFX_Object
-{
-public:
-
-    void*			operator new (size_t size, FX_LPCSTR file, int line);
-
-    void			operator delete (void* p, FX_LPCSTR file, int line);
-
-    void*			operator new (size_t size);
-
-    void			operator delete (void* p);
-
-    void*			operator new[] (size_t size, FX_LPCSTR file, int line);
-
-    void			operator delete[] (void* p, FX_LPCSTR file, int line);
-
-    void*			operator new[] (size_t size);
-
-    void			operator delete[] (void* p);
-
-    void*			operator new (size_t, void* buf)
-    {
-        return buf;
-    }
-
-    void			operator delete (void*, void*) {}
-};
 #define FX_NEW_VECTOR(Pointer, Class, Count) \
     { \
         Pointer = FX_Alloc(Class, Count); \
@@ -112,6 +96,7 @@ public:
 
     virtual ~CFX_DestructObject() {}
 };
+#endif
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -148,6 +133,7 @@ IFX_Allocator* FXMEM_GetDefAllocator();
 #endif
 #define FX_Allocator_Free(fxAllocator, ptr) \
     ((fxAllocator) ? (fxAllocator)->m_Free((fxAllocator), (ptr)) : (FX_Free(ptr)))
+#ifdef __cplusplus
 inline void* operator new(size_t size, IFX_Allocator* fxAllocator)
 {
     return (void*)FX_Allocator_Alloc(fxAllocator, FX_BYTE, size);
@@ -265,36 +251,5 @@ private:
 
     IFX_Allocator*	m_pAllocator;
 };
-#endif
-#ifdef __cplusplus
-extern "C" {
-#endif
-#define FX_FIXEDMEM_PAGESIZE		(4096 * 16)
-#define FX_FIXEDMEM_MIDBLOCKSIZE	(4096)
-typedef struct _FX_MEMCONFIG {
-
-    size_t	nPageNum_Init8;
-
-    size_t	nPageNum_Init16;
-
-    size_t	nPageNum_Init32;
-
-    size_t	nPageNum_More16;
-
-    size_t	nPageNum_More32;
-
-    size_t	nPageSize_Mid;
-
-    size_t	nPageNum_InitMid;
-
-    size_t	nPageNum_MoreMid;
-
-    size_t	nPageSize_Large;
-
-    size_t	nPageSize_Alone;
-} FX_MEMCONFIG;
-void	FXMEM_SetConfig(const FX_MEMCONFIG* memConfig);
-#ifdef __cplusplus
-}
 #endif
 #endif
