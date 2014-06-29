@@ -9,15 +9,11 @@
 #ifndef _FX_SYSTEM_H_
 #include "fx_system.h"
 #endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 #define FX_Alloc(type, size)						(type*)malloc(sizeof(type) * (size))
-#if _FXM_PLATFORM_ == _FXM_PLATFORM_WINDOWS_
-	#define FX_AlignedAlloc(type, size, align)			(type*)_aligned_malloc(sizeof(type) * (size), align)
-#else
-	#define FX_AlignedAlloc(type, size, align)			(type*)memalign(align, sizeof(type) * (size))
-#endif
 #define FX_Realloc(type, ptr, size)					(type*)realloc(ptr, sizeof(type) * (size))
 #define FX_AllocNL(type, size)						FX_Alloc(type, size)
 #define FX_ReallocNL(type, ptr, size)				FX_Realloc(type, ptr, size)
@@ -28,6 +24,7 @@ void	FXMEM_DefaultFree(void* pointer, int flags);
 #ifdef __cplusplus
 }
 #endif
+
 #ifdef __cplusplus
 class CFX_Object
 {
@@ -71,11 +68,11 @@ public:
     void			operator delete (void*, void*)							{}
 };
 #endif
+
 #ifdef __cplusplus
 #if defined(_DEBUG)
 #define FX_NEW new(__FILE__, __LINE__)
 #else
-
 #define FX_NEW new
 #endif
 #define FX_NEW_VECTOR(Pointer, Class, Count) \
@@ -93,10 +90,11 @@ public:
 class CFX_DestructObject : public CFX_Object
 {
 public:
-
     virtual ~CFX_DestructObject() {}
 };
 #endif
+
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -112,27 +110,27 @@ typedef struct _IFX_Allocator {
 
     void	(*m_Free)(struct _IFX_Allocator* pAllocator, void* p);
 } IFX_Allocator;
-IFX_Allocator* FXMEM_GetDefAllocator();
 #ifdef __cplusplus
 }
 #endif
-#ifdef _DEBUG
 
+
+#ifdef _DEBUG
 #define FX_Allocator_Alloc(fxAllocator, type, size) \
     ((fxAllocator) ? (type*)(fxAllocator)->m_AllocDebug((fxAllocator), (size) * sizeof(type), __FILE__, __LINE__) : (FX_Alloc(type, size)))
-
 #define FX_Allocator_Realloc(fxAllocator, type, ptr, new_size) \
     ((fxAllocator) ? (type*)(fxAllocator)->m_ReallocDebug((fxAllocator), (ptr), (new_size) * sizeof(type), __FILE__, __LINE__) : (FX_Realloc(type, ptr, new_size)))
 #else
-
 #define FX_Allocator_Alloc(fxAllocator, type, size) \
     ((fxAllocator) ? (type*)(fxAllocator)->m_Alloc((fxAllocator), (size) * sizeof(type)) : (FX_Alloc(type, size)))
-
 #define FX_Allocator_Realloc(fxAllocator, type, ptr, new_size) \
     ((fxAllocator) ? (type*)(fxAllocator)->m_Realloc((fxAllocator), (ptr), (new_size) * sizeof(type)) : (FX_Realloc(type, ptr, new_size)))
 #endif
+
 #define FX_Allocator_Free(fxAllocator, ptr) \
     ((fxAllocator) ? (fxAllocator)->m_Free((fxAllocator), (ptr)) : (FX_Free(ptr)))
+
+
 #ifdef __cplusplus
 inline void* operator new(size_t size, IFX_Allocator* fxAllocator)
 {
@@ -146,110 +144,13 @@ inline void operator delete(void* ptr, IFX_Allocator* fxAllocator)
 #define FX_DeleteAtAllocator(pointer, fxAllocator, __class__) \
     (pointer)->~__class__(); \
     FX_Allocator_Free(fxAllocator, pointer)
-class CFX_AllocObject
-{
-public:
 
-    void*			operator new (size_t size, IFX_Allocator* pAllocator, FX_LPCSTR file, int line);
-#ifndef _FX_NO_EXCEPTION_
-
-    void			operator delete (void* p, IFX_Allocator* pAllocator, FX_LPCSTR file, int line);
-#endif
-
-    void*			operator new (size_t size, IFX_Allocator* pAllocator);
-
-    void			operator delete (void* p);
-#ifndef _FX_NO_EXCEPTION_
-
-    void			operator delete (void* p, IFX_Allocator* pAllocator);
-#endif
-
-    void*			operator new (size_t, void* buf)
-    {
-        return buf;
-    }
-#ifndef _FX_NO_EXCEPTION_
-
-    void			operator delete (void*, void*) {}
-#endif
-
-    IFX_Allocator*	GetAllocator() const
-    {
-        return m_pAllocator;
-    }
-private:
-
-    void*			operator new[] (size_t size, IFX_Allocator* pAllocator, FX_LPCSTR file, int line)
-    {
-        return operator new(size, pAllocator, file, line);
-    }
-#ifndef _FX_NO_EXCEPTION_
-
-    void			operator delete[] (void* p, IFX_Allocator* pAllocator, FX_LPCSTR file, int line) {}
-#endif
-
-    void*			operator new[] (size_t size, IFX_Allocator* pAllocator)
-    {
-        return operator new(size, pAllocator);
-    }
-
-    void			operator delete[] (void* p) {}
-#ifndef _FX_NO_EXCEPTION_
-
-    void			operator delete[] (void* p, IFX_Allocator* pAllocator) {}
-#endif
-protected:
-
-    IFX_Allocator*	m_pAllocator;
-};
 #if defined(_DEBUG)
 #define FX_NEWAT(pAllocator) new(pAllocator, __FILE__, __LINE__)
 #else
-
 #define FX_NEWAT(pAllocator) new(pAllocator)
 #endif
-class CFX_GrowOnlyPool : public IFX_Allocator, public CFX_Object
-{
-public:
-
-    CFX_GrowOnlyPool(IFX_Allocator* pAllocator = NULL, size_t trunk_size = 16384);
-
-    ~CFX_GrowOnlyPool();
-
-    void	SetAllocator(IFX_Allocator* pAllocator);
-
-    void	SetTrunkSize(size_t trunk_size)
-    {
-        m_TrunkSize = trunk_size;
-    }
-
-    void*	AllocDebug(size_t size, FX_LPCSTR file, int line)
-    {
-        return Alloc(size);
-    }
-
-    void*	Alloc(size_t size);
-
-    void*	ReallocDebug(void* p, size_t new_size, FX_LPCSTR file, int line)
-    {
-        return NULL;
-    }
-
-    void*	Realloc(void* p, size_t new_size)
-    {
-        return NULL;
-    }
-
-    void	Free(void*) {}
-
-    void	FreeAll();
-private:
-
-    size_t	m_TrunkSize;
-
-    void*	m_pFirstTrunk;
-
-    IFX_Allocator*	m_pAllocator;
-};
 #endif
-#endif
+
+
+#endif //_FX_MEMORY_H_
