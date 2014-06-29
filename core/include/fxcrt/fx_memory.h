@@ -150,6 +150,49 @@ inline void operator delete(void* ptr, IFX_Allocator* fxAllocator)
 #else
 #define FX_NEWAT(pAllocator) new(pAllocator)
 #endif
+class CFX_GrowOnlyPool : public IFX_Allocator, public CFX_Object
+{
+public:
+
+    CFX_GrowOnlyPool(IFX_Allocator* pAllocator = NULL, size_t trunk_size = 16384);
+
+    ~CFX_GrowOnlyPool();
+
+    void	SetAllocator(IFX_Allocator* pAllocator);
+
+    void	SetTrunkSize(size_t trunk_size)
+    {
+        m_TrunkSize = trunk_size;
+    }
+
+    void*	AllocDebug(size_t size, FX_LPCSTR file, int line)
+    {
+        return Alloc(size);
+    }
+
+    void*	Alloc(size_t size);
+
+    void*	ReallocDebug(void* p, size_t new_size, FX_LPCSTR file, int line)
+    {
+        return NULL;
+    }
+
+    void*	Realloc(void* p, size_t new_size)
+    {
+        return NULL;
+    }
+
+    void	Free(void*) {}
+
+    void	FreeAll();
+private:
+
+    size_t	m_TrunkSize;
+
+    void*	m_pFirstTrunk;
+
+    IFX_Allocator*	m_pAllocator;
+};
 #endif
 
 
