@@ -116,19 +116,13 @@ typedef struct _IFX_Allocator {
 
 
 #ifdef _DEBUG
-#define FX_Allocator_Alloc(fxAllocator, type, size) \
-    ((fxAllocator) ? (type*)(fxAllocator)->m_AllocDebug((fxAllocator), (size) * sizeof(type), __FILE__, __LINE__) : (FX_Alloc(type, size)))
-#define FX_Allocator_Realloc(fxAllocator, type, ptr, new_size) \
-    ((fxAllocator) ? (type*)(fxAllocator)->m_ReallocDebug((fxAllocator), (ptr), (new_size) * sizeof(type), __FILE__, __LINE__) : (FX_Realloc(type, ptr, new_size)))
+#define FX_Allocator_Alloc(fxAllocator, type, size) FX_Alloc(type, size)
+#define FX_Allocator_Realloc(fxAllocator, type, ptr, new_size) FX_Realloc(type, ptr, new_size)
 #else
-#define FX_Allocator_Alloc(fxAllocator, type, size) \
-    ((fxAllocator) ? (type*)(fxAllocator)->m_Alloc((fxAllocator), (size) * sizeof(type)) : (FX_Alloc(type, size)))
-#define FX_Allocator_Realloc(fxAllocator, type, ptr, new_size) \
-    ((fxAllocator) ? (type*)(fxAllocator)->m_Realloc((fxAllocator), (ptr), (new_size) * sizeof(type)) : (FX_Realloc(type, ptr, new_size)))
+#define FX_Allocator_Alloc(fxAllocator, type, size) FX_Alloc(type, size)
+#define FX_Allocator_Realloc(fxAllocator, type, ptr, new_size) FX_Realloc(type, ptr, new_size)
 #endif
-
-#define FX_Allocator_Free(fxAllocator, ptr) \
-    ((fxAllocator) ? (fxAllocator)->m_Free((fxAllocator), (ptr)) : (FX_Free(ptr)))
+#define FX_Allocator_Free(fxAllocator, ptr) FX_Free(ptr)
 
 
 #ifdef __cplusplus
@@ -144,6 +138,7 @@ inline void operator delete(void* ptr, IFX_Allocator* fxAllocator)
 #define FX_DeleteAtAllocator(pointer, fxAllocator, __class__) \
     (pointer)->~__class__(); \
     FX_Allocator_Free(fxAllocator, pointer)
+
 
 #if defined(_DEBUG)
 #define FX_NEWAT(pAllocator) new(pAllocator, __FILE__, __LINE__)
