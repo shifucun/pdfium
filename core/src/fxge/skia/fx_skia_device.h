@@ -13,6 +13,9 @@ public:
     CFX_SkiaDeviceDriver(CFX_DIBitmap* pBitmap, int dither_bits, FX_BOOL bRgbByteOrder, CFX_DIBitmap* pOriDevice, FX_BOOL bGroupKnockout);
     virtual ~CFX_SkiaDeviceDriver();
 
+    void				InitPlatform();
+    void				DestroyPlatform();
+
     virtual int			GetDeviceCaps(int caps_id);
 
 
@@ -62,7 +65,7 @@ public:
     virtual FX_BOOL		GetDIBits(CFX_DIBitmap* pBitmap, int left, int top, void* pIccTransform = NULL, FX_BOOL bDEdge = FALSE);
     virtual CFX_DIBitmap*   GetBackDrop()
     {
-        return m_pAggDriver->GetBackDrop();
+        return m_pOriDevice;
     }
 
     virtual FX_BOOL		SetDIBits(const CFX_DIBSource* pBitmap, FX_DWORD color, const FX_RECT* pSrcRect,
@@ -82,17 +85,26 @@ public:
                                        CFX_FontCache* pCache, const CFX_AffineMatrix* pObject2Device, FX_FLOAT font_size, FX_DWORD color,
                                        int alpha_flag = 0, void* pIccTransform = NULL);
 
-    virtual FX_BOOL		RenderRasterizer(FX_NAMESPACE_DECLARE(agg, rasterizer_scanline_aa)& rasterizer, FX_DWORD color, FX_BOOL bFullCover, FX_BOOL bGroupKnockout,
-                                         int alpha_flag, void* pIccTransform);
     virtual FX_BOOL		RenderRasterizerSkia(SkPath& skPath, const SkPaint& origPaint, SkIRect& rect, FX_DWORD color, FX_BOOL bFullCover, FX_BOOL bGroupKnockout,
             int alpha_flag, void* pIccTransform, FX_BOOL bFill = TRUE);
-    void				SetClipMask(FX_NAMESPACE_DECLARE(agg, rasterizer_scanline_aa)& rasterizer);
     void				SetClipMask(SkPath& skPath, SkPaint* spaint);
     virtual	FX_LPBYTE	GetBuffer() const
     {
-        return m_pAggDriver->GetBuffer();
+        return m_pBitmap->GetBuffer();
     }
-    CFX_AggDeviceDriver* m_pAggDriver;
+
+private:
+    CFX_DIBitmap*		m_pBitmap;
+    CFX_ClipRgn*		m_pClipRgn;
+    CFX_PtrArray		m_StateStack;
+    void*				m_pPlatformGraphics;
+    void*				m_pPlatformBitmap;
+    void*				m_pDwRenderTartget;
+    int					m_FillFlags;
+    int					m_DitherBits;
+    FX_BOOL				m_bRgbByteOrder;
+    CFX_DIBitmap*       m_pOriDevice;
+    FX_BOOL             m_bGroupKnockout;
 };
 #endif
 #endif

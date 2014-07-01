@@ -8,14 +8,13 @@
 #if _FX_OS_ == _FX_WIN32_DESKTOP_ || _FX_OS_ == _FX_WIN64_
 #include "../../../include/fxge/fx_ge_win32.h"
 #include <crtdbg.h>
-#include "../agg/include/fxfx_agg_clip_liang_barsky.h"
 #include "dwrite_int.h"
 #include "win32_int.h"
 #include "../ge/text_int.h"
 #include "../dib/dib_int.h"
-#include "../agg/include/fx_agg_driver.h"
 #include "../../../include/fxge/fx_freetype.h"
 #include "../../../include/fxcodec/fx_codec.h"
+#include "agg_clip_liang_barsky.h"
 class CWin32FontInfo : public IFX_SystemFontInfo
 {
 public:
@@ -705,6 +704,7 @@ static void _SetPathToDC(HDC hDC, const CFX_PathData* pPathData, const CFX_Affin
     }
     EndPath(hDC);
 }
+
 void CGdiDeviceDriver::DrawLine(FX_FLOAT x1, FX_FLOAT y1, FX_FLOAT x2, FX_FLOAT y2)
 {
     int flag1 = (x1 < 0) | ((x1 > m_Width) << 1) | ((y1 < 0) << 2) | ((y1 > m_Height) << 3);
@@ -713,9 +713,9 @@ void CGdiDeviceDriver::DrawLine(FX_FLOAT x1, FX_FLOAT y1, FX_FLOAT x2, FX_FLOAT 
         return;
     }
     if (flag1 || flag2) {
-        agg::rect_base<FX_FLOAT> rect(0.0f, 0.0f, (FX_FLOAT)(m_Width), (FX_FLOAT)(m_Height));
+        CFX_FloatRect rect(0.0f, 0.0f, (FX_FLOAT)(m_Width), (FX_FLOAT)(m_Height));
         FX_FLOAT x[2], y[2];
-        int np = agg::clip_liang_barsky<FX_FLOAT>(x1, y1, x2, y2, rect, x, y);
+        int np = clip_liang_barsky(x1, y1, x2, y2, rect, x, y);
         if (np == 0) {
             return;
         }
