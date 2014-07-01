@@ -28,5 +28,6 @@ void CFX_GEModule::DestroyPlatform()
     if (m_pPlatformData) {
         ((IFPF_DeviceModule*)m_pPlatformData)->Destroy();
     }
+    m_pPlatformData = NULL;
 }
 #endif
