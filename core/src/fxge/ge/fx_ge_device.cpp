@@ -246,7 +246,11 @@ FX_BOOL CFX_RenderDevice::DrawPath(const CFX_PathData* pPathData,
             }
             Backdrop.Copy(&bitmap);
         }
+#if defined(_SKIA_SUPPORT_)
+        CFX_SkiaDevice bitmap_device;
+#else
         CFX_FxgeDevice bitmap_device;
+#endif
         bitmap_device.Attach(&bitmap, 0, FALSE, &Backdrop, TRUE);
         CFX_AffineMatrix matrix;
         if (pObject2Device) {

@@ -659,16 +659,6 @@
           'dependencies': [
             '<(DEPTH)/skia/skia.gyp:skia',
           ],
-          'include_dirs': [
-            '<(DEPTH)/third_party/skia/include/config',
-            '<(DEPTH)/third_party/skia/include/core',
-            '<(DEPTH)/third_party/skia/include/effects',
-            '<(DEPTH)/third_party/skia/include/images',
-            '<(DEPTH)/third_party/skia/include/lazy',
-            '<(DEPTH)/third_party/skia/include/pathops',
-            '<(DEPTH)/third_party/skia/include/utils',
-            '<(DEPTH)/third_party/skia/src/core',
-          ],
         }],
         ['OS=="win"', {
           'defines!': [

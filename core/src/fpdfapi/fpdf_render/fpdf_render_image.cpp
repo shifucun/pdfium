@@ -555,7 +555,11 @@ FX_BOOL	CPDF_ImageRenderer::DrawPatternImage(const CFX_Matrix* pObj2Device)
     new_matrix.TranslateI(-rect.left, -rect.top);
     int width = rect.Width();
     int height = rect.Height();
+#if defined(_SKIA_SUPPORT_)
+    CFX_SkiaDevice bitmap_device1;
+#else
     CFX_FxgeDevice bitmap_device1;
+#endif
     if (!bitmap_device1.Create(rect.Width(), rect.Height(), FXDIB_Rgb32)) {
         return TRUE;
     }
@@ -573,7 +577,11 @@ FX_BOOL	CPDF_ImageRenderer::DrawPatternImage(const CFX_Matrix* pObj2Device)
         }
     }
     {
+#if defined(_SKIA_SUPPORT_)
+        CFX_SkiaDevice bitmap_device2;
+#else
         CFX_FxgeDevice bitmap_device2;
+#endif
         if (!bitmap_device2.Create(rect.Width(), rect.Height(), FXDIB_8bppRgb)) {
             return TRUE;
         }
@@ -645,7 +653,11 @@ FX_BOOL CPDF_ImageRenderer::DrawMaskedImage()
     new_matrix.TranslateI(-rect.left, -rect.top);
     int width = rect.Width();
     int height = rect.Height();
+#if defined(_SKIA_SUPPORT_)
+    CFX_SkiaDevice bitmap_device1;
+#else
     CFX_FxgeDevice bitmap_device1;
+#endif
     if (!bitmap_device1.Create(width, height, FXDIB_Rgb32)) {
         return TRUE;
     }
@@ -660,7 +672,11 @@ FX_BOOL CPDF_ImageRenderer::DrawMaskedImage()
         }
     }
     {
+#if defined(_SKIA_SUPPORT_)
+        CFX_SkiaDevice bitmap_device2;
+#else
         CFX_FxgeDevice bitmap_device2;
+#endif
         if (!bitmap_device2.Create(width, height, FXDIB_8bppRgb)) {
             return TRUE;
         }
@@ -1065,7 +1081,11 @@ CFX_DIBitmap* CPDF_RenderStatus::LoadSMask(CPDF_Dictionary* pSMaskDict,
     matrix.TranslateI(-pClipRect->left, -pClipRect->top);
     CPDF_Form form(m_pContext->m_pDocument, m_pContext->m_pPageResources, pGroup);
     form.ParseContent(NULL, NULL, NULL, NULL);
+#if defined(_SKIA_SUPPORT_)
+    CFX_SkiaDevice bitmap_device;
+#else
     CFX_FxgeDevice bitmap_device;
+#endif
 #if _FXM_PLATFORM_  == _FXM_PLATFORM_APPLE_
     if (!bitmap_device.Create(width, height, bLuminosity ? FXDIB_Rgb32 : FXDIB_8bppMask)) {
         return NULL;

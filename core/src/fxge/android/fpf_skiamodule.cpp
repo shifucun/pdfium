@@ -38,7 +38,7 @@ IFPF_FontMgr* CFPF_SkiaDeviceModule::GetFontMgr()
         }
         if (!m_pFontMgr->InitFTLibrary()) {
             delete m_pFontMgr;
-            return NULL;
+            m_pFontMgr = NULL;
         }
     }
     return (IFPF_FontMgr*)m_pFontMgr;

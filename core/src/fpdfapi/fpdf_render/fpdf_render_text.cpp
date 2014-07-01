@@ -446,7 +446,11 @@ FX_BOOL CPDF_RenderStatus::ProcessType3Text(const CPDF_TextObject* textobj, cons
                 CFX_FloatRect rect_f = pType3Char->m_pForm->CalcBoundingBox();
                 rect_f.Transform(&matrix);
                 FX_RECT rect = rect_f.GetOutterRect();
+#if defined(_SKIA_SUPPORT_)
+                CFX_SkiaDevice bitmap_device;
+#else
                 CFX_FxgeDevice bitmap_device;
+#endif
                 if (!bitmap_device.Create((int)(rect.Width() * sa), (int)(rect.Height() * sd), FXDIB_Argb)) {
                     return TRUE;
                 }
