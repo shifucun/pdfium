@@ -5,7 +5,6 @@
 // Original code copyright 2014 Foxit Software Inc. http://www.foxitsoftware.com
 
 #include "../../../include/fxge/fx_ge.h"
-#include "../agg/include/fx_agg_driver.h"
 #include "text_int.h"
 #if !defined(_FPDFAPI_MINI_) &&  _FXM_PLATFORM_ == _FXM_PLATFORM_LINUX_
 #if (_FXM_PLATFORM_  == _FXM_PLATFORM_APPLE_ && (!defined(_FPDFAPI_MINI_)))
