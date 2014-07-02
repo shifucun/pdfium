@@ -9,7 +9,6 @@
 #ifndef _FX_SYSTEM_H_
 #include "fx_system.h"
 #endif
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -24,7 +23,6 @@ void	FXMEM_DefaultFree(void* pointer, int flags);
 #ifdef __cplusplus
 }
 #endif
-
 #ifdef __cplusplus
 class CFX_Object
 {
@@ -68,11 +66,11 @@ public:
     void			operator delete (void*, void*)							{}
 };
 #endif
-
 #ifdef __cplusplus
 #if defined(_DEBUG)
 #define FX_NEW new(__FILE__, __LINE__)
 #else
+
 #define FX_NEW new
 #endif
 #define FX_NEW_VECTOR(Pointer, Class, Count) \
@@ -90,70 +88,16 @@ public:
 class CFX_DestructObject : public CFX_Object
 {
 public:
+
     virtual ~CFX_DestructObject() {}
 };
-#endif
-
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-typedef struct _IFX_Allocator {
-
-    void*	(*m_AllocDebug)(struct _IFX_Allocator* pAllocator, size_t size, FX_LPCSTR file, int line);
-
-    void*	(*m_Alloc)(struct _IFX_Allocator* pAllocator, size_t size);
-
-    void*	(*m_ReallocDebug)(struct _IFX_Allocator* pAllocator, void* p, size_t size, FX_LPCSTR file, int line);
-
-    void*	(*m_Realloc)(struct _IFX_Allocator* pAllocator, void* p, size_t size);
-
-    void	(*m_Free)(struct _IFX_Allocator* pAllocator, void* p);
-} IFX_Allocator;
-#ifdef __cplusplus
-}
-#endif
-
-
-#ifdef _DEBUG
-#define FX_Allocator_Alloc(fxAllocator, type, size) FX_Alloc(type, size)
-#define FX_Allocator_Realloc(fxAllocator, type, ptr, new_size) FX_Realloc(type, ptr, new_size)
-#else
-#define FX_Allocator_Alloc(fxAllocator, type, size) FX_Alloc(type, size)
-#define FX_Allocator_Realloc(fxAllocator, type, ptr, new_size) FX_Realloc(type, ptr, new_size)
-#endif
-#define FX_Allocator_Free(fxAllocator, ptr) FX_Free(ptr)
-
-
-#ifdef __cplusplus
-inline void* operator new(size_t size, IFX_Allocator* fxAllocator)
-{
-    return (void*)FX_Allocator_Alloc(fxAllocator, FX_BYTE, size);
-}
-inline void operator delete(void* ptr, IFX_Allocator* fxAllocator)
-{
-}
-#define FX_NewAtAllocator(fxAllocator) \
-    ::new(fxAllocator)
-#define FX_DeleteAtAllocator(pointer, fxAllocator, __class__) \
-    (pointer)->~__class__(); \
-    FX_Allocator_Free(fxAllocator, pointer)
-
-
-#if defined(_DEBUG)
-#define FX_NEWAT(pAllocator) new(pAllocator, __FILE__, __LINE__)
-#else
-#define FX_NEWAT(pAllocator) new(pAllocator)
-#endif
-class CFX_GrowOnlyPool : public IFX_Allocator, public CFX_Object
+class CFX_GrowOnlyPool : public CFX_Object
 {
 public:
 
-    CFX_GrowOnlyPool(IFX_Allocator* pAllocator = NULL, size_t trunk_size = 16384);
+    CFX_GrowOnlyPool(size_t trunk_size = 16384);
 
     ~CFX_GrowOnlyPool();
-
-    void	SetAllocator(IFX_Allocator* pAllocator);
 
     void	SetTrunkSize(size_t trunk_size)
     {
@@ -185,10 +129,6 @@ private:
     size_t	m_TrunkSize;
 
     void*	m_pFirstTrunk;
-
-    IFX_Allocator*	m_pAllocator;
 };
 #endif
-
-
-#endif //_FX_MEMORY_H_
+#endif
