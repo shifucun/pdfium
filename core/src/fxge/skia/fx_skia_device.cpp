@@ -22,7 +22,7 @@ FX_BOOL FxSkDrawTreatAsHairline(const SkPaint& paint, SkScalar* coverage)
     }
     FXSYS_assert(coverage);
     SkScalar strokeWidth = paint.getStrokeWidth();
-    if (0 == strokeWidth) {
+    if (strokeWidth < 0.000001f) {
         *coverage = SK_Scalar1;
         return TRUE;
     }
@@ -44,7 +44,7 @@ void SuperBlitter_skia::DrawPath(const SkPath& srcPath, SkBlitter* blitter, cons
     {
         SkScalar coverage;
         if (FxSkDrawTreatAsHairline(origPaint, &coverage)) {
-            if (SK_Scalar1 == coverage) {
+            if (FXSYS_fabs(SK_Scalar1 - coverage) < 0.000001f) {
                 paint.writable()->setStrokeWidth(0);
             } else if (1) {
                 U8CPU newAlpha;
