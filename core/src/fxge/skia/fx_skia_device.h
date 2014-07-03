@@ -13,9 +13,6 @@ public:
     CFX_SkiaDeviceDriver(CFX_DIBitmap* pBitmap, int dither_bits, FX_BOOL bRgbByteOrder, CFX_DIBitmap* pOriDevice, FX_BOOL bGroupKnockout);
     virtual ~CFX_SkiaDeviceDriver();
 
-    void				InitPlatform();
-    void				DestroyPlatform();
-
     virtual int			GetDeviceCaps(int caps_id);
 
 

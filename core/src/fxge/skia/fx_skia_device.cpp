@@ -443,7 +443,6 @@ CFX_SkiaDeviceDriver::CFX_SkiaDeviceDriver(CFX_DIBitmap* pBitmap, int dither_bit
     m_pOriDevice = pOriDevice;
     m_bGroupKnockout = bGroupKnockout;
     m_FillFlags = 0;
-    InitPlatform();
 }
 CFX_SkiaDeviceDriver::~CFX_SkiaDeviceDriver()
 {
@@ -454,14 +453,6 @@ CFX_SkiaDeviceDriver::~CFX_SkiaDeviceDriver()
     if (m_StateStack[i]) {
         delete (CFX_ClipRgn*)m_StateStack[i];
     }
-    DestroyPlatform();
-}
-
-void CFX_SkiaDeviceDriver::InitPlatform()
-{
-}
-void CFX_SkiaDeviceDriver::DestroyPlatform()
-{
 }
 
 FX_BOOL CFX_SkiaDeviceDriver::DrawDeviceText(int nChars, const FXTEXT_CHARPOS* pCharPos, CFX_Font* pFont,
