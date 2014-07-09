@@ -1111,10 +1111,8 @@ FX_BOOL app::response(OBJ_METHOD_PARAMS)
 	}
 	else
 	{
-		nLength = nLength>2046?2046:nLength;
-    pBuff[nLength] = 0;
-    pBuff[nLength+1] = 0;
-		swResponse = CFX_WideString::FromUTF16LE((unsigned short*)pBuff, nLength);
+		nLength = nLength>2048?2048:nLength;
+		swResponse = CFX_WideString::FromUTF16LE((unsigned short*)pBuff, nLength/2);
 		vRet = swResponse;
 	}
 	delete[] pBuff;
