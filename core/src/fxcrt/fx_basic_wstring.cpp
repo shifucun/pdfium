@@ -401,12 +401,7 @@ CFX_WideString CFX_WideString::FromUTF8(const char* str, FX_STRSIZE len)
     if (!str) {
         return CFX_WideString();
     }
-    if (len < 0) {
-        len = 0;
-        while (str[len]) {
-            len ++;
-        }
-    }
+
     CFX_UTF8Decoder decoder;
     for (FX_STRSIZE i = 0; i < len; i ++) {
         decoder.Input(str[i]);
@@ -418,12 +413,7 @@ CFX_WideString CFX_WideString::FromUTF16LE(const unsigned short* wstr, FX_STRSIZ
     if (!wstr || !wlen) {
         return CFX_WideString();
     }
-    if (wlen < 0) {
-        wlen = 0;
-        while (wstr[wlen]) {
-            wlen ++;
-        }
-    }
+
     CFX_WideString result;
     FX_WCHAR* buf = result.GetBuffer(wlen);
     for (int i = 0; i < wlen; i ++) {
