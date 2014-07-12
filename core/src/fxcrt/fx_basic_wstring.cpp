@@ -398,7 +398,7 @@ CFX_WideString CFX_WideString::FromLocal(const char* str, FX_STRSIZE len)
 }
 CFX_WideString CFX_WideString::FromUTF8(const char* str, FX_STRSIZE len)
 {
-    if (!str) {
+    if (!str || 0 == len) {
         return CFX_WideString();
     }
 
@@ -410,7 +410,7 @@ CFX_WideString CFX_WideString::FromUTF8(const char* str, FX_STRSIZE len)
 }
 CFX_WideString CFX_WideString::FromUTF16LE(const unsigned short* wstr, FX_STRSIZE wlen)
 {
-    if (!wstr || !wlen) {
+    if (!wstr || 0 == wlen) {
         return CFX_WideString();
     }
 
@@ -422,6 +422,16 @@ CFX_WideString CFX_WideString::FromUTF16LE(const unsigned short* wstr, FX_STRSIZ
     result.ReleaseBuffer(wlen);
     return result;
 }
+FX_STRSIZE CFX_WideString::WStringLength(const unsigned short* str)
+{
+    FX_STRSIZE len = 0;
+    if (str)
+        while (str[len]) len++;
+    return len;
+}
+
+
+
 void CFX_WideString::AllocCopy(CFX_WideString& dest, FX_STRSIZE nCopyLen, FX_STRSIZE nCopyIndex) const
 {
     // |FX_STRSIZE| is currently typedef'd as in |int|. TODO(palmer): It

@@ -329,10 +329,8 @@ void* CWin32FontInfo::MapFont(int weight, FX_BOOL bItalic, int charset, int pitc
         if (face == VariantNames[i].m_pFaceName) {
             CFX_WideString wsFace = CFX_WideString::FromLocal(facebuf);
             const unsigned short* pName = (const unsigned short*)VariantNames[i].m_pVariantName;
-            FX_STRSIZE len = 0;
-            while (pName[len]) len++;
+            FX_STRSIZE len = CFX_WideString::WStringLength(pName);
             CFX_WideString wsName = CFX_WideString::FromUTF16LE(pName, len);
-
             if (wsFace == wsName) {
                 return hFont;
             }

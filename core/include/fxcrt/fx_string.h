@@ -638,6 +638,8 @@ public:
 
     static CFX_WideString	FromUTF16LE(const unsigned short* str, FX_STRSIZE len);
 
+    static FX_STRSIZE       WStringLength(const unsigned short* str);
+
     operator FX_LPCWSTR() const
     {
         return m_pData ? m_pData->m_String : (FX_WCHAR*)L"";
