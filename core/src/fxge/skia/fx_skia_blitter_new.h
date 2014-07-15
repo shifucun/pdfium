@@ -15,20 +15,20 @@ protected:
                 m_Green,
                 m_Blue,
                 m_Gray;
-    FX_DWORD  m_Color;
-    FX_BOOL   m_bFullCover;
-    int     m_ProcessFilter;
+    FX_DWORD    m_Color;
+    FX_BOOL     m_bFullCover;
+    int         m_ProcessFilter;
     FX_BOOL     m_bRgbByteOrder;
 
-    FX_RECT       m_ClipBox;
-    CFX_DIBitmap*   m_pDevice;
-    CFX_DIBitmap*   m_pOriDevice;
+    FX_RECT             m_ClipBox;
+    CFX_DIBitmap*       m_pDevice;
+    CFX_DIBitmap*       m_pOriDevice;
     const CFX_ClipRgn*  m_pClipRgn;
     const CFX_DIBitmap* m_pClipMask;
-    FX_LPBYTE m_pDestScan;
-    FX_LPBYTE m_pDestExtraAlphaScan;
-    FX_LPBYTE m_pOriScan;
-    FX_LPBYTE m_pClipScan;
+    FX_LPBYTE           m_pDestScan;
+    FX_LPBYTE           m_pDestExtraAlphaScan;
+    FX_LPBYTE           m_pOriScan;
+    FX_LPBYTE           m_pClipScan;
     void (CFX_SkiaRenderer::*composite_span)(FX_LPBYTE, FX_LPBYTE, int, int, int, int, FX_BYTE, int, int, int, FX_LPBYTE, FX_LPBYTE);
 public:
     virtual void blitAntiH(int x, int y, const SkAlpha antialias[], const int16_t runs[]);
