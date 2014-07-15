@@ -10,21 +10,21 @@
 class CFX_SkiaRenderer : public SkBlitter, public CFX_Object
 {
 protected:
-    int			m_Alpha,
+    int         m_Alpha,
                 m_Red,
                 m_Green,
                 m_Blue,
                 m_Gray;
-    FX_DWORD	m_Color;
-    FX_BOOL		m_bFullCover;
-    int			m_ProcessFilter;
+    FX_DWORD  m_Color;
+    FX_BOOL   m_bFullCover;
+    int     m_ProcessFilter;
     FX_BOOL     m_bRgbByteOrder;
 
-    FX_RECT				m_ClipBox;
-    CFX_DIBitmap*		m_pDevice;
-    CFX_DIBitmap*		m_pOriDevice;
-    const CFX_ClipRgn*	m_pClipRgn;
-    const CFX_DIBitmap*	m_pClipMask;
+    FX_RECT       m_ClipBox;
+    CFX_DIBitmap*   m_pDevice;
+    CFX_DIBitmap*   m_pOriDevice;
+    const CFX_ClipRgn*  m_pClipRgn;
+    const CFX_DIBitmap* m_pClipMask;
     FX_LPBYTE m_pDestScan;
     FX_LPBYTE m_pDestExtraAlphaScan;
     FX_LPBYTE m_pOriScan;
@@ -35,7 +35,7 @@ public:
     virtual void blitH(int x, int y, int width);
     virtual void blitV(int x, int y, int height, SkAlpha alpha);
     virtual void blitRect(int x, int y, int width, int height);
-    virtual	void blitAntiRect(int x, int y, int width, int height, SkAlpha leftAlpha, SkAlpha rightAlpha);
+    virtual void blitAntiRect(int x, int y, int width, int height, SkAlpha leftAlpha, SkAlpha rightAlpha);
 
 
     void CompositeSpan1bpp_0(FX_LPBYTE dest_scan, FX_LPBYTE ori_scan, int Bpp,
@@ -189,7 +189,7 @@ public:
     virtual void blitH(int x, int y, int width);
     virtual void blitV(int x, int y, int height, SkAlpha alpha);
     virtual void blitRect(int x, int y, int width, int height);
-    virtual	void blitAntiRect(int x, int y, int width, int height, SkAlpha leftAlpha, SkAlpha rightAlpha);
+    virtual void blitAntiRect(int x, int y, int width, int height, SkAlpha leftAlpha, SkAlpha rightAlpha);
     FX_BOOL Init(CFX_DIBitmap* pDevice, int Left, int Top);
     CFX_DIBitmap* m_pDevice;
     int m_Left;
