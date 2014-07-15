@@ -1095,14 +1095,7 @@ void CFX_SkiaA8Renderer::blitAntiH(int x, int y, const SkAlpha antialias[], cons
             int result = col_end - col_start;
             if (result > 0) {
                 dest_pos = dest_scan + col_start;
-                if (result >= 4) {
-                    for (int col = 0; col < result; col++) {
-                        *(FX_DWORD*)dest_pos = FXARGB_MAKE(aa, aa, aa, aa);
-                        dest_pos += 4;
-                    }
-                } else {
-                    FXSYS_memset(dest_pos, aa, result);
-                }
+                FXSYS_memset(dest_pos, aa, result);
             }
         }
         runs += width;
@@ -1127,14 +1120,7 @@ void CFX_SkiaA8Renderer::blitH(int x, int y, int width)
     int result = col_end - col_start;
     if (result > 0) {
         FX_BYTE* dest_pos = dest_scan + col_start;
-        if (result >= 4) {
-            for (int col = 0; col < result; col++) {
-                *(FX_DWORD*)dest_pos = 0xffffffff;
-                dest_pos += 4;
-            }
-        } else {
-            FXSYS_memset(dest_pos, 255, result);
-        }
+        FXSYS_memset(dest_pos, 255, result);
     }
 }
 void CFX_SkiaA8Renderer::blitV(int x, int y, int height, SkAlpha alpha)
