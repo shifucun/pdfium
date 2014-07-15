@@ -169,7 +169,10 @@ void CFX_SkiaRenderer::CompositeSpanGray_2(FX_LPBYTE dest_scan, FX_LPBYTE ori_sc
     }
     dest_scan += col_start;
     if (cover_scan == 255 && m_Alpha == 255) {
-        FXSYS_memset32(dest_scan, FXARGB_MAKE(m_Gray, m_Gray, m_Gray, m_Gray), col_end - col_start);
+        for (int col = 0; col < col_end - col_start; col++) {
+            *(FX_DWORD*)dest_scan = FXARGB_MAKE(m_Gray, m_Gray, m_Gray, m_Gray);
+            dest_scan += 4;
+        }
         return;
     }
     int src_alpha = m_Alpha * cover_scan / 255;
@@ -195,7 +198,10 @@ void CFX_SkiaRenderer::CompositeSpanGray_3(FX_LPBYTE dest_scan, FX_LPBYTE ori_sc
     dest_scan += col_start;
     ori_scan += col_start;
     if (m_Alpha == 255 && cover_scan == 255) {
-        FXSYS_memset32(dest_scan, FXARGB_MAKE(m_Gray, m_Gray, m_Gray, m_Gray), col_end - col_start);
+        for (int col = 0; col < col_end - col_start; col++) {
+            *(FX_DWORD*)dest_scan = FXARGB_MAKE(m_Gray, m_Gray, m_Gray, m_Gray);
+            dest_scan += 4;
+        }
     } else {
         int src_alpha = m_Alpha;
         for (int col = col_start; col < col_end; col ++) {
@@ -276,7 +282,10 @@ void CFX_SkiaRenderer::CompositeSpanARGB_2(FX_LPBYTE dest_scan, FX_LPBYTE ori_sc
     }
     dest_scan += col_start << 2;
     if (m_Alpha == 255 && cover_scan == 255) {
-        FXSYS_memset8(dest_scan, m_Color, (col_end - col_start) << 2);
+        for (int col = 0; col < col_end - col_start; col++) {
+            *(FX_DWORD*)dest_scan = m_Color;
+            dest_scan += 4;
+        }
         return;
     }
     int src_alpha;
@@ -315,12 +324,18 @@ void CFX_SkiaRenderer::CompositeSpanARGB_3(FX_LPBYTE dest_scan, FX_LPBYTE ori_sc
     }
     dest_scan += col_start << 2;
     if (m_Alpha == 255 && cover_scan == 255) {
-        FXSYS_memset8(dest_scan, m_Color, (col_end - col_start) << 2);
+        for (int col = 0; col < col_end - col_start; col++) {
+            *(FX_DWORD*)dest_scan = m_Color;
+            dest_scan += 4;
+        }
         return;
     }
     if (cover_scan == 255) {
         int dst_color = (0x00ffffff & m_Color) | (m_Alpha << 24);
-        FXSYS_memset8(dest_scan, dst_color, (col_end - col_start) << 2);
+        for (int col = 0; col < col_end - col_start; col++) {
+            *(FX_DWORD*)dest_scan = dst_color;
+            dest_scan += 4;
+        }
         return;
     }
     int src_alpha_covered = m_Alpha * cover_scan / 255;
@@ -439,7 +454,10 @@ void CFX_SkiaRenderer::CompositeSpanRGB32_2(FX_LPBYTE dest_scan, FX_LPBYTE ori_s
     }
     dest_scan += (col_start << 2);
     if (m_Alpha == 255 && cover_scan == 255) {
-        FXSYS_memset8(dest_scan, m_Color, (col_end - col_start) << 2);
+        for (int col = 0; col < col_end - col_start; col++) {
+            *(FX_DWORD*)dest_scan = m_Color;
+            dest_scan += 4;
+        }
         return;
     }
     int src_alpha;
@@ -468,7 +486,10 @@ void CFX_SkiaRenderer::CompositeSpanRGB32_3(FX_LPBYTE dest_scan, FX_LPBYTE ori_s
     dest_scan += col_start << 2;
     ori_scan += col_start << 2;
     if (m_Alpha == 255 && cover_scan == 255) {
-        FXSYS_memset8(dest_scan, m_Color, (col_end - col_start) << 2);
+        for (int col = 0; col < col_end - col_start; col++) {
+            *(FX_DWORD*)dest_scan = m_Color;
+            dest_scan += 4;
+        }
         return;
     }
     int src_alpha = m_Alpha;
@@ -1075,9 +1096,12 @@ void CFX_SkiaA8Renderer::blitAntiH(int x, int y, const SkAlpha antialias[], cons
             if (result > 0) {
                 dest_pos = dest_scan + col_start;
                 if (result >= 4) {
-                    FXSYS_memset32(dest_pos, FXARGB_MAKE(aa, aa, aa, aa), result);
+                    for (int col = 0; col < result; col++) {
+                        *(FX_DWORD*)dest_pos = FXARGB_MAKE(aa, aa, aa, aa);
+                        dest_pos += 4;
+                    }
                 } else {
-                    FXSYS_memset8(dest_pos, aa, result);
+                    FXSYS_memset(dest_pos, aa, result);
                 }
             }
         }
@@ -1104,9 +1128,12 @@ void CFX_SkiaA8Renderer::blitH(int x, int y, int width)
     if (result > 0) {
         FX_BYTE* dest_pos = dest_scan + col_start;
         if (result >= 4) {
-            FXSYS_memset32(dest_pos, 0xffffffff, result);
+            for (int col = 0; col < result; col++) {
+                *(FX_DWORD*)dest_pos = 0xffffffff;
+                dest_pos += 4;
+            }
         } else {
-            FXSYS_memset8(dest_pos, 255, result);
+            FXSYS_memset(dest_pos, 255, result);
         }
     }
 }
