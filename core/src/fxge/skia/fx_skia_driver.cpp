@@ -660,7 +660,7 @@ FX_BOOL FxSkDrawTreatAsHairline(const SkPaint& paint, SkScalar* coverage)
     return FALSE;
 }
 
-void SkRasterizeStroke(SkPaint& spaint, SkPath* dstPathData, SkPath& path_data,
+static void SkRasterizeStroke(SkPaint& spaint, SkPath* dstPathData, SkPath& path_data,
     const CFX_AffineMatrix* pObject2Device,
     const CFX_GraphStateData* pGraphState, FX_FLOAT scale,
     FX_BOOL bStrokeAdjust, FX_BOOL bTextMode)
