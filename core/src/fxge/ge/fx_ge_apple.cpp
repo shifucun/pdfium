@@ -7,20 +7,23 @@
 #include "../../../include/fxcrt/fx_ext.h"
 #include "../../../include/fxge/fx_ge.h"
 #if _FXM_PLATFORM_  == _FXM_PLATFORM_APPLE_
-#include "apple_int.h"
+#include "../apple/apple_int.h"
 #include "../../../include/fxge/fx_ge_apple.h"
-#include "../agg/include/fxfx_agg_clip_liang_barsky.h"
+//#include "../agg/include/fxfx_agg_clip_liang_barsky.h"
 #include "../ge/text_int.h"
 #include "../dib/dib_int.h"
-#include "../agg/include/fx_agg_driver.h"
+//#include "../agg/include/fx_agg_driver.h"
 #include "../../../include/fxge/fx_freetype.h"
+#include "../skia/fx_skia.h"
+#include "../skia/fx_skia_device.h"
+
 #if (_FXM_PLATFORM_  == _FXM_PLATFORM_APPLE_ && (!defined(_FPDFAPI_MINI_)))
-void CFX_AggDeviceDriver::InitPlatform()
+void CFX_SkiaDeviceDriver::InitPlatform()
 {
     CQuartz2D & quartz2d = ((CApplePlatform *) CFX_GEModule::Get()->GetPlatformData())->_quartz2d;
     m_pPlatformGraphics = quartz2d.createGraphics(m_pBitmap);
 }
-void CFX_AggDeviceDriver::DestroyPlatform()
+void CFX_SkiaDeviceDriver::DestroyPlatform()
 {
     CQuartz2D & quartz2d = ((CApplePlatform *) CFX_GEModule::Get()->GetPlatformData())->_quartz2d;
     if (m_pPlatformGraphics) {
@@ -100,7 +103,7 @@ static FX_BOOL _CGDrawGlyphRun(CGContextRef               pContext,
                                        NULL);
 }
 static void _DoNothing(void *info, const void *data, size_t size) {}
-FX_BOOL CFX_AggDeviceDriver::DrawDeviceText(int						 nChars,
+FX_BOOL CFX_SkiaDeviceDriver::DrawDeviceText(int nChars,
         const FXTEXT_CHARPOS *	 pCharPos,
         CFX_Font *				 pFont,
         CFX_FontCache *			 pCache,

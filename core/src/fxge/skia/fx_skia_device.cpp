@@ -455,12 +455,6 @@ CFX_SkiaDeviceDriver::~CFX_SkiaDeviceDriver()
     }
 }
 
-FX_BOOL CFX_SkiaDeviceDriver::DrawDeviceText(int nChars, const FXTEXT_CHARPOS* pCharPos, CFX_Font* pFont,
-        CFX_FontCache* pCache, const CFX_AffineMatrix* pObject2Device, FX_FLOAT font_size, FX_DWORD color,
-        int alpha_flag, void* pIccTransform)
-{
-    return FALSE;
-}
 int CFX_SkiaDeviceDriver::GetDeviceCaps(int caps_id)
 {
     switch (caps_id) {
