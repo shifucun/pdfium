@@ -222,12 +222,8 @@ DLLEXPORT void STDCALL FPDF_FFLDraw(FPDF_FORMHANDLE hHandle, FPDF_BITMAP bitmap,
 	clip.top = start_y;
 	clip.bottom = start_y + size_y;
 
-#ifdef _SKIA_SUPPORT_
-	CFX_SkiaDevice* pDevice = FX_NEW CFX_SkiaDevice;
-#else
 	CFX_FxgeDevice* pDevice = NULL;
 	pDevice = FX_NEW CFX_FxgeDevice;
-#endif
 
 	if (!pDevice)
 		return;

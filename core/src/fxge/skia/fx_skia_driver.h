@@ -4,14 +4,14 @@
 
 // Original code copyright 2014 Foxit Software Inc. http://www.foxitsoftware.com
 
-#ifndef _FX_SKIA_DEVICE_DRIVER_
-#define _FX_SKIA_DEVICE_DRIVER_
-#if defined(_SKIA_SUPPORT_)
-class CFX_SkiaDeviceDriver : public IFX_RenderDeviceDriver
+#ifndef _FX_SKIA_DRIVER_
+#define _FX_SKIA_DRIVER_
+
+class CFX_SkiaDriver : public IFX_RenderDeviceDriver
 {
 public:
-    CFX_SkiaDeviceDriver(CFX_DIBitmap* pBitmap, int dither_bits, FX_BOOL bRgbByteOrder, CFX_DIBitmap* pOriDevice, FX_BOOL bGroupKnockout);
-    virtual ~CFX_SkiaDeviceDriver();
+    CFX_SkiaDriver(CFX_DIBitmap* pBitmap, int dither_bits, FX_BOOL bRgbByteOrder, CFX_DIBitmap* pOriDevice, FX_BOOL bGroupKnockout);
+    virtual ~CFX_SkiaDriver();
     
     void                InitPlatform();
     void                DestroyPlatform();
@@ -106,5 +106,5 @@ private:
     CFX_DIBitmap*       m_pOriDevice;
     FX_BOOL             m_bGroupKnockout;
 };
-#endif
+
 #endif

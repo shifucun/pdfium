@@ -6,10 +6,12 @@
 
 #ifndef _FX_SKIA_H_
 #define _FX_SKIA_H_
+
 #include "SkBlitter.h"
 #include "SkDashPathEffect.h"
 #include "SkTLazy.h"
 #include "SkScan.h"
 #include "SkRasterClip.h"
 #include "SkStroke.h"
+
 #endif

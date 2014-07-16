@@ -6,16 +6,7 @@
 
 #include "../../../include/fxge/fx_ge.h"
 #include "text_int.h"
-#include "../skia/fx_skia.h"
-#include "../skia/fx_skia_device.h"
 #if !defined(_FPDFAPI_MINI_) &&  _FXM_PLATFORM_ == _FXM_PLATFORM_LINUX_
-
-FX_BOOL CFX_SkiaDeviceDriver::DrawDeviceText(int nChars, const FXTEXT_CHARPOS* pCharPos, CFX_Font* pFont,
-    CFX_FontCache* pCache, const CFX_AffineMatrix* pObject2Device, FX_FLOAT font_size, FX_DWORD color,
-    int alpha_flag, void* pIccTransform)
-{
-    return FALSE;
-}
 
 static const struct {
     FX_LPCSTR	m_pName;

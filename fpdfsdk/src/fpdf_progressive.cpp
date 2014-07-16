@@ -34,19 +34,12 @@ DLLEXPORT int STDCALL FPDF_RenderPageBitmap_Start( FPDF_BITMAP bitmap, FPDF_PAGE
 	
 	CRenderContext* pContext = FX_NEW CRenderContext;
 	pPage->SetPrivateData((void*)1, pContext, DropContext );
-#ifdef _SKIA_SUPPORT_
-	pContext->m_pDevice = FX_NEW CFX_SkiaDevice;
-	if (flags & FPDF_REVERSE_BYTE_ORDER)
-		((CFX_SkiaDevice*)pContext->m_pDevice)->Attach((CFX_DIBitmap*)bitmap,0,TRUE);
-	else
-		((CFX_SkiaDevice*)pContext->m_pDevice)->Attach((CFX_DIBitmap*)bitmap);
-#else
 	pContext->m_pDevice = FX_NEW CFX_FxgeDevice;
 	if (flags & FPDF_REVERSE_BYTE_ORDER)
 		((CFX_FxgeDevice*)pContext->m_pDevice)->Attach((CFX_DIBitmap*)bitmap,0,TRUE);
 	else
 		((CFX_FxgeDevice*)pContext->m_pDevice)->Attach((CFX_DIBitmap*)bitmap);
-#endif
+
 	IFSDK_PAUSE_Adapter IPauseAdapter(pause);
 	
 	if (flags & FPDF_NO_CATCH)

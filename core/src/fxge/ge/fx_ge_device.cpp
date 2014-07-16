@@ -5,6 +5,8 @@
 // Original code copyright 2014 Foxit Software Inc. http://www.foxitsoftware.com
 
 #include "../../../include/fxge/fx_ge.h"
+#include "../skia/fx_skia_driver.h"
+
 CFX_RenderDevice::CFX_RenderDevice()
 {
     m_pDeviceDriver = NULL;
@@ -246,11 +248,7 @@ FX_BOOL CFX_RenderDevice::DrawPath(const CFX_PathData* pPathData,
             }
             Backdrop.Copy(&bitmap);
         }
-#if defined(_SKIA_SUPPORT_)
-        CFX_SkiaDevice bitmap_device;
-#else
         CFX_FxgeDevice bitmap_device;
-#endif
         bitmap_device.Attach(&bitmap, 0, FALSE, &Backdrop, TRUE);
         CFX_AffineMatrix matrix;
         if (pObject2Device) {
@@ -406,4 +404,48 @@ FX_BOOL CFX_RenderDevice::ContinueDIBits(FX_LPVOID handle, IFX_Pause* pPause)
 void CFX_RenderDevice::CancelDIBits(FX_LPVOID handle)
 {
     m_pDeviceDriver->CancelDIBits(handle);
+}
+
+
+CFX_FxgeDevice::CFX_FxgeDevice()
+{
+    m_bOwnedBitmap = FALSE;
+}
+FX_BOOL CFX_FxgeDevice::Attach(CFX_DIBitmap* pBitmap, int dither_bits, FX_BOOL bRgbByteOrder, CFX_DIBitmap* pOriDevice, FX_BOOL bGroupKnockout)
+{
+    if (pBitmap == NULL) {
+        return FALSE;
+    }
+    SetBitmap(pBitmap);
+    CFX_SkiaDriver* pDriver = FX_NEW CFX_SkiaDriver(pBitmap, dither_bits, bRgbByteOrder, pOriDevice, bGroupKnockout);
+    if (!pDriver) {
+        return FALSE;
+    }
+    SetDeviceDriver(pDriver);
+    return TRUE;
+}
+FX_BOOL CFX_FxgeDevice::Create(int width, int height, FXDIB_Format format, int dither_bits, CFX_DIBitmap* pOriDevice)
+{
+    m_bOwnedBitmap = TRUE;
+    CFX_DIBitmap* pBitmap = FX_NEW CFX_DIBitmap;
+    if (!pBitmap) {
+        return FALSE;
+    }
+    if (!pBitmap->Create(width, height, format)) {
+        delete pBitmap;
+        return FALSE;
+    }
+    SetBitmap(pBitmap);
+    CFX_SkiaDriver* pDriver = FX_NEW CFX_SkiaDriver(pBitmap, dither_bits, FALSE, pOriDevice, FALSE);
+    if (!pDriver) {
+        return FALSE;
+    }
+    SetDeviceDriver(pDriver);
+    return TRUE;
+}
+CFX_FxgeDevice::~CFX_FxgeDevice()
+{
+    if (m_bOwnedBitmap && GetBitmap()) {
+        delete GetBitmap();
+    }
 }

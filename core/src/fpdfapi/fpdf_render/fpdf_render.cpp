@@ -831,11 +831,8 @@ FX_BOOL CPDF_RenderStatus::ProcessTransparency(const CPDF_PageObject* pPageObj, 
     FX_FLOAT scaleY = FXSYS_fabs(deviceCTM.d);
     int width = FXSYS_round((FX_FLOAT)rect.Width() * scaleX);
     int height = FXSYS_round((FX_FLOAT)rect.Height() * scaleY);
-#if defined(_SKIA_SUPPORT_)
-    CFX_SkiaDevice bitmap_device;
-#else
+
     CFX_FxgeDevice bitmap_device;
-#endif
     CFX_DIBitmap* oriDevice = NULL;
     if (!isolated && (m_pDevice->GetRenderCaps() & FXRC_GET_BITS)) {
         oriDevice = FX_NEW CFX_DIBitmap;
@@ -860,11 +857,7 @@ FX_BOOL CPDF_RenderStatus::ProcessTransparency(const CPDF_PageObject* pPageObj, 
             return TRUE;
         }
         pTextMask->Clear(0);
-#if defined(_SKIA_SUPPORT_)
-        CFX_SkiaDevice text_device;
-#else
         CFX_FxgeDevice text_device;
-#endif
         text_device.Attach(pTextMask);
         for (FX_DWORD i = 0; i < pPageObj->m_ClipPath.GetTextCount(); i ++) {
             CPDF_TextObject* textobj = pPageObj->m_ClipPath.GetText(i);
@@ -947,11 +940,7 @@ CFX_DIBitmap* CPDF_RenderStatus::GetBackdrop(const CPDF_PageObject* pObj, const 
     FinalMatrix.TranslateI(-left, -top);
     FinalMatrix.Scale(scaleX, scaleY);
     pBackdrop->Clear(pBackdrop->HasAlpha() ? 0 : 0xffffffff);
-#if defined(_SKIA_SUPPORT_)
-    CFX_SkiaDevice device;
-#else
     CFX_FxgeDevice device;
-#endif
     device.Attach(pBackdrop);
     m_pContext->Render(&device, pObj, &m_Options, &FinalMatrix);
     return pBackdrop;
@@ -959,11 +948,7 @@ CFX_DIBitmap* CPDF_RenderStatus::GetBackdrop(const CPDF_PageObject* pObj, const 
 void CPDF_RenderContext::GetBackground(CFX_DIBitmap* pBuffer, const CPDF_PageObject* pObj,
                                        const CPDF_RenderOptions* pOptions, CFX_AffineMatrix* pFinalMatrix)
 {
-#if defined(_SKIA_SUPPORT_)
-    CFX_SkiaDevice device;
-#else
     CFX_FxgeDevice device;
-#endif
     device.Attach(pBuffer);
     if (m_pBackgroundDraw) {
         m_pBackgroundDraw->OnDrawBackground(&device, pFinalMatrix);
@@ -1451,11 +1436,7 @@ FX_BOOL CPDF_ScaledRenderBuffer::Initialize(CPDF_RenderContext* pContext, CFX_Re
             m_Matrix.Scale(1.0f, (FX_FLOAT)(max_dpi) / (FX_FLOAT)dpiv);
         }
     }
-#if defined(_SKIA_SUPPORT_)
-    m_pBitmapDevice = FX_NEW CFX_SkiaDevice;
-#else
     m_pBitmapDevice = FX_NEW CFX_FxgeDevice;
-#endif
     FXDIB_Format dibFormat = FXDIB_Rgb;
     FX_INT32 bpp = 24;
     if (m_pDevice->GetDeviceCaps(FXDC_RENDER_CAPS) & FXRC_ALPHA_OUTPUT) {

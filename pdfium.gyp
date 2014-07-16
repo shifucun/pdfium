@@ -1,7 +1,4 @@
 {
-  'variables': {
-    'pdf_use_skia%': 0,
-  },
   'target_defaults': {
     'defines' : [
       'FOXIT_CHROME_BUILD',
@@ -626,7 +623,6 @@
         'core/src/fxge/ge/fx_ge_device.cpp',
         'core/src/fxge/ge/fx_ge_font.cpp',
         'core/src/fxge/ge/fx_ge_fontmap.cpp',
-        'core/src/fxge/ge/fx_ge_windows.cpp',
         'core/src/fxge/ge/fx_ge_linux.cpp',
         'core/src/fxge/ge/fx_ge_apple.cpp',
         'core/src/fxge/ge/fx_ge_path.cpp',
@@ -637,8 +633,8 @@
       'conditions': [
         ['pdf_use_skia==1', {
           'sources': [
-            'core/src/fxge/skia/fx_skia_blitter_new.cpp',
-            'core/src/fxge/skia/fx_skia_device.cpp',
+            'core/src/fxge/skia/fx_skia_blitter.cpp',
+            'core/src/fxge/skia/fx_skia_driver.cpp',
           ],
           'dependencies': [
             '<(DEPTH)/skia/skia.gyp:skia',

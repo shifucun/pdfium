@@ -449,13 +449,8 @@ DLLEXPORT void STDCALL FPDF_RenderPage(HDC dc, FPDF_PAGE page, int start_x, int 
 		pBitmap = FX_NEW CFX_DIBitmap;
 		pBitmap->Create(size_x, size_y, FXDIB_Argb);
 		pBitmap->Clear(0x00ffffff);
-#ifdef _SKIA_SUPPORT_
-		pContext->m_pDevice = FX_NEW CFX_SkiaDevice;
-		((CFX_SkiaDevice*)pContext->m_pDevice)->Attach((CFX_DIBitmap*)pBitmap);
-#else
 		pContext->m_pDevice = FX_NEW CFX_FxgeDevice;
 		((CFX_FxgeDevice*)pContext->m_pDevice)->Attach((CFX_DIBitmap*)pBitmap);
-#endif
 	}
 	else
 	pContext->m_pDevice = FX_NEW CFX_WindowsDevice(dc);
@@ -605,21 +600,14 @@ DLLEXPORT void STDCALL FPDF_RenderPageBitmap(FPDF_BITMAP bitmap, FPDF_PAGE page,
 
 	CRenderContext* pContext = FX_NEW CRenderContext;
 	pPage->SetPrivateData((void*)1, pContext, DropContext);
-#ifdef _SKIA_SUPPORT_
-	pContext->m_pDevice = FX_NEW CFX_SkiaDevice;
 
-	if (flags & FPDF_REVERSE_BYTE_ORDER)
-		((CFX_SkiaDevice*)pContext->m_pDevice)->Attach((CFX_DIBitmap*)bitmap,0,TRUE);
-	else
-		((CFX_SkiaDevice*)pContext->m_pDevice)->Attach((CFX_DIBitmap*)bitmap);
-#else
 	pContext->m_pDevice = FX_NEW CFX_FxgeDevice;
 
 	if (flags & FPDF_REVERSE_BYTE_ORDER)
 		((CFX_FxgeDevice*)pContext->m_pDevice)->Attach((CFX_DIBitmap*)bitmap,0,TRUE);
 	else
 		((CFX_FxgeDevice*)pContext->m_pDevice)->Attach((CFX_DIBitmap*)bitmap);
-#endif
+
 	if (flags & FPDF_NO_CATCH)
 		Func_RenderPage(pContext, page, start_x, start_y, size_x, size_y, rotate, flags,TRUE,NULL);
 	else {
@@ -728,11 +716,7 @@ DLLEXPORT FPDF_BITMAP STDCALL FPDFBitmap_CreateEx(int width, int height, int for
 DLLEXPORT void STDCALL FPDFBitmap_FillRect(FPDF_BITMAP bitmap, int left, int top, int width, int height, FPDF_DWORD color)
 {
 	if (bitmap == NULL) return;
-#ifdef _SKIA_SUPPORT_
-	CFX_SkiaDevice device;
-#else
 	CFX_FxgeDevice device;
-#endif
 	device.Attach((CFX_DIBitmap*)bitmap);
 	if (!((CFX_DIBitmap*)bitmap)->HasAlpha()) color |= 0xFF000000;
 	FX_RECT rect(left, top, left+width, top+height);

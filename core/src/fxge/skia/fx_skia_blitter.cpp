@@ -5,10 +5,9 @@
 // Original code copyright 2014 Foxit Software Inc. http://www.foxitsoftware.com
 
 #include "../../../include/fxge/fx_ge.h"
-#if defined(_SKIA_SUPPORT_)
 #include "../../../include/fxcodec/fx_codec.h"
 #include "fx_skia.h"
-#include "fx_skia_blitter_new.h"
+#include "fx_skia_blitter.h"
 void CFX_SkiaRenderer::blitAntiH(int x, int y, const SkAlpha antialias[], const int16_t runs[])
 {
     FXSYS_assert(m_Alpha);
@@ -1171,4 +1170,3 @@ FX_BOOL CFX_SkiaA8Renderer::Init(CFX_DIBitmap* pDevice, int Left, int Top)
     }
     return TRUE;
 }
-#endif

@@ -5,11 +5,10 @@
 // Original code copyright 2014 Foxit Software Inc. http://www.foxitsoftware.com
 
 #include "../../../include/fxge/fx_ge.h"
-#if defined(_SKIA_SUPPORT_)
 #include "../../../include/fxcodec/fx_codec.h"
 #include "fx_skia.h"
-#include "fx_skia_blitter_new.h"
-#include "fx_skia_device.h"
+#include "fx_skia_blitter.h"
+#include "fx_skia_driver.h"
 class SuperBlitter_skia
 {
 public:
@@ -431,7 +430,7 @@ void RgbByteOrderTransferBitmap(CFX_DIBitmap* pBitmap, int dest_left, int dest_t
     }
 }
 
-CFX_SkiaDeviceDriver::CFX_SkiaDeviceDriver(CFX_DIBitmap* pBitmap, int dither_bits, FX_BOOL bRgbByteOrder, CFX_DIBitmap* pOriDevice, FX_BOOL bGroupKnockout)
+CFX_SkiaDriver::CFX_SkiaDriver(CFX_DIBitmap* pBitmap, int dither_bits, FX_BOOL bRgbByteOrder, CFX_DIBitmap* pOriDevice, FX_BOOL bGroupKnockout)
 {
     m_pBitmap = pBitmap;
     m_DitherBits = dither_bits;
@@ -444,7 +443,7 @@ CFX_SkiaDeviceDriver::CFX_SkiaDeviceDriver(CFX_DIBitmap* pBitmap, int dither_bit
     m_bGroupKnockout = bGroupKnockout;
     m_FillFlags = 0;
 }
-CFX_SkiaDeviceDriver::~CFX_SkiaDeviceDriver()
+CFX_SkiaDriver::~CFX_SkiaDriver()
 {
     if (m_pClipRgn) {
         delete m_pClipRgn;
@@ -455,7 +454,7 @@ CFX_SkiaDeviceDriver::~CFX_SkiaDeviceDriver()
     }
 }
 
-int CFX_SkiaDeviceDriver::GetDeviceCaps(int caps_id)
+int CFX_SkiaDriver::GetDeviceCaps(int caps_id)
 {
     switch (caps_id) {
     case FXDC_DEVICE_CLASS:
@@ -492,7 +491,7 @@ int CFX_SkiaDeviceDriver::GetDeviceCaps(int caps_id)
     }
     return 0;
 }
-void CFX_SkiaDeviceDriver::SaveState()
+void CFX_SkiaDriver::SaveState()
 {
     void* pClip = NULL;
     if (m_pClipRgn) {
@@ -503,7 +502,7 @@ void CFX_SkiaDeviceDriver::SaveState()
     }
     m_StateStack.Add(pClip);
 }
-void CFX_SkiaDeviceDriver::RestoreState(FX_BOOL bKeepSaved)
+void CFX_SkiaDriver::RestoreState(FX_BOOL bKeepSaved)
 {
     if (m_StateStack.GetSize() == 0) {
         if (m_pClipRgn) {
@@ -528,7 +527,7 @@ void CFX_SkiaDeviceDriver::RestoreState(FX_BOOL bKeepSaved)
     }
 }
 
-void CFX_SkiaDeviceDriver::SetClipMask(SkPath& skPath, SkPaint* spaint)
+void CFX_SkiaDriver::SetClipMask(SkPath& skPath, SkPaint* spaint)
 {
     SkIRect clip_box;
     clip_box.set(0, 0, (FX_FLOAT)(GetDeviceCaps(FXDC_PIXEL_WIDTH)), (FX_FLOAT)(GetDeviceCaps(FXDC_PIXEL_HEIGHT)));
@@ -550,7 +549,7 @@ void CFX_SkiaDeviceDriver::SetClipMask(SkPath& skPath, SkPaint* spaint)
     SuperBlitter_skia::DrawPath(skPath, (SkBlitter*)&render, rasterClip, *spaint);
     m_pClipRgn->IntersectMaskF(clip_box.fLeft, clip_box.fTop, mask);
 }
-FX_BOOL CFX_SkiaDeviceDriver::SetClip_PathFill(const CFX_PathData* pPathData,
+FX_BOOL CFX_SkiaDriver::SetClip_PathFill(const CFX_PathData* pPathData,
         const CFX_AffineMatrix* pObject2Device,
         int fill_mode
                                               )
@@ -581,7 +580,7 @@ FX_BOOL CFX_SkiaDeviceDriver::SetClip_PathFill(const CFX_PathData* pPathData,
     SetClipMask(path_data.m_PathData, &spaint);
     return TRUE;
 }
-FX_BOOL CFX_SkiaDeviceDriver::SetClip_PathStroke(const CFX_PathData* pPathData,
+FX_BOOL CFX_SkiaDriver::SetClip_PathStroke(const CFX_PathData* pPathData,
         const CFX_AffineMatrix* pObject2Device,
         const CFX_GraphStateData* pGraphState
                                                 )
@@ -606,7 +605,7 @@ FX_BOOL CFX_SkiaDeviceDriver::SetClip_PathStroke(const CFX_PathData* pPathData,
     return TRUE;
 }
 
-FX_BOOL	CFX_SkiaDeviceDriver::RenderRasterizerSkia(SkPath& skPath, const SkPaint& origPaint, SkIRect& rect, FX_DWORD color, FX_BOOL bFullCover, FX_BOOL bGroupKnockout,
+FX_BOOL	CFX_SkiaDriver::RenderRasterizerSkia(SkPath& skPath, const SkPaint& origPaint, SkIRect& rect, FX_DWORD color, FX_BOOL bFullCover, FX_BOOL bGroupKnockout,
         int alpha_flag, void* pIccTransform, FX_BOOL bFill)
 {
     CFX_DIBitmap* pt = bGroupKnockout ? this->GetBackDrop() : NULL;
@@ -618,7 +617,7 @@ FX_BOOL	CFX_SkiaDeviceDriver::RenderRasterizerSkia(SkPath& skPath, const SkPaint
     SuperBlitter_skia::DrawPath(skPath, (SkBlitter*)&render,  rasterClip, origPaint);
     return TRUE;
 }
-FX_BOOL	CFX_SkiaDeviceDriver::DrawPath(const CFX_PathData* pPathData,
+FX_BOOL	CFX_SkiaDriver::DrawPath(const CFX_PathData* pPathData,
                                        const CFX_AffineMatrix* pObject2Device,
                                        const CFX_GraphStateData* pGraphState,
                                        FX_DWORD fill_color,
@@ -680,7 +679,7 @@ FX_BOOL	CFX_SkiaDeviceDriver::DrawPath(const CFX_PathData* pPathData,
 
 
 
-FX_BOOL CFX_SkiaDeviceDriver::SetPixel(int x, int y, FX_DWORD color, int alpha_flag, void* pIccTransform)
+FX_BOOL CFX_SkiaDriver::SetPixel(int x, int y, FX_DWORD color, int alpha_flag, void* pIccTransform)
 {
     if (m_pBitmap->GetBuffer() == NULL) {
         return TRUE;
@@ -728,7 +727,7 @@ FX_BOOL CFX_SkiaDeviceDriver::SetPixel(int x, int y, FX_DWORD color, int alpha_f
 
 
 
-FX_BOOL CFX_SkiaDeviceDriver::FillRect(const FX_RECT* pRect, FX_DWORD fill_color, int alpha_flag, void* pIccTransform, int blend_type)
+FX_BOOL CFX_SkiaDriver::FillRect(const FX_RECT* pRect, FX_DWORD fill_color, int alpha_flag, void* pIccTransform, int blend_type)
 {
     if (blend_type != FXDIB_BLEND_NORMAL) {
         return FALSE;
@@ -759,7 +758,7 @@ FX_BOOL CFX_SkiaDeviceDriver::FillRect(const FX_RECT* pRect, FX_DWORD fill_color
     return TRUE;
 }
 
-FX_BOOL CFX_SkiaDeviceDriver::GetClipBox(FX_RECT* pRect)
+FX_BOOL CFX_SkiaDriver::GetClipBox(FX_RECT* pRect)
 {
     if (m_pClipRgn == NULL) {
         pRect->left = pRect->top = 0;
@@ -772,7 +771,7 @@ FX_BOOL CFX_SkiaDeviceDriver::GetClipBox(FX_RECT* pRect)
 }
 
 
-FX_BOOL	CFX_SkiaDeviceDriver::GetDIBits(CFX_DIBitmap* pBitmap, int left, int top, void* pIccTransform, FX_BOOL bDEdge)
+FX_BOOL	CFX_SkiaDriver::GetDIBits(CFX_DIBitmap* pBitmap, int left, int top, void* pIccTransform, FX_BOOL bDEdge)
 {
     if (m_pBitmap->GetBuffer() == NULL) {
         return TRUE;
@@ -813,7 +812,7 @@ FX_BOOL	CFX_SkiaDeviceDriver::GetDIBits(CFX_DIBitmap* pBitmap, int left, int top
     delete pBack;
     return bRet;
 }
-FX_BOOL	CFX_SkiaDeviceDriver::SetDIBits(const CFX_DIBSource* pBitmap, FX_DWORD argb, const FX_RECT* pSrcRect, int left, int top, int blend_type,
+FX_BOOL	CFX_SkiaDriver::SetDIBits(const CFX_DIBSource* pBitmap, FX_DWORD argb, const FX_RECT* pSrcRect, int left, int top, int blend_type,
                                         int alpha_flag, void* pIccTransform)
 {
     if (m_pBitmap->GetBuffer() == NULL) {
@@ -825,7 +824,7 @@ FX_BOOL	CFX_SkiaDeviceDriver::SetDIBits(const CFX_DIBSource* pBitmap, FX_DWORD a
     return m_pBitmap->CompositeBitmap(left, top, pSrcRect->Width(), pSrcRect->Height(), pBitmap,
         pSrcRect->left, pSrcRect->top, blend_type, m_pClipRgn, m_bRgbByteOrder, pIccTransform);
 }
-FX_BOOL	CFX_SkiaDeviceDriver::StretchDIBits(const CFX_DIBSource* pSource, FX_DWORD argb, int dest_left, int dest_top,
+FX_BOOL	CFX_SkiaDriver::StretchDIBits(const CFX_DIBSource* pSource, FX_DWORD argb, int dest_left, int dest_top,
         int dest_width, int dest_height, const FX_RECT* pClipRect, FX_DWORD flags,
         int alpha_flag, void* pIccTransform, int blend_type)
 {
@@ -849,7 +848,7 @@ FX_BOOL	CFX_SkiaDeviceDriver::StretchDIBits(const CFX_DIBSource* pSource, FX_DWO
     }
     return TRUE;
 }
-FX_BOOL	CFX_SkiaDeviceDriver::StartDIBits(const CFX_DIBSource* pSource, int bitmap_alpha, FX_DWORD argb,
+FX_BOOL	CFX_SkiaDriver::StartDIBits(const CFX_DIBSource* pSource, int bitmap_alpha, FX_DWORD argb,
         const CFX_AffineMatrix* pMatrix, FX_DWORD render_flags, FX_LPVOID& handle,
         int alpha_flag, void* pIccTransform, int blend_type)
 {
@@ -864,60 +863,103 @@ FX_BOOL	CFX_SkiaDeviceDriver::StartDIBits(const CFX_DIBSource* pSource, int bitm
     handle = pRenderer;
     return TRUE;
 }
-FX_BOOL	CFX_SkiaDeviceDriver::ContinueDIBits(FX_LPVOID pHandle, IFX_Pause* pPause)
+FX_BOOL	CFX_SkiaDriver::ContinueDIBits(FX_LPVOID pHandle, IFX_Pause* pPause)
 {
     if (m_pBitmap->GetBuffer() == NULL) {
         return TRUE;
     }
     return ((CFX_ImageRenderer*)pHandle)->Continue(pPause);
 }
-void CFX_SkiaDeviceDriver::CancelDIBits(FX_LPVOID pHandle)
+void CFX_SkiaDriver::CancelDIBits(FX_LPVOID pHandle)
 {
     if (m_pBitmap->GetBuffer() == NULL) {
         return;
     }
     delete (CFX_ImageRenderer*)pHandle;
 }
-CFX_SkiaDevice::CFX_SkiaDevice()
+
+
+FX_BOOL CFX_SkiaDriver::DrawDeviceText(int nChars, const FXTEXT_CHARPOS* pCharPos, CFX_Font* pFont,
+    CFX_FontCache* pCache, const CFX_AffineMatrix* pObject2Device, FX_FLOAT font_size, FX_DWORD color,
+    int alpha_flag, void* pIccTransform)
 {
-    m_bOwnedBitmap = FALSE;
-}
-FX_BOOL CFX_SkiaDevice::Attach(CFX_DIBitmap* pBitmap, int dither_bits, FX_BOOL bRgbByteOrder, CFX_DIBitmap* pOriDevice, FX_BOOL bGroupKnockout)
-{
-    if (pBitmap == NULL) {
-        return FALSE;
-    }
-    SetBitmap(pBitmap);
-    CFX_SkiaDeviceDriver* pDriver = FX_NEW CFX_SkiaDeviceDriver(pBitmap, dither_bits, bRgbByteOrder, pOriDevice, bGroupKnockout);
-    if (!pDriver) {
-        return FALSE;
-    }
-    SetDeviceDriver(pDriver);
-    return TRUE;
-}
-FX_BOOL CFX_SkiaDevice::Create(int width, int height, FXDIB_Format format, int dither_bits, CFX_DIBitmap* pOriDevice)
-{
-    m_bOwnedBitmap = TRUE;
-    CFX_DIBitmap* pBitmap = FX_NEW CFX_DIBitmap;
-    if (!pBitmap) {
-        return FALSE;
-    }
-    if (!pBitmap->Create(width, height, format)) {
-        delete pBitmap;
-        return FALSE;
-    }
-    SetBitmap(pBitmap);
-    CFX_SkiaDeviceDriver* pDriver =  FX_NEW CFX_SkiaDeviceDriver(pBitmap, dither_bits, FALSE, pOriDevice, FALSE);
-    if (!pDriver) {
-        return FALSE;
-    }
-    SetDeviceDriver(pDriver);
-    return TRUE;
-}
-CFX_SkiaDevice::~CFX_SkiaDevice()
-{
-    if (m_bOwnedBitmap && GetBitmap()) {
-        delete GetBitmap();
-    }
-}
+#if _FX_OS_ == _FX_WIN32_DESKTOP_ || _FX_OS_ == _FX_WIN64_  || _FXM_PLATFORM_ == _FXM_PLATFORM_LINUX_
+    return FALSE;
 #endif
+
+#if (_FXM_PLATFORM_  == _FXM_PLATFORM_APPLE_ && (!defined(_FPDFAPI_MINI_)))
+    if (!pFont) {
+        return FALSE;
+    }
+    FX_BOOL bBold = pFont->IsBold();
+    if (!bBold && pFont->GetSubstFont() &&
+        pFont->GetSubstFont()->m_Weight >= 500 &&
+        pFont->GetSubstFont()->m_Weight <= 600) {
+        return FALSE;
+    }
+    for (int i = 0; i < nChars; i++) {
+        if (pCharPos[i].m_bGlyphAdjust) {
+            return FALSE;
+        }
+    }
+    CGContextRef ctx = CGContextRef(m_pPlatformGraphics);
+    if (NULL == ctx) {
+        return FALSE;
+    }
+    CGContextSaveGState(ctx);
+    CGContextSetTextDrawingMode(ctx, kCGTextFillClip);
+    CGRect rect_cg;
+    CGImageRef pImageCG = NULL;
+    if (m_pClipRgn) {
+        rect_cg = CGRectMake(m_pClipRgn->GetBox().left, m_pClipRgn->GetBox().top, m_pClipRgn->GetBox().Width(), m_pClipRgn->GetBox().Height());
+        const CFX_DIBitmap*	pClipMask = m_pClipRgn->GetMask();
+        if (pClipMask) {
+            CGDataProviderRef pClipMaskDataProvider = CGDataProviderCreateWithData(NULL,
+                pClipMask->GetBuffer(),
+                pClipMask->GetPitch() * pClipMask->GetHeight(),
+                _DoNothing);
+            CGFloat decode_f[2] = { 255.f, 0.f };
+            pImageCG = CGImageMaskCreate(pClipMask->GetWidth(), pClipMask->GetHeight(),
+                8, 8, pClipMask->GetPitch(), pClipMaskDataProvider,
+                decode_f, FALSE);
+            CGDataProviderRelease(pClipMaskDataProvider);
+        }
+    }
+    else {
+        rect_cg = CGRectMake(0, 0, m_pBitmap->GetWidth(), m_pBitmap->GetHeight());
+    }
+    rect_cg = CGContextConvertRectToDeviceSpace(ctx, rect_cg);
+    if (pImageCG) {
+        CGContextClipToMask(ctx, rect_cg, pImageCG);
+    }
+    else {
+        CGContextClipToRect(ctx, rect_cg);
+    }
+    FX_BOOL ret = _CGDrawGlyphRun(ctx, nChars, pCharPos, pFont, pCache, pObject2Device, font_size, argb, alpha_flag, pIccTransform);
+    if (pImageCG) {
+        CGImageRelease(pImageCG);
+    }
+    CGContextRestoreGState(ctx);
+    return ret;
+#endif
+
+}
+
+void CFX_SkiaDriver::InitPlatform()
+{
+#if (_FXM_PLATFORM_  == _FXM_PLATFORM_APPLE_ && (!defined(_FPDFAPI_MINI_)))
+    CQuartz2D & quartz2d = ((CApplePlatform *)CFX_GEModule::Get()->GetPlatformData())->_quartz2d;
+    m_pPlatformGraphics = quartz2d.createGraphics(m_pBitmap);
+#endif
+}
+
+void CFX_SkiaDriver::DestroyPlatform()
+{
+#if (_FXM_PLATFORM_  == _FXM_PLATFORM_APPLE_ && (!defined(_FPDFAPI_MINI_)))
+    CQuartz2D & quartz2d = ((CApplePlatform *)CFX_GEModule::Get()->GetPlatformData())->_quartz2d;
+    if (m_pPlatformGraphics) {
+        quartz2d.destroyGraphics(m_pPlatformGraphics);
+        m_pPlatformGraphics = NULL;
+    }
+#endif
+}

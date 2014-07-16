@@ -276,11 +276,7 @@ private:
     CPDF_RenderContext*	m_pContext;
     FX_RECT				m_Rect;
     const CPDF_PageObject* m_pObject;
-#if defined(_SKIA_SUPPORT_)
-    CFX_SkiaDevice* m_pBitmapDevice;
-#else
     CFX_FxgeDevice*	m_pBitmapDevice;
-#endif
     CFX_AffineMatrix	m_Matrix;
 };
 class ICodec_ScanlineDecoder;

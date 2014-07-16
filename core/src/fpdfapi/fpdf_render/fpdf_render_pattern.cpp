@@ -673,11 +673,7 @@ static void _DrawCoonPatchMeshes(FX_BOOL bTensor, CFX_DIBitmap* pBitmap, CFX_Aff
     if (pShadingStream->GetType() != PDFOBJ_STREAM) {
         return;
     }
-#if defined(_SKIA_SUPPORT_)
-    CFX_SkiaDevice device;
-#else
     CFX_FxgeDevice device;
-#endif
     device.Attach(pBitmap);
     CPDF_MeshStream stream;
     if (!stream.Load(pShadingStream, pFuncs, nFuncs, pCS)) {
@@ -876,11 +872,7 @@ static CFX_DIBitmap* DrawPatternBitmap(CPDF_Document* pDoc, CPDF_PageRenderCache
         delete pBitmap;
         return NULL;
     }
-#if defined(_SKIA_SUPPORT_)
-    CFX_SkiaDevice bitmap_device;
-#else
     CFX_FxgeDevice bitmap_device;
-#endif
     bitmap_device.Attach(pBitmap);
     pBitmap->Clear(0);
     CFX_FloatRect cell_bbox = pPattern->m_BBox;

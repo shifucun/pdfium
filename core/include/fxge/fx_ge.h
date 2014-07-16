@@ -490,21 +490,6 @@ protected:
 
     FX_BOOL			m_bOwnedBitmap;
 };
-class CFX_SkiaDevice : public CFX_RenderDevice
-{
-public:
-
-    CFX_SkiaDevice();
-
-    ~CFX_SkiaDevice();
-
-    FX_BOOL			Attach(CFX_DIBitmap* pBitmap, int dither_bits = 0, FX_BOOL bRgbByteOrder = FALSE, CFX_DIBitmap* pOriDevice = NULL, FX_BOOL bGroupKnockout = FALSE);
-
-    FX_BOOL			Create(int width, int height, FXDIB_Format format, int dither_bits = 0, CFX_DIBitmap* pOriDevice = NULL);
-protected:
-
-    FX_BOOL			m_bOwnedBitmap;
-};
 class IFX_RenderDeviceDriver : public CFX_Object
 {
 public:
@@ -638,8 +623,8 @@ class IFX_PSOutput
 {
 public:
 
-    virtual void	OutputPS(FX_LPCSTR string, int len) = 0;
-    virtual void  Release() = 0;
+    virtual void    OutputPS(FX_LPCSTR string, int len) = 0;
+    virtual void    Release() = 0;
 };
 class CPSFont;
 class CFX_PSRenderer : public CFX_Object
