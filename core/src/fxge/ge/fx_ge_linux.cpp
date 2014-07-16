@@ -6,8 +6,10 @@
 
 #include "../../../include/fxge/fx_ge.h"
 #include "text_int.h"
+#include "../skia/fx_skia.h"
+#include "../skia/fx_skia_device.h"
 #if !defined(_FPDFAPI_MINI_) &&  _FXM_PLATFORM_ == _FXM_PLATFORM_LINUX_
-#if (_FXM_PLATFORM_  == _FXM_PLATFORM_APPLE_ && (!defined(_FPDFAPI_MINI_)))
+
 void CFX_SkiaDeviceDriver::InitPlatform()
 {
 }
@@ -31,7 +33,7 @@ CFX_GlyphBitmap* CFX_FaceCache::RenderGlyph_Nativetext(CFX_Font* pFont, FX_DWORD
 void CFX_Font::ReleasePlatformResource()
 {
 }
-#endif
+
 static const struct {
     FX_LPCSTR	m_pName;
     FX_LPCSTR	m_pSubstName;
