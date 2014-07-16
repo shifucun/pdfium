@@ -8,6 +8,7 @@
 #include "../../../include/fxcodec/fx_codec.h"
 #include "fx_skia.h"
 #include "fx_skia_blitter.h"
+
 void CFX_SkiaRenderer::blitAntiH(int x, int y, const SkAlpha antialias[], const int16_t runs[])
 {
     FXSYS_assert(m_Alpha);
@@ -32,6 +33,7 @@ void CFX_SkiaRenderer::blitAntiH(int x, int y, const SkAlpha antialias[], const 
         x += width;
     }
 }
+
 void CFX_SkiaRenderer::blitH(int x, int y, int width)
 {
     FXSYS_assert(m_Alpha && width);
@@ -40,6 +42,7 @@ void CFX_SkiaRenderer::blitH(int x, int y, int width)
     }
     (this->*composite_span)(m_pDestScan, m_pOriScan, 0, x, width, y, 255, m_ClipBox.top, m_ClipBox.left, m_ClipBox.right, m_pClipScan, m_pDestExtraAlphaScan);
 }
+
 void CFX_SkiaRenderer::blitV(int x, int y, int height, SkAlpha alpha)
 {
     FXSYS_assert(m_Alpha && alpha);
@@ -67,6 +70,7 @@ void CFX_SkiaRenderer::blitRect(int x, int y, int width, int height)
         blitH(x, y ++, width);
     }
 }
+
 void CFX_SkiaRenderer::blitAntiRect(int x, int y, int width, int height,
                                     SkAlpha leftAlpha, SkAlpha rightAlpha)
 {
@@ -114,6 +118,7 @@ void CFX_SkiaRenderer::CompositeSpan1bpp_0(FX_LPBYTE dest_scan, FX_LPBYTE ori_sc
         dest_scan1 = dest_scan + (span_left % 8 + col - col_start + 1) / 8;
     }
 }
+
 void CFX_SkiaRenderer::CompositeSpan1bpp_4(FX_LPBYTE dest_scan, FX_LPBYTE ori_scan, int Bpp,
         int span_left, int span_len, int span_top, FX_BYTE cover_scan,
         int clip_top, int clip_left, int clip_right, FX_LPBYTE clip_scan,
@@ -180,6 +185,7 @@ void CFX_SkiaRenderer::CompositeSpanGray_2(FX_LPBYTE dest_scan, FX_LPBYTE ori_sc
         dest_scan++;
     }
 }
+
 void CFX_SkiaRenderer::CompositeSpanGray_3(FX_LPBYTE dest_scan, FX_LPBYTE ori_scan, int Bpp,
         int span_left, int span_len, int span_top, FX_BYTE cover_scan,
         int clip_top, int clip_left, int clip_right, FX_LPBYTE clip_scan,
@@ -210,6 +216,7 @@ void CFX_SkiaRenderer::CompositeSpanGray_3(FX_LPBYTE dest_scan, FX_LPBYTE ori_sc
         }
     }
 }
+
 void CFX_SkiaRenderer::CompositeSpanGray_6(FX_LPBYTE dest_scan, FX_LPBYTE ori_scan, int Bpp,
         int span_left, int span_len, int span_top, FX_BYTE cover_scan,
         int clip_top, int clip_left, int clip_right, FX_LPBYTE clip_scan,
@@ -239,6 +246,7 @@ void CFX_SkiaRenderer::CompositeSpanGray_6(FX_LPBYTE dest_scan, FX_LPBYTE ori_sc
         }
     }
 }
+
 void CFX_SkiaRenderer::CompositeSpanGray_7(FX_LPBYTE dest_scan, FX_LPBYTE ori_scan, int Bpp,
         int span_left, int span_len, int span_top, FX_BYTE cover_scan,
         int clip_top, int clip_left, int clip_right, FX_LPBYTE clip_scan,
@@ -309,6 +317,7 @@ void CFX_SkiaRenderer::CompositeSpanARGB_2(FX_LPBYTE dest_scan, FX_LPBYTE ori_sc
         dest_scan += 2;
     }
 }
+
 void CFX_SkiaRenderer::CompositeSpanARGB_3(FX_LPBYTE dest_scan, FX_LPBYTE ori_scan, int Bpp,
         int span_left, int span_len, int span_top, FX_BYTE cover_scan,
         int clip_top, int clip_left, int clip_right, FX_LPBYTE clip_scan,
@@ -356,6 +365,7 @@ void CFX_SkiaRenderer::CompositeSpanARGB_3(FX_LPBYTE dest_scan, FX_LPBYTE ori_sc
         dest_scan += 2;
     }
 }
+
 void CFX_SkiaRenderer::CompositeSpanARGB_6(FX_LPBYTE dest_scan, FX_LPBYTE ori_scan, int Bpp,
         int span_left, int span_len, int span_top, FX_BYTE cover_scan,
         int clip_top, int clip_left, int clip_right, FX_LPBYTE clip_scan,
@@ -400,6 +410,7 @@ void CFX_SkiaRenderer::CompositeSpanARGB_6(FX_LPBYTE dest_scan, FX_LPBYTE ori_sc
         }
     }
 }
+
 void CFX_SkiaRenderer::CompositeSpanARGB_7(FX_LPBYTE dest_scan, FX_LPBYTE ori_scan, int Bpp,
         int span_left, int span_len, int span_top, FX_BYTE cover_scan,
         int clip_top, int clip_left, int clip_right, FX_LPBYTE clip_scan,
@@ -438,7 +449,6 @@ void CFX_SkiaRenderer::CompositeSpanARGB_7(FX_LPBYTE dest_scan, FX_LPBYTE ori_sc
         dest_scan += 2;
     }
 }
-
 
 void CFX_SkiaRenderer::CompositeSpanRGB32_2(FX_LPBYTE dest_scan, FX_LPBYTE ori_scan, int Bpp,
         int span_left, int span_len, int span_top, FX_BYTE cover_scan,

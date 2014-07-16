@@ -2,8 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-pdf_use_skia = true
-
 config("pdfium_config") {
   cflags = []
   defines = [
@@ -12,10 +10,6 @@ config("pdfium_config") {
     "_FPDFSDK_LIB",
     "_NO_GDIPLUS_",  # workaround text rendering issues on Windows
   ]
-
-  if (pdf_use_skia) {
-    defines += [ "_SKIA_SUPPORT_" ]
-  }
 
   if (is_linux) {
     if (cpu_arch == "x64") {
@@ -627,6 +621,8 @@ static_library("fxge") {
     "core/src/fxge/ge/fx_ge_ps.cpp",
     "core/src/fxge/ge/fx_ge_text.cpp",
     "core/src/fxge/ge/text_int.h",
+    "core/src/fxge/skia/fx_skia_blitter.cpp",
+    "core/src/fxge/skia/fx_skia_driver.cpp",
   ]
 
   configs -= [ "//build/config/compiler:chromium_code" ]
@@ -635,13 +631,7 @@ static_library("fxge") {
   }
   configs += [ ":pdfium_config", "//build/config/compiler:no_chromium_code" ]
 
-  if (pdf_use_skia) {
-    sources = [
-      "core/src/fxge/skia/fx_skia_blitter.cpp",
-      "core/src/fxge/skia/fx_skia_driver.cpp",
-    ]
-    deps = [ "//skia" ]
-  }
+  deps = [ "//skia" ]
 
   if (is_win) {
     sources += [
