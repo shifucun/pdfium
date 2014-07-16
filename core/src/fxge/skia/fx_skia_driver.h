@@ -7,6 +7,8 @@
 #ifndef _FX_SKIA_DRIVER_
 #define _FX_SKIA_DRIVER_
 
+#include "fx_skia.h"
+
 class CFX_SkiaDriver : public IFX_RenderDeviceDriver
 {
 public:

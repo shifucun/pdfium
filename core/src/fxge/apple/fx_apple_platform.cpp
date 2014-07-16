@@ -7,14 +7,12 @@
 #include "../../../include/fxcrt/fx_ext.h"
 #include "../../../include/fxge/fx_ge.h"
 #if _FXM_PLATFORM_  == _FXM_PLATFORM_APPLE_
-#include "../apple/apple_int.h"
+#include "apple_int.h"
 #include "../../../include/fxge/fx_ge_apple.h"
 #include "../ge/text_int.h"
 #include "../dib/dib_int.h"
 #include "../../../include/fxge/fx_freetype.h"
-
-#if (_FXM_PLATFORM_  == _FXM_PLATFORM_APPLE_ && (!defined(_FPDFAPI_MINI_)) && defined(_SKIA_SUPPORT_))
-
+#if (_FXM_PLATFORM_  == _FXM_PLATFORM_APPLE_ && (!defined(_FPDFAPI_MINI_)))
 void CFX_FaceCache::InitPlatform() {}
 void CFX_FaceCache::DestroyPlatform() {}
 CFX_GlyphBitmap* CFX_FaceCache::RenderGlyph_Nativetext(CFX_Font *				pFont,
@@ -86,6 +84,7 @@ static FX_BOOL _CGDrawGlyphRun(CGContextRef               pContext,
                                        argb,
                                        NULL);
 }
+
 static void _DoNothing(void *info, const void *data, size_t size) {}
 
 void CFX_Font::ReleasePlatformResource()

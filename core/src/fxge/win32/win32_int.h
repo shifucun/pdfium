@@ -65,7 +65,6 @@ public:
     CGdiplusExt		m_GdiplusExt;
     CDWriteExt      m_DWriteExt;
 };
-
 class CGdiDeviceDriver : public IFX_RenderDeviceDriver
 {
 protected:
@@ -165,7 +164,6 @@ protected:
     int				m_HorzSize, m_VertSize;
     FX_BOOL			m_bSupportROP;
 };
-
 class CPSOutput : public IFX_PSOutput, public CFX_Object
 {
 public:

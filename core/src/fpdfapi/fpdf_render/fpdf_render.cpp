@@ -831,7 +831,6 @@ FX_BOOL CPDF_RenderStatus::ProcessTransparency(const CPDF_PageObject* pPageObj, 
     FX_FLOAT scaleY = FXSYS_fabs(deviceCTM.d);
     int width = FXSYS_round((FX_FLOAT)rect.Width() * scaleX);
     int height = FXSYS_round((FX_FLOAT)rect.Height() * scaleY);
-
     CFX_FxgeDevice bitmap_device;
     CFX_DIBitmap* oriDevice = NULL;
     if (!isolated && (m_pDevice->GetRenderCaps() & FXRC_GET_BITS)) {
