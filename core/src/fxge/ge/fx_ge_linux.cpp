@@ -20,8 +20,8 @@ void CFX_FaceCache::InitPlatform()
 {
 }
 FX_BOOL CFX_SkiaDeviceDriver::DrawDeviceText(int nChars, const FXTEXT_CHARPOS* pCharPos, CFX_Font* pFont,
-        CFX_FontCache* pCache, const CFX_AffineMatrix* pObject2Device,
-        FX_FLOAT font_size, FX_DWORD argb)
+    CFX_FontCache* pCache, const CFX_AffineMatrix* pObject2Device, FX_FLOAT font_size, FX_DWORD color,
+    int alpha_flag, void* pIccTransform)
 {
     return FALSE;
 }
