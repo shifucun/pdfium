@@ -242,7 +242,7 @@ FX_UINT32 FX_GetHashCode( FX_LPCSTR pStr);
 FX_DWORD  FX_IOSGetMatchFamilyNameHashcode(FX_LPCSTR pFontName);
 FX_UINT32 FX_IOSGetFamilyNamesCount();
 FX_LPCSTR FX_IOSGetFamilyName( FX_UINT32 uIndex);
-void _DoNothing(void *info, const void *data, size_t size) {};
+static void _DoNothing(void *info, const void *data, size_t size) {};
 FX_BOOL _CGDrawGlyphRun(CGContextRef               pContext,
     int                        nChars,
     const FXTEXT_CHARPOS*      pCharPos,
@@ -252,6 +252,6 @@ FX_BOOL _CGDrawGlyphRun(CGContextRef               pContext,
     FX_FLOAT                   font_size,
     FX_DWORD                   argb,
     int                        alpha_flag,
-    void*                      pIccTransform)
+    void*                      pIccTransform);
 #endif
 #endif

@@ -505,7 +505,7 @@ FX_BOOL CFX_SkiaDriver::DrawDeviceText(int nChars, const FXTEXT_CHARPOS* pCharPo
     else {
         CGContextClipToRect(ctx, rect_cg);
     }
-    FX_BOOL ret = _CGDrawGlyphRun(ctx, nChars, pCharPos, pFont, pCache, pObject2Device, font_size, argb, alpha_flag, pIccTransform);
+    FX_BOOL ret = _CGDrawGlyphRun(ctx, nChars, pCharPos, pFont, pCache, pObject2Device, font_size, color, alpha_flag, pIccTransform);
     if (pImageCG) {
         CGImageRelease(pImageCG);
     }
