@@ -827,8 +827,8 @@ FX_BOOL CPDF_RenderStatus::ProcessTransparency(const CPDF_PageObject* pPageObj, 
         return TRUE;
     }
     CFX_Matrix deviceCTM = m_pDevice->GetCTM();
-    FX_FLOAT scaleX = FXSYS_abs(deviceCTM.a);
-    FX_FLOAT scaleY = FXSYS_abs(deviceCTM.d);
+    FX_FLOAT scaleX = FXSYS_fabs(deviceCTM.a);
+    FX_FLOAT scaleY = FXSYS_fabs(deviceCTM.d);
     int width = FXSYS_round((FX_FLOAT)rect.Width() * scaleX);
     int height = FXSYS_round((FX_FLOAT)rect.Height() * scaleY);
 #if defined(_SKIA_SUPPORT_)
@@ -919,8 +919,8 @@ CFX_DIBitmap* CPDF_RenderStatus::GetBackdrop(const CPDF_PageObject* pObj, const 
     left = bbox.left;
     top = bbox.top;
     CFX_Matrix deviceCTM = m_pDevice->GetCTM();
-    FX_FLOAT scaleX = FXSYS_abs(deviceCTM.a);
-    FX_FLOAT scaleY = FXSYS_abs(deviceCTM.d);
+    FX_FLOAT scaleX = FXSYS_fabs(deviceCTM.a);
+    FX_FLOAT scaleY = FXSYS_fabs(deviceCTM.d);
     int width = FXSYS_round(bbox.Width() * scaleX);
     int height = FXSYS_round(bbox.Height() * scaleY);
     CFX_DIBitmap* pBackdrop = FX_NEW CFX_DIBitmap;
