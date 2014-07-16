@@ -23,7 +23,7 @@ CFX_GlyphBitmap* CFX_FaceCache::RenderGlyph_Nativetext(CFX_Font *				pFont,
 {
     return NULL;
 }
-static FX_BOOL _CGDrawGlyphRun(CGContextRef               pContext,
+FX_BOOL _CGDrawGlyphRun(CGContextRef               pContext,
                                int                        nChars,
                                const FXTEXT_CHARPOS*      pCharPos,
                                CFX_Font*                  pFont,
