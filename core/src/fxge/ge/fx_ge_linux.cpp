@@ -10,28 +10,11 @@
 #include "../skia/fx_skia_device.h"
 #if !defined(_FPDFAPI_MINI_) &&  _FXM_PLATFORM_ == _FXM_PLATFORM_LINUX_
 
-void CFX_SkiaDeviceDriver::InitPlatform()
-{
-}
-void CFX_SkiaDeviceDriver::DestroyPlatform()
-{
-}
-void CFX_FaceCache::InitPlatform()
-{
-}
 FX_BOOL CFX_SkiaDeviceDriver::DrawDeviceText(int nChars, const FXTEXT_CHARPOS* pCharPos, CFX_Font* pFont,
     CFX_FontCache* pCache, const CFX_AffineMatrix* pObject2Device, FX_FLOAT font_size, FX_DWORD color,
     int alpha_flag, void* pIccTransform)
 {
     return FALSE;
-}
-CFX_GlyphBitmap* CFX_FaceCache::RenderGlyph_Nativetext(CFX_Font* pFont, FX_DWORD glyph_index, const CFX_AffineMatrix* pMatrix,
-        int dest_width, int anti_alias)
-{
-    return NULL;
-}
-void CFX_Font::ReleasePlatformResource()
-{
 }
 
 static const struct {
