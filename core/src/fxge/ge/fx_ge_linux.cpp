@@ -8,16 +8,16 @@
 #include "text_int.h"
 #if !defined(_FPDFAPI_MINI_) &&  _FXM_PLATFORM_ == _FXM_PLATFORM_LINUX_
 #if (_FXM_PLATFORM_  == _FXM_PLATFORM_APPLE_ && (!defined(_FPDFAPI_MINI_)))
-void CFX_AggDeviceDriver::InitPlatform()
+void CFX_SkiaDeviceDriver::InitPlatform()
 {
 }
-void CFX_AggDeviceDriver::DestroyPlatform()
+void CFX_SkiaDeviceDriver::DestroyPlatform()
 {
 }
 void CFX_FaceCache::InitPlatform()
 {
 }
-FX_BOOL CFX_AggDeviceDriver::DrawDeviceText(int nChars, const FXTEXT_CHARPOS* pCharPos, CFX_Font* pFont,
+FX_BOOL CFX_SkiaDeviceDriver::DrawDeviceText(int nChars, const FXTEXT_CHARPOS* pCharPos, CFX_Font* pFont,
         CFX_FontCache* pCache, const CFX_AffineMatrix* pObject2Device,
         FX_FLOAT font_size, FX_DWORD argb)
 {
