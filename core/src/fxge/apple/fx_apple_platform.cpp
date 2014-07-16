@@ -85,8 +85,6 @@ static FX_BOOL _CGDrawGlyphRun(CGContextRef               pContext,
                                        NULL);
 }
 
-static void _DoNothing(void *info, const void *data, size_t size) {}
-
 void CFX_Font::ReleasePlatformResource()
 {
     if (m_pPlatformFont) {

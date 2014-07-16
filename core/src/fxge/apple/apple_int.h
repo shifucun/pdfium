@@ -242,5 +242,7 @@ FX_UINT32 FX_GetHashCode( FX_LPCSTR pStr);
 FX_DWORD  FX_IOSGetMatchFamilyNameHashcode(FX_LPCSTR pFontName);
 FX_UINT32 FX_IOSGetFamilyNamesCount();
 FX_LPCSTR FX_IOSGetFamilyName( FX_UINT32 uIndex);
+static void _DoNothing(void *info, const void *data, size_t size) {};
+
 #endif
 #endif

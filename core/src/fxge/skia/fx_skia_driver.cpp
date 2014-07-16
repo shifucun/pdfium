@@ -9,6 +9,10 @@
 #include "fx_skia.h"
 #include "fx_skia_blitter.h"
 #include "fx_skia_driver.h"
+#if (_FXM_PLATFORM_  == _FXM_PLATFORM_APPLE_)
+#include "../apple/apple_int.h"
+#endif
+
 
 CFX_SkiaDriver::CFX_SkiaDriver(CFX_DIBitmap* pBitmap, int dither_bits, FX_BOOL bRgbByteOrder, CFX_DIBitmap* pOriDevice, FX_BOOL bGroupKnockout)
 {
