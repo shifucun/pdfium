@@ -7,9 +7,6 @@
       '_NO_GDIPLUS_',  # workaround text rendering issues on Windows
     ],
     'conditions': [
-      ['pdf_use_skia==1', {
-        'defines': ['_SKIA_SUPPORT_'],
-      }],
       ['OS=="linux"', {
         'cflags!': [
           '-fno-exceptions',
@@ -547,6 +544,9 @@
     {
       'target_name': 'fxge',
       'type': 'static_library',
+      'dependencies': [
+            '<(DEPTH)/skia/skia.gyp:skia',
+          ],
       'ldflags': [ '-L<(PRODUCT_DIR)',],
       'sources': [
         'core/include/fxge/fpf.h',
@@ -629,17 +629,10 @@
         'core/src/fxge/ge/fx_ge_ps.cpp',
         'core/src/fxge/ge/fx_ge_text.cpp',
         'core/src/fxge/ge/text_int.h',
+        'core/src/fxge/skia/fx_skia_blitter.cpp',
+        'core/src/fxge/skia/fx_skia_driver.cpp',
       ],
       'conditions': [
-        ['pdf_use_skia==1', {
-          'sources': [
-            'core/src/fxge/skia/fx_skia_blitter.cpp',
-            'core/src/fxge/skia/fx_skia_driver.cpp',
-          ],
-          'dependencies': [
-            '<(DEPTH)/skia/skia.gyp:skia',
-          ],
-        }],
         ['OS=="win"', {
           'defines!': [
             'NOMINMAX',

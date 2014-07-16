@@ -6,7 +6,7 @@
 
 #ifndef _FX_SKIABLITTER_H_
 #define _FX_SKIABLITTER_H_
-#if defined(_SKIA_SUPPORT_)
+
 class CFX_SkiaRenderer : public SkBlitter, public CFX_Object
 {
 protected:
@@ -197,5 +197,5 @@ public:
     int m_dstWidth;
     int m_dstHeight;
 };
-#endif
+
 #endif
