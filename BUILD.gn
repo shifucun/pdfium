@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-pdf_use_skia = false
+pdf_use_skia = true
 
 config("pdfium_config") {
   cflags = []
@@ -563,6 +563,7 @@ static_library("fxge") {
     "core/src/fxge/android/fx_android_font.h",
     "core/src/fxge/android/fx_android_imp.cpp",
     "core/src/fxge/android/fx_fpf.h",
+    'core/src/fxge/apple/fx_apple_platform.cpp',
     "core/src/fxge/apple/apple_int.h",
     "core/src/fxge/apple/fx_mac_imp.cpp",
     "core/src/fxge/apple/fx_quartz_device.cpp",
@@ -622,7 +623,6 @@ static_library("fxge") {
     "core/src/fxge/ge/fx_ge_fontmap.cpp",
     "core/src/fxge/ge/fx_ge_windows.cpp",
     "core/src/fxge/ge/fx_ge_linux.cpp",
-    "core/src/fxge/ge/fx_ge_apple.cpp",
     "core/src/fxge/ge/fx_ge_path.cpp",
     "core/src/fxge/ge/fx_ge_ps.cpp",
     "core/src/fxge/ge/fx_ge_text.cpp",
@@ -637,8 +637,8 @@ static_library("fxge") {
 
   if (pdf_use_skia) {
     sources = [
-      "core/src/fxge/skia/fx_skia_blitter_new.cpp",
-      "core/src/fxge/skia/fx_skia_device.cpp",
+      "core/src/fxge/skia/fx_skia_blitter.cpp",
+      "core/src/fxge/skia/fx_skia_driver.cpp",
     ]
     deps = [ "//skia" ]
   }
