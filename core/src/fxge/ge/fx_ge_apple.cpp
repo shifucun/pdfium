@@ -9,10 +9,8 @@
 #if _FXM_PLATFORM_  == _FXM_PLATFORM_APPLE_
 #include "../apple/apple_int.h"
 #include "../../../include/fxge/fx_ge_apple.h"
-//#include "../agg/include/fxfx_agg_clip_liang_barsky.h"
 #include "../ge/text_int.h"
 #include "../dib/dib_int.h"
-//#include "../agg/include/fx_agg_driver.h"
 #include "../../../include/fxge/fx_freetype.h"
 #include "../skia/fx_skia.h"
 #include "../skia/fx_skia_device.h"
