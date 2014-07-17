@@ -618,7 +618,7 @@ void CSkia_PathData::BuildPath(const CFX_PathData* pPathData, const CFX_AffineMa
         }
         else if (point_type == FXPT_LINETO) {
             if (pPoints[i - 1].m_Flag == FXPT_MOVETO && (i == nPoints - 1 || pPoints[i + 1].m_Flag == FXPT_MOVETO) &&
-                FXSYS_abs(pPoints[i].m_PointX - pPoints[i - 1].m_PointX) < 0.4f && FXSYS_abs(pPoints[i].m_PointY - pPoints[i - 1].m_PointY) < 0.4f) {
+                FXSYS_fabs(pPoints[i].m_PointX - pPoints[i - 1].m_PointX) < 0.4f && FXSYS_fabs(pPoints[i].m_PointY - pPoints[i - 1].m_PointY) < 0.4f) {
                 x += 0.4f;
             }
             m_PathData.lineTo(x, y);

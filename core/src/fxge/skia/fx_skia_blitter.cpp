@@ -811,7 +811,7 @@ void CFX_SkiaRenderer::CompositeSpanCMYK(FX_LPBYTE dest_scan, FX_LPBYTE ori_scan
         return;
     }
     dest_scan += col_start * 4;
-    Bpp;
+
     if (dest_extra_alpha_scan) {
         for (int col = col_start; col < col_end; col ++) {
             int src_alpha;
