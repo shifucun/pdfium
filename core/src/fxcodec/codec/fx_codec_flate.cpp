@@ -462,8 +462,8 @@ static void PNG_Predictor(FX_LPBYTE& data_buf, FX_DWORD& data_size,
             }
             byte_cnt++;
         }
-        pSrcData += row_size + 1;
-        pDestData += row_size;
+        pSrcData += row_size;
+        pDestData += (row_size+1);
         byte_cnt++;
     }
     FX_Free(data_buf);
