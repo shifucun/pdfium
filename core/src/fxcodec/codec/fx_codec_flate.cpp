@@ -409,6 +409,7 @@ static void PNG_Predictor(FX_LPBYTE& data_buf, FX_DWORD& data_size,
             byte_cnt += move_size + 1;
             continue;
         }
+        byte_cnt++;
         for (int byte = 0; byte < row_size && byte_cnt < (int)data_size; byte ++) {
             FX_BYTE raw_byte = pSrcData[byte + 1];
             switch (tag) {
@@ -460,10 +461,9 @@ static void PNG_Predictor(FX_LPBYTE& data_buf, FX_DWORD& data_size,
                     pDestData[byte] = raw_byte;
                     break;
             }
-            byte_cnt++;
         }
-        pSrcData += row_size;
-        pDestData += (row_size+1);
+        pSrcData += (row_size+1);
+        pDestData += row_size;
         byte_cnt++;
     }
     FX_Free(data_buf);
