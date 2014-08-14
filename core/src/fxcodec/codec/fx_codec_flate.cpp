@@ -461,10 +461,10 @@ static void PNG_Predictor(FX_LPBYTE& data_buf, FX_DWORD& data_size,
                     pDestData[byte] = raw_byte;
                     break;
             }
+            byte_cnt++;
         }
         pSrcData += (row_size+1);
         pDestData += row_size;
-        byte_cnt++;
     }
     FX_Free(data_buf);
     data_buf = dest_buf;
