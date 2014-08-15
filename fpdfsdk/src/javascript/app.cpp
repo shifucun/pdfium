@@ -141,7 +141,7 @@ FX_BOOL app::activeDocs(OBJ_PROP_PARAMS)
 		CJS_Context* pContext = (CJS_Context *)cc;
 		ASSERT(pContext != NULL);
 		
-		CPDFDoc_Environment* pApp = pContext->GetReaderApp();
+		CPDFXFA_App* pApp = pContext->GetReaderApp();
 		ASSERT(pApp != NULL);
 
 		CJS_Runtime* pRuntime = pContext->GetJSRuntime();
@@ -152,9 +152,9 @@ FX_BOOL app::activeDocs(OBJ_PROP_PARAMS)
 		CJS_Array aDocs(pRuntime->GetIsolate());
 //		int iNumDocs = pApp->CountDocuments();
 		
-//		for(int iIndex = 0; iIndex<iNumDocs; iIndex++)
-//		{
-			CPDFSDK_Document* pDoc = pApp->GetCurrentDoc();
+// 		for(int iIndex = 0; iIndex<iNumDocs; iIndex++)
+// 		{
+			CPDFSDK_Document* pDoc = pApp->GetFormFillEnv()->GetCurrentDoc();
 			if (pDoc)
 			{
 				CJS_Document * pJSDocument = NULL;
@@ -202,18 +202,18 @@ FX_BOOL app::calculate(OBJ_PROP_PARAMS)
 		CJS_Context* pContext = (CJS_Context*)cc;
 		ASSERT(pContext != NULL);
 		
-		CPDFDoc_Environment* pApp = pContext->GetReaderApp();
+		CPDFXFA_App* pApp = pContext->GetReaderApp();
 		ASSERT(pApp != NULL);
 		
 		CJS_Runtime* pRuntime = pContext->GetJSRuntime();
 		ASSERT(pRuntime != NULL);
 
 		CJS_Array aDocs(pRuntime->GetIsolate());
-//		int iNumDocs = pApp->CountDocuments();
-//		
-//		for (int iIndex = 0;iIndex < iNumDocs; iIndex++)
-//		{
-			if (CPDFSDK_Document* pDoc = pApp->GetCurrentDoc())
+// 		int iNumDocs = pApp->CountDocuments();
+// 		
+// 		for (int iIndex = 0;iIndex < iNumDocs; iIndex++)
+// 		{
+			if (CPDFSDK_Document* pDoc = pApp->GetFormFillEnv()->GetCurrentDoc())
 			{
 				CPDFSDK_InterForm* pInterForm = (CPDFSDK_InterForm*)pDoc->GetInterForm();
 				ASSERT(pInterForm != NULL);
@@ -456,8 +456,8 @@ FX_BOOL app::beep(OBJ_METHOD_PARAMS)
 	{
 		CJS_Context* pContext = (CJS_Context*)cc;
 		CJS_Runtime* pRuntime = pContext->GetJSRuntime();
-		CPDFDoc_Environment * pEnv = pRuntime->GetReaderApp();
-		pEnv->JS_appBeep((int)params[0]);
+		CPDFXFA_App * pApp = pRuntime->GetReaderApp();
+		pApp->GetFormFillEnv()->JS_appBeep((int)params[0]);
 
 		return TRUE;
 	}
@@ -521,7 +521,7 @@ FX_BOOL app::setInterval(OBJ_METHOD_PARAMS)
 
 	FX_DWORD dwInterval = params.size() > 1 ? (int)params[1] : 1000;
 	
-	CPDFDoc_Environment* pApp = pRuntime->GetReaderApp();
+	CPDFXFA_App* pApp = pRuntime->GetReaderApp();
 	ASSERT(pApp);
 	CJS_Timer* pTimer = new CJS_Timer(this, pApp);
 	m_aTimer.Add(pTimer);
@@ -570,7 +570,7 @@ FX_BOOL app::setTimeOut(OBJ_METHOD_PARAMS)
 	
 	FX_DWORD dwTimeOut = params.size() > 1 ? (int)params[1] : 1000;
 	
-	CPDFDoc_Environment* pApp = pRuntime->GetReaderApp();
+	CPDFXFA_App* pApp = pRuntime->GetReaderApp();
 	ASSERT(pApp);
 	CJS_Timer* pTimer = new CJS_Timer(this, pApp);
 	m_aTimer.Add(pTimer);
@@ -809,11 +809,11 @@ FX_BOOL app::mailMsg(OBJ_METHOD_PARAMS)
 	CJS_Runtime* pRuntime = pContext->GetJSRuntime();
 	ASSERT(pRuntime != NULL);
 
-	CPDFDoc_Environment* pApp = pContext->GetReaderApp();
+	CPDFXFA_App* pApp = pContext->GetReaderApp();
 	ASSERT(pApp != NULL);
 
 	pRuntime->BeginBlock();
-	pApp->JS_docmailForm(NULL, 0, bUI, (FX_LPCWSTR)cTo, (FX_LPCWSTR)cSubject, (FX_LPCWSTR)cCc, (FX_LPCWSTR)cBcc, (FX_LPCWSTR)cMsg);
+	pApp->GetFormFillEnv()->JS_docmailForm(NULL, 0, bUI, (FX_LPCWSTR)cTo, (FX_LPCWSTR)cSubject, (FX_LPCWSTR)cCc, (FX_LPCWSTR)cBcc, (FX_LPCWSTR)cMsg);
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	pRuntime->EndBlock();
 
@@ -920,7 +920,7 @@ FX_BOOL app::browseForDoc(OBJ_METHOD_PARAMS)
 	CJS_Context* pContext = (CJS_Context *)cc;
 	ASSERT(pContext != NULL);
 	
-	CPDFDoc_Environment* pApp = pContext->GetReaderApp();
+	CPDFXFA_App* pApp = pContext->GetReaderApp();
 	ASSERT(pApp != NULL);
 
 	CJS_Runtime* pRuntime = pContext->GetJSRuntime();
@@ -928,7 +928,7 @@ FX_BOOL app::browseForDoc(OBJ_METHOD_PARAMS)
 
 	CFX_WideString wsFileNameInit = CFX_WideString::FromLocal(cFilenameInit);
 	CFX_WideString wsFSInit = CFX_WideString::FromLocal(cFSInit);
-	CFX_WideString wsFilePath = pApp->JS_appbrowseForDoc(bSave, wsFileNameInit);
+	CFX_WideString wsFilePath = pApp->GetFormFillEnv()->JS_appbrowseForDoc(bSave, wsFileNameInit);
 	if(wsFilePath.IsEmpty())
 		return FALSE;
 
@@ -1086,7 +1086,7 @@ FX_BOOL app::response(OBJ_METHOD_PARAMS)
 	CJS_Context* pContext = (CJS_Context *)cc;
 	ASSERT(pContext != NULL);
 
-	CPDFDoc_Environment* pApp = pContext->GetReaderApp();
+	CPDFXFA_App* pApp = pContext->GetReaderApp();
 	ASSERT(pApp != NULL);
 
 	const int MAX_INPUT_BYTES = 2048;
@@ -1095,7 +1095,7 @@ FX_BOOL app::response(OBJ_METHOD_PARAMS)
 		return FALSE;
 
 	memset(pBuff, 0, MAX_INPUT_BYTES + 2);
-	int nLengthBytes = pApp->JS_appResponse(swQuestion, swTitle, swDefault, swLabel, bPassWord, pBuff, MAX_INPUT_BYTES);
+	int nLengthBytes = pApp->GetFormFillEnv()->JS_appResponse(swQuestion, swTitle, swDefault, swLabel, bPassWord, pBuff, MAX_INPUT_BYTES);
 	if (nLengthBytes <= 0)
 	{
 		vRet.SetNull();

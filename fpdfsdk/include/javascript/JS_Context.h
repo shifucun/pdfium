@@ -74,7 +74,7 @@ public:
 	FX_BOOL						IsMsgBoxEnabled() const {return m_bMsgBoxEnable;}
 
 public:
-	CPDFDoc_Environment*			GetReaderApp();
+	CPDFXFA_App*				GetReaderApp();
 	CJS_Runtime*				GetJSRuntime(){return m_pRuntime;}
 
 	FX_BOOL						DoJob(int nMode, const CFX_WideString& script, CFX_WideString& info);

@@ -383,3 +383,40 @@ void FX_Random_GenerateCrypto(FX_LPDWORD pBuffer, FX_INT32 iCount)
 #ifdef __cplusplus
 }
 #endif
+#ifdef __cplusplus
+extern "C" {
+#endif
+void FX_GUID_CreateV4(FX_LPGUID pGUID)
+{
+#if (_FX_OS_ == _FX_WIN32_DESKTOP_ || _FX_OS_ == _FX_WIN32_MOBILE_ || _FX_OS_ == _FX_WIN64_)
+#ifdef _FX_WINAPI_PARTITION_DESKTOP_
+    if (!FX_GenerateCryptoRandom((FX_LPDWORD)pGUID, 4)) {
+        FX_Random_GenerateMT((FX_LPDWORD)pGUID, 4);
+    }
+#else
+    FX_Random_GenerateMT((FX_LPDWORD)pGUID, 4);
+#endif
+#else
+    FX_Random_GenerateMT((FX_LPDWORD)pGUID, 4);
+#endif
+    FX_BYTE &b = ((FX_LPBYTE)pGUID)[6];
+    b = (b & 0x0F) | 0x40;
+}
+FX_LPCSTR gs_FX_pHexChars = "0123456789ABCDEF";
+void FX_GUID_ToString(FX_LPCGUID pGUID, CFX_ByteString &bsStr, FX_BOOL bSeparator)
+{
+    FX_LPSTR pBuf = bsStr.GetBuffer(40);
+    FX_BYTE b;
+    for (FX_INT32 i = 0; i < 16; i ++) {
+        b = ((FX_LPCBYTE)pGUID)[i];
+        *pBuf ++ = gs_FX_pHexChars[b >> 4];
+        *pBuf ++ = gs_FX_pHexChars[b & 0x0F];
+        if (bSeparator && (i == 3 || i == 5 || i == 7 || i == 9)) {
+            *pBuf ++ = L'-';
+        }
+    }
+    bsStr.ReleaseBuffer(bSeparator ? 36 : 32);
+}
+#ifdef __cplusplus
+}
+#endif

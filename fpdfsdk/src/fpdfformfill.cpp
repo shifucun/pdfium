@@ -7,7 +7,10 @@
 #include "../include/fpdfview.h"
 #include "../include/fpdfformfill.h"
 #include "../include/fsdk_define.h"
+#include "../include/fpdfxfa/fpdfxfa_doc.h"
 #include "../include/fsdk_mgr.h"
+#include "../include/fpdfxfa/fpdfxfa_page.h"
+#include "../include/fpdfxfa/fpdfxfa_app.h"
 
 
 #include "../include/javascript/IJavaScript.h"
@@ -17,46 +20,91 @@ DLLEXPORT int STDCALL FPDPage_HasFormFieldAtPoint(FPDF_FORMHANDLE hHandle, FPDF_
 {
 	if(!page || !hHandle)
 		return -1;
-	CPDF_Page * pPage = (CPDF_Page*) page;
+	CPDF_Page * pPage = ((CPDFXFA_Page*) page)->GetPDFPage();
+	if (pPage)
+	{
+		CPDF_InterForm * pInterForm = NULL;
+		pInterForm = new CPDF_InterForm(pPage->m_pDocument,FALSE);
+		if (!pInterForm)
+			return -1;
+		CPDF_FormControl* pFormCtrl = pInterForm->GetControlAtPoint(pPage, (FX_FLOAT)page_x, (FX_FLOAT)page_y);
+		if(!pFormCtrl)
+		{
+			delete pInterForm;
+			return -1;
+		}
+		CPDF_FormField* pFormField = pFormCtrl->GetField();
+		if(!pFormField)
+		{
+			delete pInterForm;
+			return -1;
+		}
 
-	CPDF_InterForm * pInterForm = NULL;
-	pInterForm = new CPDF_InterForm(pPage->m_pDocument,FALSE);
-	if (!pInterForm)
-		return -1;
-	CPDF_FormControl* pFormCtrl = pInterForm->GetControlAtPoint(pPage, (FX_FLOAT)page_x, (FX_FLOAT)page_y);
-	if(!pFormCtrl)
-	{
+		int nType = pFormField->GetFieldType();
 		delete pInterForm;
-		return -1;
+		return nType;
 	}
-	CPDF_FormField* pFormField = pFormCtrl->GetField();
-	if(!pFormField)
+
+	IXFA_PageView* pPageView = ((CPDFXFA_Page*)page)->GetXFAPageView();
+	if (pPageView) 
 	{
-		delete pInterForm;
-		return -1;
+		IXFA_WidgetHandler* pWidgetHandler = NULL;
+		IXFA_DocView* pDocView = pPageView->GetDocView();
+		if (!pDocView)
+			return -1;
+
+		pWidgetHandler = pDocView->GetWidgetHandler();
+		if (!pWidgetHandler)
+			return -1;
+
+		XFA_HWIDGET pXFAAnnot = NULL;
+		IXFA_WidgetIterator* pWidgetIterator = pPageView->CreateWidgetIterator(XFA_TRAVERSEWAY_Form, XFA_WIDGETFILTER_Viewable|XFA_WIDGETFILTER_AllType);
+		if (!pWidgetIterator)
+			return -1;
+		pXFAAnnot = pWidgetIterator->MoveToNext();
+		while (pXFAAnnot) {
+			CFX_RectF rcBBox;
+			pWidgetHandler->GetBBox (pXFAAnnot, rcBBox, 0);
+			CFX_FloatRect rcWidget(rcBBox.left, rcBBox.top, rcBBox.left + rcBBox.width, rcBBox.top+rcBBox.height);
+			rcWidget.left -= 1.0f;
+			rcWidget.right += 1.0f;
+			rcWidget.bottom -= 1.0f;
+			rcWidget.top += 1.0f;
+
+			if (rcWidget.Contains(page_x, page_y)) {
+				pWidgetIterator->Release();
+				return FPDF_FORMFIELD_XFA;
+			}
+			pXFAAnnot = pWidgetIterator->MoveToNext();
+		}
+
+		pWidgetIterator->Release();
 	}
-	
-	int nType = pFormField->GetFieldType();
-	delete pInterForm;
-	return nType;
+
+	return -1;
 }
 
 DLLEXPORT FPDF_FORMHANDLE STDCALL FPDFDOC_InitFormFillEnviroument(FPDF_DOCUMENT document, FPDF_FORMFILLINFO* formInfo)
 {
 	if(!document || !formInfo || formInfo->version!=1)
 		return NULL;
-	CPDF_Document * pDocument = (CPDF_Document*) document;
+	CPDFXFA_Document * pDocument = (CPDFXFA_Document*) document;
  	CPDFDoc_Environment * pEnv = NULL;
 	pEnv = new CPDFDoc_Environment(pDocument);
 	if (!pEnv)
 		return NULL;
 	pEnv->RegAppHandle(formInfo);
 
-	if(pEnv->GetPDFDocument())
+	CPDFXFA_App* pApp = FPDFXFA_GetApp();
+	pApp->SetFormFillEnv(pEnv);
+
+	if(pEnv->GetPDFXFADocument())
 	{
-		CPDFSDK_Document* pSDKDoc = new CPDFSDK_Document(pEnv->GetPDFDocument(), pEnv);
-		if(pSDKDoc)
+		//CPDFSDK_Document* pSDKDoc = new CPDFSDK_Document(pEnv->GetPDFXFADocument(), pEnv);
+		CPDFSDK_Document* pSDKDoc = pDocument->GetSDKDocument(pEnv);
+		if(pSDKDoc) {
 			pEnv->SetCurrentDoc(pSDKDoc);
+		}
 	}
 	return pEnv;
 }
@@ -69,7 +117,9 @@ DLLEXPORT void STDCALL FPDFDOC_ExitFormFillEnviroument(FPDF_FORMHANDLE hHandle)
 	if(pSDKDoc)
 	{
 		((CPDFDoc_Environment*)hHandle)->SetCurrentDoc(NULL);
-		delete pSDKDoc;
+		CPDFXFA_Document* pDoc = ((CPDFDoc_Environment*)hHandle)->GetPDFXFADocument();
+		if (pDoc)
+			pDoc->ReleaseSDKDoc();
 	}
 	delete (CPDFDoc_Environment*)hHandle;
 	hHandle = NULL;
@@ -85,7 +135,7 @@ DLLEXPORT FPDF_BOOL STDCALL FORM_OnMouseMove(FPDF_FORMHANDLE hHandle, FPDF_PAGE 
 	CPDFSDK_Document* pFXDoc = ((CPDFDoc_Environment*)hHandle)->GetCurrentDoc();
 	if(!pFXDoc)
 		return FALSE;
-	CPDFSDK_PageView* pPageView = pFXDoc->GetPageView((CPDF_Page*)page);
+	CPDFSDK_PageView* pPageView = pFXDoc->GetPageView((CPDFXFA_Page*)page);
 	if(!pPageView)
 		return FALSE;
 	
@@ -103,7 +153,7 @@ DLLEXPORT FPDF_BOOL STDCALL FORM_OnLButtonDown(FPDF_FORMHANDLE hHandle, FPDF_PAG
 	CPDFSDK_Document* pFXDoc = ((CPDFDoc_Environment*)hHandle)->GetCurrentDoc();
 	if(!pFXDoc)
 		return FALSE;
-	CPDFSDK_PageView* pPageView = pFXDoc->GetPageView((CPDF_Page*)page);
+	CPDFSDK_PageView* pPageView = pFXDoc->GetPageView((CPDFXFA_Page*)page);
 	if(!pPageView)
 		return FALSE;
 // 	double page_x = 0;
@@ -120,7 +170,7 @@ DLLEXPORT FPDF_BOOL STDCALL FORM_OnLButtonUp(FPDF_FORMHANDLE hHandle, FPDF_PAGE 
 	CPDFSDK_Document* pFXDoc = ((CPDFDoc_Environment*)hHandle)->GetCurrentDoc();
 	if(!pFXDoc)
 		return FALSE;
-	CPDFSDK_PageView* pPageView = pFXDoc->GetPageView((CPDF_Page*)page);
+	CPDFSDK_PageView* pPageView = pFXDoc->GetPageView((CPDFXFA_Page*)page);
 	if(!pPageView)
 		return FALSE;
 // 	double page_x = 0;
@@ -137,7 +187,7 @@ DLLEXPORT FPDF_BOOL STDCALL FORM_OnKeyDown(FPDF_FORMHANDLE hHandle, FPDF_PAGE pa
 	CPDFSDK_Document* pFXDoc = ((CPDFDoc_Environment*)hHandle)->GetCurrentDoc();
 	if(!pFXDoc)
 		return FALSE;
-	CPDFSDK_PageView* pPageView = pFXDoc->GetPageView((CPDF_Page*)page);
+	CPDFSDK_PageView* pPageView = pFXDoc->GetPageView((CPDFXFA_Page*)page);
 	if(!pPageView)
 		return FALSE;
 	
@@ -152,7 +202,7 @@ DLLEXPORT FPDF_BOOL STDCALL FORM_OnKeyUp(FPDF_FORMHANDLE hHandle, FPDF_PAGE page
 	CPDFSDK_Document* pFXDoc = ((CPDFDoc_Environment*)hHandle)->GetCurrentDoc();
 	if(!pFXDoc)
 		return FALSE;
-	CPDFSDK_PageView* pPageView = pFXDoc->GetPageView((CPDF_Page*)page);
+	CPDFSDK_PageView* pPageView = pFXDoc->GetPageView((CPDFXFA_Page*)page);
 	if(!pPageView)
 		return FALSE;
 	
@@ -168,7 +218,7 @@ DLLEXPORT FPDF_BOOL STDCALL FORM_OnChar(FPDF_FORMHANDLE hHandle, FPDF_PAGE page,
 	CPDFSDK_Document* pFXDoc = ((CPDFDoc_Environment*)hHandle)->GetCurrentDoc();
 	if(!pFXDoc)
 		return FALSE;
-	CPDFSDK_PageView* pPageView = pFXDoc->GetPageView((CPDF_Page*)page);
+	CPDFSDK_PageView* pPageView = pFXDoc->GetPageView((CPDFXFA_Page*)page);
 	if(!pPageView)
 		return FALSE;
 	return pPageView->OnChar(nChar, modifier);
@@ -191,8 +241,15 @@ DLLEXPORT void STDCALL FPDF_FFLDraw(FPDF_FORMHANDLE hHandle, FPDF_BITMAP bitmap,
 {
 	if (!hHandle || !page)
 		return ;
-	CPDF_Page* pPage = (CPDF_Page*)page;
-	
+
+	CPDFXFA_Page* pPage = (CPDFXFA_Page*)page;
+	CPDFXFA_Document* pDocument = pPage->GetDocument();
+	if (!pDocument)
+		return;
+	CPDF_Document* pPDFDoc = pDocument->GetPDFDoc();
+	if (!pPDFDoc)
+		return;
+
 	CPDF_RenderOptions options;
 	if (flags & FPDF_LCD_TEXT)
 		options.m_Flags |= RENDER_CLEARTYPE;
@@ -209,7 +266,7 @@ DLLEXPORT void STDCALL FPDF_FFLDraw(FPDF_FORMHANDLE hHandle, FPDF_BITMAP bitmap,
 	
 	options.m_AddFlags = flags >> 8;
 
-	options.m_pOCContext = FX_NEW CPDF_OCContext(pPage->m_pDocument);
+	options.m_pOCContext = FX_NEW CPDF_OCContext(pPDFDoc);
 
 	//FXMT_CSLOCK_OBJ(&pPage->m_PageLock);
 	
@@ -257,7 +314,7 @@ DLLEXPORT void STDCALL FPDF_FFLDraw(FPDF_FORMHANDLE hHandle, FPDF_BITMAP bitmap,
 		pDevice = NULL;
 		return;
 	}
-	if(CPDFSDK_PageView* pPageView = pFXDoc->GetPageView(pPage))
+	if(CPDFSDK_PageView* pPageView = pFXDoc->GetPageView((CPDFXFA_Page*)page))
 	{
 		pPageView->PageView_OnDraw(pDevice, &matrix, &options);
 	}
@@ -279,6 +336,235 @@ DLLEXPORT void STDCALL FPDF_FFLDraw(FPDF_FORMHANDLE hHandle, FPDF_BITMAP bitmap,
 		pDevice = NULL;
 	}
 
+}
+DLLEXPORT void STDCALL FPDF_Widget_Undo(FPDF_DOCUMENT document, FPDF_WIDGET hWidget)
+{
+	if (NULL == hWidget || NULL == document)
+		return;
+	
+	CPDFXFA_Document* pDocument = (CPDFXFA_Document*)document;	
+
+	if (pDocument->GetDocType() != XFA_DOCTYPE_Dynamic && pDocument->GetDocType() != XFA_DOCTYPE_Static)
+		return;
+
+	IXFA_MenuHandler* pXFAMenuHander = pDocument->GetApp()->GetXFAApp()->GetMenuHandler();
+
+	if (pXFAMenuHander == NULL)
+		return;
+
+	pXFAMenuHander->Undo((XFA_HWIDGET)hWidget);
+
+}
+DLLEXPORT void STDCALL FPDF_Widget_Redo(FPDF_DOCUMENT document, FPDF_WIDGET hWidget)
+{
+	if (NULL == hWidget || NULL == document)
+		return;
+	
+	CPDFXFA_Document* pDocument = (CPDFXFA_Document*)document;	
+	if (pDocument->GetDocType() != XFA_DOCTYPE_Dynamic && pDocument->GetDocType() != XFA_DOCTYPE_Static)
+		return;
+
+	IXFA_MenuHandler* pXFAMenuHander = pDocument->GetApp()->GetXFAApp()->GetMenuHandler();
+
+	if (pXFAMenuHander == NULL)
+		return;
+
+	pXFAMenuHander->Redo((XFA_HWIDGET)hWidget);
+}
+
+DLLEXPORT void STDCALL FPDF_Widget_SelectAll(FPDF_DOCUMENT document, FPDF_WIDGET hWidget)
+{
+	if (NULL == hWidget || NULL == document)
+		return;
+	
+	CPDFXFA_Document* pDocument = (CPDFXFA_Document*)document;	
+	if (pDocument->GetDocType() != XFA_DOCTYPE_Dynamic && pDocument->GetDocType() != XFA_DOCTYPE_Static)
+		return;
+
+	IXFA_MenuHandler* pXFAMenuHander = pDocument->GetApp()->GetXFAApp()->GetMenuHandler();
+
+	if (pXFAMenuHander == NULL)
+		return;
+
+	pXFAMenuHander->SelectAll((XFA_HWIDGET)hWidget);
+}
+DLLEXPORT void STDCALL FPDF_Widget_Copy(FPDF_DOCUMENT document, FPDF_WIDGET hWidget, FPDF_WIDESTRING wsText, FPDF_DWORD* size)
+{
+	if (NULL == hWidget || NULL == document)
+		return;
+	
+	CPDFXFA_Document* pDocument = (CPDFXFA_Document*)document;	
+	if (pDocument->GetDocType() != XFA_DOCTYPE_Dynamic && pDocument->GetDocType() != XFA_DOCTYPE_Static)
+		return;
+
+	IXFA_MenuHandler* pXFAMenuHander = pDocument->GetApp()->GetXFAApp()->GetMenuHandler();
+
+	if (pXFAMenuHander == NULL)
+		return;
+
+	CFX_WideString wsCpText;
+	pXFAMenuHander->Copy((XFA_HWIDGET)hWidget, wsCpText);
+
+	CFX_ByteString bsCpText = wsCpText.UTF16LE_Encode();
+
+	int len = bsCpText.GetLength()/sizeof(unsigned short);
+	
+	if (wsText == NULL) {
+		*size = len;
+		return;
+	}
+
+	int real_size = len < *size ? len : *size;
+	if (real_size > 0)
+	{
+		FXSYS_memcpy((void*)wsText,bsCpText.GetBuffer(real_size*sizeof(unsigned short)),real_size*sizeof(unsigned short));
+		bsCpText.ReleaseBuffer(real_size*sizeof(unsigned short));
+	}
+	*size = real_size;
+}
+DLLEXPORT void STDCALL FPDF_Widget_Cut(FPDF_DOCUMENT document, FPDF_WIDGET hWidget, FPDF_WIDESTRING wsText, FPDF_DWORD* size)
+{
+	if (NULL == hWidget || NULL == document)
+		return;
+	
+	CPDFXFA_Document* pDocument = (CPDFXFA_Document*)document;	
+	if (pDocument->GetDocType() != XFA_DOCTYPE_Dynamic && pDocument->GetDocType() != XFA_DOCTYPE_Static)
+		return;
+
+	IXFA_MenuHandler* pXFAMenuHander = pDocument->GetApp()->GetXFAApp()->GetMenuHandler();
+
+	if (pXFAMenuHander == NULL)
+		return;
+
+	CFX_WideString wsCpText;
+	pXFAMenuHander->Cut((XFA_HWIDGET)hWidget, wsCpText);
+
+	CFX_ByteString bsCpText = wsCpText.UTF16LE_Encode();
+
+	int len = bsCpText.GetLength()/sizeof(unsigned short);
+	
+	if (wsText == NULL) {
+		*size = len;
+		return;
+	}
+
+	int real_size = len < *size ? len : *size;
+	if (real_size > 0)
+	{
+		FXSYS_memcpy((void*)wsText,bsCpText.GetBuffer(real_size*sizeof(unsigned short)),real_size*sizeof(unsigned short));
+		bsCpText.ReleaseBuffer(real_size*sizeof(unsigned short));
+	}
+	*size = real_size;
+}
+DLLEXPORT void STDCALL FPDF_Widget_Paste(FPDF_DOCUMENT document, FPDF_WIDGET hWidget, FPDF_WIDESTRING wsText, FPDF_DWORD size)
+{
+	if (NULL == hWidget || NULL == document)
+		return;
+	
+	CPDFXFA_Document* pDocument = (CPDFXFA_Document*)document;	
+	if (pDocument->GetDocType() != XFA_DOCTYPE_Dynamic && pDocument->GetDocType() != XFA_DOCTYPE_Static)
+		return;
+
+	IXFA_MenuHandler* pXFAMenuHander = pDocument->GetApp()->GetXFAApp()->GetMenuHandler();
+
+	if (pXFAMenuHander == NULL)
+		return;
+
+	CFX_WideString wstr = CFX_WideString::FromUTF16LE(wsText, size);
+
+	pXFAMenuHander->Paste((XFA_HWIDGET)hWidget, wstr);
+
+}
+DLLEXPORT void STDCALL FPDF_Widget_ReplaceSpellCheckWord(FPDF_DOCUMENT document, FPDF_WIDGET hWidget, float x, float y, FPDF_BYTESTRING bsText)
+{
+	if (NULL == hWidget || NULL == document)
+		return;
+	
+	CPDFXFA_Document* pDocument = (CPDFXFA_Document*)document;	
+	if (pDocument->GetDocType() != XFA_DOCTYPE_Dynamic && pDocument->GetDocType() != XFA_DOCTYPE_Static)
+		return;
+
+	IXFA_MenuHandler* pXFAMenuHander = pDocument->GetApp()->GetXFAApp()->GetMenuHandler();
+
+	if (pXFAMenuHander == NULL)
+		return;
+
+	CFX_PointF ptPopup;
+	ptPopup.x = x;
+	ptPopup.y = y;
+	CFX_ByteStringC bs(bsText); 
+	pXFAMenuHander->ReplaceSpellCheckWord((XFA_HWIDGET)hWidget,ptPopup,bs);
+
+}
+DLLEXPORT void STDCALL FPDF_Widget_GetSpellCheckWords(FPDF_DOCUMENT document, FPDF_WIDGET hWidget, float x, float y, FPDF_STRINGHANDLE* stringHandle)
+{
+	if (NULL == hWidget || NULL == document)
+		return;
+	
+	CPDFXFA_Document* pDocument = (CPDFXFA_Document*)document;	
+	if (pDocument->GetDocType() != XFA_DOCTYPE_Dynamic && pDocument->GetDocType() != XFA_DOCTYPE_Static)
+		return;
+
+	IXFA_MenuHandler* pXFAMenuHander = pDocument->GetApp()->GetXFAApp()->GetMenuHandler();
+
+	if (pXFAMenuHander == NULL)
+		return;
+
+	CFX_ByteStringArray* sSuggestWords = FX_NEW CFX_ByteStringArray;
+	CFX_PointF ptPopup;
+	ptPopup.x = x;
+	ptPopup.y = y;
+	pXFAMenuHander->GetSuggestWords((XFA_HWIDGET)hWidget, ptPopup, *sSuggestWords);
+	*stringHandle = (FPDF_STRINGHANDLE)sSuggestWords;
+}
+DLLEXPORT int STDCALL FPDF_StringHandleCounts(FPDF_STRINGHANDLE stringHandle)
+{
+	if (stringHandle == NULL)
+		return -1;
+	CFX_ByteStringArray* sSuggestWords = (CFX_ByteStringArray*)stringHandle;
+	return sSuggestWords->GetSize();
+}
+DLLEXPORT FPDF_BOOL STDCALL FPDF_StringHandleGetStringByIndex(FPDF_STRINGHANDLE stringHandle, int index, FPDF_BYTESTRING bsText, FPDF_DWORD* size)
+{
+	if (stringHandle == NULL || size == NULL)
+		return FALSE;
+	int count = FPDF_StringHandleCounts(stringHandle);
+	if (index < 0|| index >= count)
+		return FALSE;
+
+	CFX_ByteStringArray sSuggestWords = *(CFX_ByteStringArray*)stringHandle;
+	int len = sSuggestWords[index].GetLength();
+
+	if (bsText == NULL) {
+		*size = len;
+		return TRUE;
+	}
+	
+	int real_size = len < *size ? len : *size;
+	if (real_size > 0)
+		FXSYS_memcpy((void*)bsText, (FX_LPCSTR)(sSuggestWords[index]), real_size);
+	*size = real_size;
+
+	return TRUE;
+}
+DLLEXPORT void STDCALL FPDF_StringHandleRelease(FPDF_STRINGHANDLE stringHandle)
+{
+	if (stringHandle == NULL)
+		return;
+	CFX_ByteStringArray* sSuggestWords = (CFX_ByteStringArray*)stringHandle;
+	delete sSuggestWords;
+}
+
+DLLEXPORT FPDF_BOOL STDCALL FPDF_StringHandleAddString(FPDF_STRINGHANDLE stringHandle, FPDF_BYTESTRING bsText, FPDF_DWORD size)
+{
+	if (stringHandle == NULL || bsText == NULL || size <= 0)
+		return FALSE;
+	
+	CFX_ByteStringArray* stringArr = (CFX_ByteStringArray*)stringHandle;
+	CFX_ByteString bsStr(bsText, size);
+
+	stringArr->Add(bsStr);
+	return TRUE;
 }
 
 DLLEXPORT void STDCALL FPDF_SetFormFieldHighlightColor(FPDF_FORMHANDLE hHandle, int fieldType, unsigned long color)
@@ -329,7 +615,7 @@ DLLEXPORT void STDCALL FORM_OnAfterLoadPage(FPDF_PAGE page, FPDF_FORMHANDLE hHan
 	CPDFSDK_Document* pSDKDoc = ((CPDFDoc_Environment*)hHandle)->GetCurrentDoc();
 	if(!pSDKDoc)
 		return;
-	CPDF_Page* pPage = (CPDF_Page*)page;
+	CPDFXFA_Page* pPage = (CPDFXFA_Page*)page;
 	CPDFSDK_PageView* pPageView = pSDKDoc->GetPageView(pPage, TRUE);
 	if(pPageView)
 	{
@@ -342,7 +628,7 @@ DLLEXPORT void STDCALL FORM_OnBeforeClosePage(FPDF_PAGE page, FPDF_FORMHANDLE hH
 	if(!hHandle || !page)
 		return;
 	CPDFSDK_Document* pSDKDoc = ((CPDFDoc_Environment*)hHandle)->GetCurrentDoc();
-	CPDF_Page* pPage = (CPDF_Page*)page;
+	CPDFXFA_Page* pPage = (CPDFXFA_Page*)page;
 	CPDFSDK_PageView* pPageView = pSDKDoc->GetPageView(pPage, FALSE);
 	if(pPageView)
 	{
@@ -380,7 +666,7 @@ DLLEXPORT void STDCALL FORM_DoDocumentAAction(FPDF_FORMHANDLE hHandle, int aaTyp
 	CPDFSDK_Document* pSDKDoc = ((CPDFDoc_Environment*)hHandle)->GetCurrentDoc();
 	if(pSDKDoc)
 	{
-		CPDF_Document* pDoc = pSDKDoc->GetDocument();
+		CPDF_Document* pDoc = pSDKDoc->GetDocument()->GetPDFDoc();
 		CPDF_Dictionary* pDic = pDoc->GetRoot();
 		if (!pDic)
 			return;
@@ -400,7 +686,7 @@ DLLEXPORT void STDCALL FORM_DoPageAAction(FPDF_PAGE page, FPDF_FORMHANDLE hHandl
 	if(!hHandle || !page)
 		return;
 	CPDFSDK_Document* pSDKDoc = ((CPDFDoc_Environment*)hHandle)->GetCurrentDoc();
-	CPDF_Page* pPage = (CPDF_Page*)page;
+	CPDFXFA_Page* pPage = (CPDFXFA_Page*)page;
 	CPDFSDK_PageView* pPageView = pSDKDoc->GetPageView(pPage, FALSE);
 	if(pPageView)
 	{
@@ -410,7 +696,9 @@ DLLEXPORT void STDCALL FORM_DoPageAAction(FPDF_PAGE page, FPDF_FORMHANDLE hHandl
 		CPDFSDK_ActionHandler *pActionHandler = pEnv->GetActionHander();
 		ASSERT(pActionHandler != NULL);
 		
-		CPDF_Dictionary *pPageDict = pPage->m_pFormDict;
+		if (!pPage->GetPDFPage())
+			return;
+		CPDF_Dictionary *pPageDict = pPage->GetPDFPage()->m_pFormDict;
 		ASSERT(pPageDict != NULL);
 		 
 		CPDF_AAction aa = pPageDict->GetDict(FX_BSTRC("AA"));

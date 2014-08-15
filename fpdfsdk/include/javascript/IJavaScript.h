@@ -7,10 +7,6 @@
 #ifndef _IJAVASCRIPT_H_
 #define _IJAVASCRIPT_H_
 
-namespace v8 {
-class Platform;
-}
-
 class IFXJS_Context  
 {
 public:
@@ -88,6 +84,8 @@ public:
 	virtual void				Exit() = 0;
 	virtual void				Enter() = 0;
 	virtual FX_BOOL				IsEntered() = 0;
+	virtual	FX_BOOL				GetHValueByName(FX_BSTR utf8Name, FXJSE_HVALUE hValue) = 0;
+	virtual	FX_BOOL				SetHValueByName(FX_BSTR utf8Name, FXJSE_HVALUE hValue) = 0;
 };
 
 class CPDFDoc_Environment;
@@ -96,21 +94,20 @@ class CJS_GlobalData;
 class CJS_RuntimeFactory
 {
 public:
-	CJS_RuntimeFactory():m_bInit(FALSE),m_nRef(0),m_pGlobalData(NULL),m_nGlobalDataCount(0),m_platform(NULL) {}
+	CJS_RuntimeFactory():m_bInit(FALSE),m_nRef(0),m_pGlobalData(NULL),m_nGlobalDataCount(0) {}
 	~CJS_RuntimeFactory();
-	IFXJS_Runtime*					NewJSRuntime(CPDFDoc_Environment* pApp);
+	IFXJS_Runtime*					NewJSRuntime(CPDFXFA_App* pApp);
 	void							DeleteJSRuntime(IFXJS_Runtime* pRuntime);
 	void							AddRef();
 	void							Release();
 
-	CJS_GlobalData*					NewGlobalData(CPDFDoc_Environment* pApp);
+	CJS_GlobalData*					NewGlobalData(CPDFXFA_App* pApp);
 	void							ReleaseGlobalData();
 private:
 	FX_BOOL m_bInit;
 	int m_nRef;
 	CJS_GlobalData*					m_pGlobalData;
 	FX_INT32						m_nGlobalDataCount;
-        v8::Platform*						m_platform;
 };
 
 #endif //_IJAVASCRIPT_H_

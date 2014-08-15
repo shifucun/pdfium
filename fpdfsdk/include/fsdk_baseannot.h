@@ -61,21 +61,35 @@ public:
 class CPDFSDK_Annot
 {
 public:
-	CPDFSDK_Annot(CPDF_Annot* pAnnot, CPDFSDK_PageView* pPageView);
-	virtual ~CPDFSDK_Annot();
+	CPDFSDK_Annot(CPDFSDK_PageView* pPageView);
+	virtual ~CPDFSDK_Annot() {}
+
 public:
+	virtual	FX_BOOL				IsXFAField() { return FALSE; }
+
 	virtual FX_FLOAT			GetMinWidth() const;
 	virtual FX_FLOAT			GetMinHeight() const;
 	//define layout order to 5.
 	virtual int					GetLayoutOrder() const { return 5; }
 
+	virtual CPDF_Annot*			GetPDFAnnot() { return NULL; }
+	virtual XFA_HWIDGET			GetXFAWidget() { return NULL; }
+	
+	virtual CFX_ByteString		GetType() const { return ""; }
+	virtual CFX_ByteString		GetSubType() const { return ""; }
+
+	virtual void				SetRect(const CPDF_Rect& rect) {}
+	virtual CPDF_Rect			GetRect() const { return CPDF_Rect(); }
+
+	virtual void				Annot_OnDraw(CFX_RenderDevice* pDevice, CPDF_Matrix* pUser2Device,CPDF_RenderOptions* pOptions) {}
+
 public:
-	CPDF_Annot*					GetPDFAnnot();
-	
-	void						SetPage(CPDFSDK_PageView* pPageView);
-	CPDFSDK_PageView*			GetPageView();	
-	FX_DWORD					GetFlags();
-	
+	CPDF_Page*					GetPDFPage();
+	CPDFXFA_Page*				GetPDFXFAPage();
+
+	void						SetPage(CPDFSDK_PageView* pPageView) { m_pPageView = pPageView; }
+	CPDFSDK_PageView*			GetPageView() { return m_pPageView; }
+
 	// Tab Order	
 	int							GetTabOrder();
 	void						SetTabOrder(int iTabOrder);
@@ -83,18 +97,36 @@ public:
 	// Selection
 	FX_BOOL						IsSelected();
 	void						SetSelected(FX_BOOL bSelected);
-	
-	CFX_ByteString				GetType() const;
-	virtual CFX_ByteString		GetSubType() const;
 
-	CPDF_Page*					GetPDFPage();
+protected:
+	CPDF_Annot*			m_pAnnot;
+	CPDFSDK_PageView*	m_pPageView;
+	FX_BOOL				m_bSelected;
+	int					m_nTabOrder;
+	
+};
+
+class CPDFSDK_BAAnnot : public CPDFSDK_Annot
+{
+public:
+	CPDFSDK_BAAnnot(CPDF_Annot* pAnnot, CPDFSDK_PageView* pPageView);
+	virtual ~CPDFSDK_BAAnnot();
 
 public:
+	virtual FX_BOOL				IsXFAField();
+
+	virtual CFX_ByteString		GetType() const;
+	virtual CFX_ByteString		GetSubType() const;
+
+	virtual void				SetRect(const CPDF_Rect& rect);
+	virtual CPDF_Rect			GetRect() const;
+
+	virtual CPDF_Annot*			GetPDFAnnot();
+
+	virtual void				Annot_OnDraw(CFX_RenderDevice* pDevice, CPDF_Matrix* pUser2Device,CPDF_RenderOptions* pOptions);
+public:
 	CPDF_Dictionary*			GetAnnotDict() const;
-	
-	void						SetRect(const CPDF_Rect& rect);
-	CPDF_Rect					GetRect() const;
-	
+
 	void						SetContents(const CFX_WideString& sContents);
 	CFX_WideString				GetContents() const;
 	
@@ -151,32 +183,24 @@ public:
 	virtual CPDF_Action			GetAAction(CPDF_AAction::AActionType eAAT);
 	
 public:
-	FX_BOOL						IsAppearanceValid();
-	FX_BOOL						IsAppearanceValid(CPDF_Annot::AppearanceMode mode);
-	void						DrawAppearance(CFX_RenderDevice* pDevice, const CPDF_Matrix* pUser2Device,
+	virtual FX_BOOL				IsAppearanceValid();
+	virtual FX_BOOL				IsAppearanceValid(CPDF_Annot::AppearanceMode mode);
+	virtual void				DrawAppearance(CFX_RenderDevice* pDevice, const CPDF_Matrix* pUser2Device,
 		CPDF_Annot::AppearanceMode mode, const CPDF_RenderOptions* pOptions);
 	void						DrawBorder(CFX_RenderDevice* pDevice, const CPDF_Matrix* pUser2Device,
 		const CPDF_RenderOptions* pOptions);
 	
 	void						ClearCachedAP();
-	
+
+	virtual void				ResetAppearance();
 	void						WriteAppearance(const CFX_ByteString& sAPType, const CPDF_Rect& rcBBox, 
 		const CPDF_Matrix& matrix, const CFX_ByteString& sContents,
 		const CFX_ByteString& sAPState = "");
-
-public:
-	virtual void			Annot_OnDraw(CFX_RenderDevice* pDevice, CPDF_Matrix* pUser2Device,CPDF_RenderOptions* pOptions);
-public:
-
 
 private:
 	FX_BOOL CreateFormFiller();
 protected:
 	CPDF_Annot*			m_pAnnot;
-	CPDFSDK_PageView*	m_pPageView;
-	FX_BOOL				m_bSelected;
-	int					m_nTabOrder;
-	
 };
 
 

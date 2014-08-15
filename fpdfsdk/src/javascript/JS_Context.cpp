@@ -38,7 +38,7 @@ CPDFSDK_Document* CJS_Context::GetReaderDocument()
 	return m_pRuntime->GetReaderDocument();
 }
 
-CPDFDoc_Environment* CJS_Context::GetReaderApp()
+CPDFXFA_App* CJS_Context::GetReaderApp()
 {
 	ASSERT(m_pRuntime != NULL);
 	
@@ -107,6 +107,7 @@ FX_BOOL CJS_Context::DoJob(int nMode, const CFX_WideString& script, CFX_WideStri
 FX_BOOL CJS_Context::RunScript(const CFX_WideString& script, CFX_WideString& info)
 {
 	v8::Isolate::Scope isolate_scope(m_pRuntime->GetIsolate());
+	v8::Locker locker(m_pRuntime->GetIsolate());
 	v8::HandleScope handle_scope(m_pRuntime->GetIsolate());
 	v8::Local<v8::Context> context = m_pRuntime->NewJSContext();
 	v8::Context::Scope context_scope(context);

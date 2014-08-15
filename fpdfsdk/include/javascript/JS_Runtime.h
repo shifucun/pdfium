@@ -18,7 +18,7 @@ public:
 class CJS_Runtime : public IFXJS_Runtime
 {
 public:
-	CJS_Runtime(CPDFDoc_Environment * pApp);
+	CJS_Runtime(CPDFXFA_App * pApp);
 	virtual ~CJS_Runtime();
 
 	virtual IFXJS_Context *					NewContext();
@@ -37,7 +37,7 @@ public:
 	virtual void							Enter();
 	virtual FX_BOOL							IsEntered();
 
-	CPDFDoc_Environment *							GetReaderApp(){return m_pApp;}
+	CPDFXFA_App *							GetReaderApp(){return m_pApp;}
 
 	FX_BOOL									InitJSObjects();
 
@@ -50,13 +50,17 @@ public:
 	FX_BOOL									IsBlocking(){return m_bBlocking;}
 
 	operator								IJS_Runtime*() {return (IJS_Runtime*)m_isolate;}
-	v8::Isolate*								GetIsolate(){return m_isolate;};
+	v8::Isolate*							GetIsolate(){return m_isolate;};
 	void									SetIsolate(v8::Isolate* isolate){m_isolate = isolate;}
 
-	v8::Handle<v8::Context>							NewJSContext();
+	v8::Handle<v8::Context>					NewJSContext();
+
+
+	virtual	FX_BOOL							GetHValueByName(FX_BSTR utf8Name, FXJSE_HVALUE hValue);
+	virtual	FX_BOOL							SetHValueByName(FX_BSTR utf8Name, FXJSE_HVALUE hValue);
 protected:
 	CFX_ArrayTemplate<CJS_Context *>		m_ContextArray;
-	CPDFDoc_Environment *							m_pApp;
+	CPDFXFA_App *							m_pApp;
 	CPDFSDK_Document *						m_pDocument;
 	FX_BOOL									m_bBlocking;
 	CJS_FieldEvent*							m_pFieldEventPath;

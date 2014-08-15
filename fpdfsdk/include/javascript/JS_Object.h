@@ -19,14 +19,14 @@ public:
 
 	virtual void				TimerProc(CJS_Timer* pTimer){};
 
-	CJS_Timer*					BeginTimer(CPDFDoc_Environment * pApp, FX_UINT nElapse);
+	CJS_Timer*					BeginTimer(CPDFXFA_App * pApp, FX_UINT nElapse);
 	void						EndTimer(CJS_Timer* pTimer);
 
 	CJS_Object*					GetJSObject(){return m_pJSObject;};
 	operator					CJS_Object* (){return m_pJSObject;};
 
 	CPDFSDK_PageView *			JSGetPageView(IFXJS_Context* cc);
-	int							MsgBox(CPDFDoc_Environment* pApp, CPDFSDK_PageView* pPageView, FX_LPCWSTR swMsg, FX_LPCWSTR swTitle = NULL, FX_UINT nType = 0, FX_UINT nIcon = 0);
+	int							MsgBox(CPDFXFA_App* pApp, CPDFSDK_PageView* pPageView, FX_LPCWSTR swMsg, FX_LPCWSTR swTitle = NULL, FX_UINT nType = 0, FX_UINT nIcon = 0);
 	void						Alert(CJS_Context* pContext, FX_LPCWSTR swMsg);
 	FX_BOOL						IsSafeMode(IFXJS_Context* cc);
 
@@ -56,7 +56,7 @@ public:
 	CJS_EmbedObj *				GetEmbedObject(){return m_pEmbedObj;};
 
 	static CPDFSDK_PageView *	JSGetPageView(IFXJS_Context* cc);
-	static int					MsgBox(CPDFDoc_Environment* pApp, CPDFSDK_PageView* pPageView, FX_LPCWSTR swMsg, FX_LPCWSTR swTitle = NULL, FX_UINT nType = 0,FX_UINT nIcon = 0);
+	static int					MsgBox(CPDFXFA_App* pApp, CPDFSDK_PageView* pPageView, FX_LPCWSTR swMsg, FX_LPCWSTR swTitle = NULL, FX_UINT nType = 0,FX_UINT nIcon = 0);
 	static void					Alert(CJS_Context* pContext, FX_LPCWSTR swMsg);
 
 	v8::Isolate*					GetIsolate() {return m_pIsolate;}
@@ -164,7 +164,7 @@ class CJS_Runtime;
 class CJS_Timer
 {
 public:
-	CJS_Timer(CJS_EmbedObj * pObj,CPDFDoc_Environment* pApp):
+	CJS_Timer(CJS_EmbedObj * pObj,CPDFXFA_App* pApp):
 		m_nTimerID(0), 
 		m_pEmbedObj(pObj), 
 		m_bProcessing(FALSE),
@@ -186,7 +186,7 @@ public:
 	FX_UINT SetJSTimer(FX_UINT nElapse)
 	{	
 		if (m_nTimerID)KillJSTimer();
-		IFX_SystemHandler* pHandler = m_pApp->GetSysHandler();
+		IFX_SystemHandler* pHandler = m_pApp->GetFormFillEnv()->GetSysHandler();
 		m_nTimerID = pHandler->SetTimer(nElapse,TimerProc);
 		m_sTimeMap.SetAt(m_nTimerID,this);
 		m_dwElapse = nElapse;
@@ -197,7 +197,7 @@ public:
 	{
 		if (m_nTimerID)
 		{
-			IFX_SystemHandler* pHandler = m_pApp->GetSysHandler();
+			IFX_SystemHandler* pHandler = m_pApp->GetFormFillEnv()->GetSysHandler();
 			pHandler->KillTimer(m_nTimerID);
 			m_sTimeMap.RemoveAt(m_nTimerID);
 			m_nTimerID = 0;
@@ -284,6 +284,6 @@ private:
 	CFX_WideString					m_swJScript;
 	int								m_nType; //0:Interval; 1:TimeOut
 
-	CPDFDoc_Environment*			m_pApp;
+	CPDFXFA_App*			m_pApp;
 };
 #endif //_JS_OBJECT_H_

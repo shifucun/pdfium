@@ -48,7 +48,7 @@ public:
 	FX_BOOL						DoProperty(IFXJS_Context* cc, FX_LPCWSTR propname, CJS_PropValue & vp, JS_ErrorString & sError);
 	FX_BOOL						DelProperty(IFXJS_Context* cc, FX_LPCWSTR propname, JS_ErrorString & sError);
 
-	void						Initial(CPDFDoc_Environment* pApp);
+	void						Initial(CPDFXFA_App* pApp);
 
 private:
 	void						UpdateGlobalPersistentVariables();
@@ -64,7 +64,7 @@ private:
 	CFX_MapByteStringToPtr		m_mapGlobal;
 	CFX_WideString				m_sFilePath;
 	CJS_GlobalData*				m_pGlobalData;
-	CPDFDoc_Environment*				m_pApp;
+	CPDFXFA_App*				m_pApp;
 };
 
 

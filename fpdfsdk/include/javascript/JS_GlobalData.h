@@ -61,7 +61,7 @@ public:
 class CJS_GlobalData
 {
 public:
-	CJS_GlobalData(CPDFDoc_Environment* pApp);
+	CJS_GlobalData(CPDFXFA_App* pApp);
 	virtual ~CJS_GlobalData();
 
 public:
@@ -91,6 +91,7 @@ private:
 private:
 	CFX_ArrayTemplate<CJS_GlobalData_Element*>	m_arrayGlobalData;
 	CFX_WideString								m_sFilePath;
+	CPDFXFA_App*								m_pApp;
 };
 
 #endif //_JS_GLOBALDATA_H_

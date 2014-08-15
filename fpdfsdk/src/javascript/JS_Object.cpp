@@ -12,16 +12,16 @@
 // #include "../../include/javascript/JS_ResMgr.h"
 #include "../../include/javascript/JS_Context.h"
 
-int FXJS_MsgBox(CPDFDoc_Environment* pApp, CPDFSDK_PageView* pPageView, FX_LPCWSTR swMsg, FX_LPCWSTR swTitle, FX_UINT nType, FX_UINT nIcon)
+int FXJS_MsgBox(CPDFXFA_App* pApp, CPDFSDK_PageView* pPageView, FX_LPCWSTR swMsg, FX_LPCWSTR swTitle, FX_UINT nType, FX_UINT nIcon)
 {
 	int nRet = 0;
 
-	if(pApp)
+	if(pApp&&pApp->GetFormFillEnv())
 	{
-		CPDFSDK_Document* pDoc = pApp->GetCurrentDoc();
+		CPDFSDK_Document* pDoc = pApp->GetFormFillEnv()->GetCurrentDoc();
 		if(pDoc)
 			pDoc->KillFocusAnnot();
-		nRet = pApp->JS_appAlert(swMsg, swTitle, nType, nIcon);
+		nRet = pApp->GetFormFillEnv()->JS_appAlert(swMsg, swTitle, nType, nIcon);
 	}
 
 	return nRet;
@@ -55,7 +55,7 @@ CPDFSDK_PageView* CJS_EmbedObj::JSGetPageView(IFXJS_Context* cc)
 	return FXJS_GetPageView(cc);
 }
 
-int CJS_EmbedObj::MsgBox(CPDFDoc_Environment* pApp, CPDFSDK_PageView* pPageView,FX_LPCWSTR swMsg,FX_LPCWSTR swTitle,FX_UINT nType,FX_UINT nIcon)
+int CJS_EmbedObj::MsgBox(CPDFXFA_App* pApp, CPDFSDK_PageView* pPageView,FX_LPCWSTR swMsg,FX_LPCWSTR swTitle,FX_UINT nType,FX_UINT nIcon)
 {
 	return FXJS_MsgBox(pApp, pPageView, swMsg, swTitle, nType, nIcon);
 }
@@ -65,7 +65,7 @@ void CJS_EmbedObj::Alert(CJS_Context* pContext, FX_LPCWSTR swMsg)
 	CJS_Object::Alert(pContext, swMsg);
 }
 
-CJS_Timer* CJS_EmbedObj::BeginTimer(CPDFDoc_Environment * pApp,FX_UINT nElapse)
+CJS_Timer* CJS_EmbedObj::BeginTimer(CPDFXFA_App * pApp,FX_UINT nElapse)
 {
 	CJS_Timer* pTimer = new CJS_Timer(this,pApp);
 	pTimer->SetJSTimer(nElapse);
@@ -125,7 +125,7 @@ CPDFSDK_PageView* CJS_Object::JSGetPageView(IFXJS_Context* cc)
 	return FXJS_GetPageView(cc);
 }
 
-int CJS_Object::MsgBox(CPDFDoc_Environment* pApp, CPDFSDK_PageView* pPageView, FX_LPCWSTR swMsg, FX_LPCWSTR swTitle, FX_UINT nType, FX_UINT nIcon)
+int CJS_Object::MsgBox(CPDFXFA_App* pApp, CPDFSDK_PageView* pPageView, FX_LPCWSTR swMsg, FX_LPCWSTR swTitle, FX_UINT nType, FX_UINT nIcon)
 {
 	return FXJS_MsgBox(pApp, pPageView, swMsg, swTitle, nType, nIcon);
 }
@@ -136,9 +136,9 @@ void CJS_Object::Alert(CJS_Context* pContext, FX_LPCWSTR swMsg)
 
 	if (pContext->IsMsgBoxEnabled())
 	{
-		CPDFDoc_Environment* pApp = pContext->GetReaderApp();
+		CPDFXFA_App* pApp = pContext->GetReaderApp();
 		if(pApp)
-			pApp->JS_appAlert(swMsg, NULL, 0, 3);
+			pApp->GetFormFillEnv()->JS_appAlert(swMsg, NULL, 0, 3);
 	}
 }
 
