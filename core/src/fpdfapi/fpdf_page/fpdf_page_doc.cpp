@@ -192,21 +192,15 @@ void CPDF_DocPageData::Clear(FX_BOOL bRelease)
         }
     }
     {
-        FX_POSITION pos_start = m_ColorSpaceMap.GetStartPosition();
-        for (int releaseLoop = 0; releaseLoop < 2; releaseLoop++){
-            pos = pos_start;
-            while (pos) {
-                CPDF_Object* csKey;
-                CPDF_CountedObject<CPDF_ColorSpace*>* csData;
-                m_ColorSpaceMap.GetNextAssoc(pos, csKey, csData);
-                nCount = csData->m_nCount;
-                if ((bRelease || nCount < 2) && csData->m_Obj) {
-                    int CS_Family = csData->m_Obj->GetFamily();
-                    if ((releaseLoop == 0 && CS_Family == PDFCS_INDEXED) || (releaseLoop == 1 && CS_Family != PDFCS_INDEXED)) {
-                        csData->m_Obj->ReleaseCS();
-                        csData->m_Obj = NULL;
-                    }
-                }
+        pos = m_ColorSpaceMap.GetStartPosition();
+        while (pos) {
+            CPDF_Object* csKey;
+            CPDF_CountedObject<CPDF_ColorSpace*>* csData;
+            m_ColorSpaceMap.GetNextAssoc(pos, csKey, csData);
+            nCount = csData->m_nCount;
+            if (bRelease || nCount < 2) {
+                csData->m_Obj->ReleaseCS();
+                csData->m_Obj = NULL;
             }
         }
     }
