@@ -517,12 +517,16 @@ void CPDF_LabCS::TranslateImageLine(FX_LPBYTE pDestBuf, FX_LPCBYTE pSrcBuf, int 
         pSrcBuf += 3;
     }
 }
-CPDF_IccProfile::CPDF_IccProfile(FX_LPCBYTE pData, FX_DWORD dwSize, int nComponents)
+CPDF_IccProfile::CPDF_IccProfile(FX_LPCBYTE pData, FX_DWORD dwSize)
 {
-    m_bsRGB = nComponents == 3 && dwSize == 3144 && FXSYS_memcmp32(pData + 0x190, "sRGB IEC61966-2.1", 17) == 0;
-    m_pTransform = NULL;
-    if (!m_bsRGB && CPDF_ModuleMgr::Get()->GetIccModule()) {
-        m_pTransform = CPDF_ModuleMgr::Get()->GetIccModule()->CreateTransform_sRGB(pData, dwSize, nComponents);
+    if (dwSize == 3144 && FXSYS_memcmp32(pData + 0x190, "sRGB IEC61966-2.1", 17) == 0) {
+        m_bsRGB = TRUE;
+        m_pTransform = NULL;
+        m_srcnComponents = 3;
+    }
+    else if (CPDF_ModuleMgr::Get()->GetIccModule()) {
+        m_bsRGB = FALSE;
+        m_pTransform = CPDF_ModuleMgr::Get()->GetIccModule()->CreateTransform_sRGB(pData, dwSize, &m_srcnComponents);
     }
 }
 CPDF_IccProfile::~CPDF_IccProfile()
@@ -583,11 +587,14 @@ FX_BOOL CPDF_ICCBasedCS::v_Load(CPDF_Document* pDoc, CPDF_Array* pArray)
     if (pStream == NULL) {
         return FALSE;
     }
-    CPDF_Dictionary* pDict = pStream->GetDict();
-    m_nComponents = pDict ? pDict->GetInteger(FX_BSTRC("N")) : 0;
-    if (m_nComponents != 1 && m_nComponents != 3 && m_nComponents != 4) {
+
+    m_pProfile = pDoc->LoadIccProfile(pStream);
+    if (!m_pProfile) {
         return FALSE;
     }
+    m_nComponents = m_pProfile->GetComponents();
+
+    CPDF_Dictionary* pDict = pStream->GetDict();
     CPDF_Array* pRanges = pDict->GetArray(FX_BSTRC("Range"));
     m_pRanges = FX_Alloc(FX_FLOAT, m_nComponents * 2);
     for (int i = 0; i < m_nComponents * 2; i ++) {
@@ -599,10 +606,7 @@ FX_BOOL CPDF_ICCBasedCS::v_Load(CPDF_Document* pDoc, CPDF_Array* pArray)
             m_pRanges[i] = 0;
         }
     }
-    m_pProfile = pDoc->LoadIccProfile(pStream, m_nComponents);
-    if (!m_pProfile) {
-        return FALSE;
-    }
+
     if (m_pProfile->m_pTransform == NULL) {
         CPDF_Object* pAlterCSObj = pDict ? pDict->GetElementValue(FX_BSTRC("Alternate")) : NULL;
         if (pAlterCSObj) {

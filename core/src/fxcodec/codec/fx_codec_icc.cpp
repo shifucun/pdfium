@@ -7,6 +7,12 @@
 #include "../../../include/fxcodec/fx_codec.h"
 #include "codec_int.h"
 #include "../lcms2/include/fx_lcms2.h"
+#define N_COMPONENT_LAB 3
+#define N_COMPONENT_GRAY 1
+#define N_COMPONENT_RGB 3
+#define N_COMPONENT_CMYK 4
+#define N_COMPONENT_DEFAULT 3
+
 FX_BOOL MD5ComputeID( FX_LPCVOID buf, FX_DWORD dwSize, FX_BYTE ID[16] )
 {
     return cmsMD5computeIDExt(buf, dwSize, ID);
@@ -28,45 +34,67 @@ FX_BOOL CheckComponents(cmsColorSpaceSignature cs, int nComponents, FX_BOOL bDst
     if (nComponents <= 0 || nComponents > 15) {
         return FALSE;
     }
-    switch(cs) {
-        case cmsSigLabData:
-            if (nComponents < 3) {
-                return FALSE;
-            }
-            break;
-        case cmsSigGrayData:
-            if (bDst && nComponents != 1) {
-                return FALSE;
-            } else if (!bDst && nComponents > 2) {
-                return FALSE;
-            }
-            break;
-        case cmsSigRgbData:
-            if (bDst && nComponents != 3) {
-                return FALSE;
-            }
-            break;
-        case cmsSigCmykData:
-            if (bDst && nComponents != 4) {
-                return FALSE;
-            }
-            break;
-        default:
-            if (nComponents != 3) {
-                return FALSE;
-            }
-            break;
+    switch (cs) {
+    case cmsSigLabData:
+        if (nComponents < 3) {
+            return FALSE;
+        }
+        break;
+    case cmsSigGrayData:
+        if (bDst && nComponents != 1) {
+            return FALSE;
+        }
+        else if (!bDst && nComponents > 2) {
+            return FALSE;
+        }
+        break;
+    case cmsSigRgbData:
+        if (bDst && nComponents != 3) {
+            return FALSE;
+        }
+        break;
+    case cmsSigCmykData:
+        if (bDst && nComponents != 4) {
+            return FALSE;
+        }
+        break;
+    default:
+        if (nComponents != 3) {
+            return FALSE;
+        }
+        break;
     }
     return TRUE;
 }
-void* IccLib_CreateTransform(const unsigned char* pSrcProfileData, unsigned int dwSrcProfileSize, int nSrcComponents,
-                             const unsigned char* pDstProfileData, unsigned int dwDstProfileSize, int nDstComponents,
+FX_INT32 GetCSComponents(cmsColorSpaceSignature cs)
+{
+    switch (cs) {
+        case cmsSigLabData:
+            return N_COMPONENT_LAB;
+            break;
+        case cmsSigGrayData:
+            return N_COMPONENT_GRAY;
+            break;
+        case cmsSigRgbData:
+            return N_COMPONENT_RGB;
+            break;
+        case cmsSigCmykData:
+            return N_COMPONENT_CMYK;
+            break;
+        default:
+            return N_COMPONENT_DEFAULT;
+            break;
+    }
+}
+void* IccLib_CreateTransform(const unsigned char* pSrcProfileData, FX_DWORD dwSrcProfileSize, FX_INT32* nSrcComponents,
+                             const unsigned char* pDstProfileData, FX_DWORD dwDstProfileSize, FX_INT32 nDstComponents,
                              int intent, FX_DWORD dwSrcFormat = Icc_FORMAT_DEFAULT, FX_DWORD dwDstFormat = Icc_FORMAT_DEFAULT)
 {
     cmsHPROFILE srcProfile = NULL;
     cmsHPROFILE dstProfile = NULL;
     cmsHTRANSFORM hTransform = NULL;
     CLcmsCmm* pCmm = NULL;
+    *nSrcComponents = 0;
     srcProfile = cmsOpenProfileFromMem((void*)pSrcProfileData, dwSrcProfileSize);
     if (srcProfile == NULL) {
         return NULL;
@@ -83,16 +111,12 @@ void* IccLib_CreateTransform(const unsigned char* pSrcProfileData, unsigned int 
     int srcFormat;
     FX_BOOL bLab = FALSE;
     cmsColorSpaceSignature srcCS = cmsGetColorSpace(srcProfile);
-    if (!CheckComponents(srcCS, nSrcComponents, FALSE)) {
-        cmsCloseProfile(srcProfile);
-        cmsCloseProfile(dstProfile);
-        return NULL;
-    }
+    *nSrcComponents = GetCSComponents(srcCS);
     if (srcCS == cmsSigLabData) {
-        srcFormat = COLORSPACE_SH(PT_Lab) | CHANNELS_SH(nSrcComponents) | BYTES_SH(0);
+        srcFormat = COLORSPACE_SH(PT_Lab) | CHANNELS_SH(*nSrcComponents) | BYTES_SH(0);
         bLab = TRUE;
     } else {
-        srcFormat = COLORSPACE_SH(PT_ANY) | CHANNELS_SH(nSrcComponents) | BYTES_SH(1);
+        srcFormat = COLORSPACE_SH(PT_ANY) | CHANNELS_SH(*nSrcComponents) | BYTES_SH(1);
         if (srcCS == cmsSigRgbData && T_DOSWAP(dwSrcFormat)) {
             srcFormat |= DOSWAP_SH(1);
         }
@@ -127,7 +151,7 @@ void* IccLib_CreateTransform(const unsigned char* pSrcProfileData, unsigned int 
     if (pCmm == NULL) {
         return NULL;
     }
-    pCmm->m_nSrcComponents = nSrcComponents;
+    pCmm->m_nSrcComponents = *nSrcComponents;
     pCmm->m_nDstComponents = nDstComponents;
     pCmm->m_hTransform = hTransform;
     pCmm->m_bLab = bLab;
@@ -135,7 +159,7 @@ void* IccLib_CreateTransform(const unsigned char* pSrcProfileData, unsigned int 
     cmsCloseProfile(dstProfile);
     return pCmm;
 }
-void* IccLib_CreateTransform_sRGB(const unsigned char* pProfileData, unsigned int dwProfileSize, int nComponents, int intent, FX_DWORD dwSrcFormat)
+void* IccLib_CreateTransform_sRGB(const unsigned char* pProfileData, FX_DWORD dwProfileSize, FX_INT32* nComponents, FX_INT32 intent, FX_DWORD dwSrcFormat)
 {
     return IccLib_CreateTransform(pProfileData, dwProfileSize, nComponents, NULL, 0, 3, intent, dwSrcFormat);
 }
@@ -192,7 +216,7 @@ void IccLib_Translate(void* pTransform, FX_DWORD nSrcComponents, FX_FLOAT* pSrcV
             break;
     }
 }
-void IccLib_TranslateImage(void* pTransform, unsigned char* pDest, const unsigned char* pSrc, int pixels)
+void IccLib_TranslateImage(void* pTransform, unsigned char* pDest, const unsigned char* pSrc, FX_INT32 pixels)
 {
     cmsDoTransform(((CLcmsCmm*)pTransform)->m_hTransform, (void*)pSrc, pDest, pixels);
 }
@@ -242,7 +266,7 @@ ICodec_IccModule::IccCS GetProfileCSFromHandle(FX_LPVOID pProfile)
             return ICodec_IccModule::IccCS_Unknown;
     }
 }
-ICodec_IccModule::IccCS CCodec_IccModule::GetProfileCS(FX_LPCBYTE pProfileData, unsigned int dwProfileSize)
+ICodec_IccModule::IccCS CCodec_IccModule::GetProfileCS(FX_LPCBYTE pProfileData, FX_DWORD dwProfileSize)
 {
     ICodec_IccModule::IccCS cs;
     cmsHPROFILE hProfile = cmsOpenProfileFromMem((void*)pProfileData, dwProfileSize);
@@ -517,12 +541,12 @@ CCodec_IccModule::~CCodec_IccModule()
         }
     }
 }
-void* CCodec_IccModule::CreateTransform_sRGB(FX_LPCBYTE pProfileData, unsigned int dwProfileSize, int nComponents, int intent, FX_DWORD dwSrcFormat)
+void* CCodec_IccModule::CreateTransform_sRGB(FX_LPCBYTE pProfileData, FX_DWORD dwProfileSize, FX_INT32* nComponents, FX_INT32 intent, FX_DWORD dwSrcFormat)
 {
     return IccLib_CreateTransform_sRGB(pProfileData, dwProfileSize, nComponents, intent, dwSrcFormat);
 }
-void* CCodec_IccModule::CreateTransform_CMYK(FX_LPCBYTE pSrcProfileData, unsigned int dwSrcProfileSize, int nSrcComponents,
-        FX_LPCBYTE pDstProfileData, unsigned int dwDstProfileSize, int intent,
+void* CCodec_IccModule::CreateTransform_CMYK(FX_LPCBYTE pSrcProfileData, FX_DWORD dwSrcProfileSize, FX_INT32* nSrcComponents,
+    FX_LPCBYTE pDstProfileData, FX_DWORD dwDstProfileSize, FX_INT32 intent,
         FX_DWORD dwSrcFormat , FX_DWORD dwDstFormat)
 {
     return IccLib_CreateTransform(pSrcProfileData, dwSrcProfileSize, nSrcComponents,
@@ -536,7 +560,7 @@ void CCodec_IccModule::Translate(void* pTransform, FX_FLOAT* pSrcValues, FX_FLOA
 {
     IccLib_Translate(pTransform, m_nComponents, pSrcValues, pDestValues);
 }
-void CCodec_IccModule::TranslateScanline(void* pTransform, FX_LPBYTE pDest, FX_LPCBYTE pSrc, int pixels)
+void CCodec_IccModule::TranslateScanline(void* pTransform, FX_LPBYTE pDest, FX_LPCBYTE pSrc, FX_INT32 pixels)
 {
     IccLib_TranslateImage(pTransform, pDest, pSrc, pixels);
 }
