@@ -560,6 +560,7 @@ ICodec_ScanlineDecoder* FPDFAPI_CreateFlateDecoder(FX_LPCBYTE src_buf, FX_DWORD 
         int nComps, int bpc, const CPDF_Dictionary* pParams);
 int CPDF_DIBSource::CreateDecoder()
 {
+    FX_DWORD bpc = GetValidBpc();
     const CFX_ByteString& decoder = m_pStreamAcc->GetImageDecoder();
     if (decoder.IsEmpty()) {
         return 1;
@@ -574,7 +575,7 @@ int CPDF_DIBSource::CreateDecoder()
                      m_nComponents, pParams ? pParams->GetInteger(FX_BSTR("ColorTransform"), 1) : 1);
         if (NULL == m_pDecoder) {
             FX_BOOL bTransform = FALSE;
-            int comps, bpc;
+            int comps;
             ICodec_JpegModule* pJpegModule = CPDF_ModuleMgr::Get()->GetJpegModule();
             if (pJpegModule->LoadInfo(src_data, src_size, m_Width, m_Height, comps, bpc, bTransform)) {
                 m_nComponents = comps;
@@ -584,7 +585,7 @@ int CPDF_DIBSource::CreateDecoder()
             }
         }
     } else if (decoder == FX_BSTRC("FlateDecode")) {
-        m_pDecoder = FPDFAPI_CreateFlateDecoder(src_data, src_size, m_Width, m_Height, m_nComponents, m_bpc, pParams);
+        m_pDecoder = FPDFAPI_CreateFlateDecoder(src_data, src_size, m_Width, m_Height, m_nComponents, bpc, pParams);
     } else if (decoder == FX_BSTRC("JPXDecode")) {
         LoadJpxBitmap();
         return m_pCachedBitmap != NULL ? 1 : 0;
@@ -601,9 +602,23 @@ int CPDF_DIBSource::CreateDecoder()
         m_pDecoder = CPDF_ModuleMgr::Get()->GetCodecModule()->GetBasicModule()->CreateRunLengthDecoder(src_data, src_size, m_Width, m_Height, m_nComponents, m_bpc);
     }
     if (m_pDecoder) {
-        int requested_pitch = (m_Width * m_nComponents * m_bpc + 7) / 8;
-        int provided_pitch = (m_pDecoder->GetWidth() * m_pDecoder->CountComps() * m_pDecoder->GetBPC() + 7) / 8;
-        if (provided_pitch < requested_pitch) {
+        FX_SAFE_DWORD requested_pitch = bpc;
+        requested_pitch *= m_nComponents;
+        requested_pitch *= m_Width;
+        requested_pitch += 7;
+        requested_pitch /= 8;
+        if (!requested_pitch.IsValid()) {
+            return 1;
+        }
+        FX_SAFE_DWORD provided_pitch = m_pDecoder->GetBPC();
+        provided_pitch *= m_pDecoder->CountComps();
+        provided_pitch *= m_pDecoder->GetWidth();
+        provided_pitch += 7;
+        provided_pitch /= 8;
+        if (!provided_pitch.IsValid()) {
+            return 1;
+        }
+        if (provided_pitch.ValueOrDie() < requested_pitch.ValueOrDie()) {
             return 0;
         }
         return 1;
