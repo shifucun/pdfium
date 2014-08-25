@@ -577,7 +577,7 @@ int CPDF_DIBSource::CreateDecoder()
             FX_BOOL bTransform = FALSE;
             int comps;
             ICodec_JpegModule* pJpegModule = CPDF_ModuleMgr::Get()->GetJpegModule();
-            if (pJpegModule->LoadInfo(src_data, src_size, m_Width, m_Height, comps, bpc, bTransform)) {
+            if (pJpegModule->LoadInfo(src_data, src_size, m_Width, m_Height, comps, (FX_INT32&)bpc, bTransform)) {
                 m_nComponents = comps;
                 m_bpc = bpc;
                 m_pDecoder = CPDF_ModuleMgr::Get()->GetJpegModule()->CreateDecoder(src_data, src_size, m_Width, m_Height,
