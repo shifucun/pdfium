@@ -525,18 +525,14 @@ static void TIFF_PredictLine(FX_LPBYTE dest_buf, int row_size, int BitsPerCompon
 {
     if (BitsPerComponent == 1) {
         int row_bits = FX_MIN(BitsPerComponent * Colors * Columns, row_size * 8);
-        int index_pre = 0;
-        int col_pre = 0;
         for(int i = 1; i < row_bits; i ++) {
             int col = i % 8;
             int index = i / 8;
-            if( ((dest_buf[index] >> (7 - col)) & 1) ^ ((dest_buf[index_pre] >> (7 - col_pre)) & 1) ) {
+            if( ((dest_buf[index] >> (7 - col)) & 1) ^ ((dest_buf[(i-1)/8] >> (7 - (i-1)%8)) & 1) ) {
                 dest_buf[index] |= 1 << (7 - col);
             } else {
                 dest_buf[index] &= ~(1 << (7 - col));
             }
-            index_pre = index;
-            col_pre = col;
         }
         return;
     }
