@@ -856,6 +856,9 @@ int CPDF_DIBSource::StartLoadMaskDIB()
 void CPDF_DIBSource::LoadPalette()
 {
     FX_DWORD bpc = GetValidBpc();
+	if (bpc == 0) {
+	    return;
+	}
     if (bpc * m_nComponents > 8) {
         return;
     }
