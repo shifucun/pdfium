@@ -1393,10 +1393,10 @@ CPDF_Object* CPDF_Parser::ParseIndirectObjectAt(CPDF_IndirectObjects* pObjList, 
         endOffset = m_Syntax.SavePos();
     }
     m_Syntax.RestorePos(SavedPos);
-	if(!pObj) {
+    if(!pObj) {
         return NULL;
-	pObj->m_GenNum = gennum;
-	if (!objnum) {
+    pObj->m_GenNum = gennum;
+    if (!objnum) {
         pObj->m_ObjNum = real_objnum;
     }
     return pObj;
