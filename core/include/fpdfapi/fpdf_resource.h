@@ -684,6 +684,7 @@ public:
     {
         m_pBuffer = NULL;
         m_pCS = NULL;
+        m_pDocument = NULL;
     }
 
     CPDF_Color(int family);
@@ -721,6 +722,9 @@ public:
     CPDF_ColorSpace*		m_pCS;
 
     FX_FLOAT*			m_pBuffer;
+
+    CPDF_Document*          m_pDocument;
+
 protected:
     void	ReleaseBuffer();
     void	ReleaseColorSpace();
@@ -732,7 +736,6 @@ class CPDF_Pattern : public CFX_Object
 public:
    
     virtual ~CPDF_Pattern();
-    void SaveColor(CPDF_Color* pColor) {m_pColor = pColor;}
 
     CPDF_Object*                m_pPatternObj;
 
@@ -742,7 +745,6 @@ public:
     CFX_AffineMatrix            m_ParentMatrix;
 
     CPDF_Document*              m_pDocument;
-    CPDF_Color*                 m_pColor;
 
 protected:
     
