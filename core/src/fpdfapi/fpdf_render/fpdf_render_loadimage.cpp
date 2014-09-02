@@ -918,6 +918,7 @@ void CPDF_DIBSource::ValidateDictParam()
             CFX_ByteString filter = pFilter->GetString();
             if (filter == FX_BSTRC("CCITTFaxDecode") || filter == FX_BSTRC("JBIG2Decode")) {
                 m_bpc = 1;
+                m_nComponents = 1;
             }
             if (filter == FX_BSTRC("RunLengthDecode") || filter == FX_BSTRC("DCTDecode")) {
                 m_bpc = 8;
