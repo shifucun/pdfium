@@ -338,8 +338,14 @@ int	CPDF_DIBSource::StartLoadDIBSource(CPDF_Document* pDoc, const CPDF_Stream* p
         return 0;
     }
     const CFX_ByteString& decoder = m_pStreamAcc->GetImageDecoder();
-    if (!decoder.IsEmpty() && decoder == FX_BSTRC("CCITTFaxDecode")) {
-        m_bpc = 1;
+    if (!decoder.IsEmpty()) {
+        if (decoder == FX_BSTRC("CCITTFaxDecode")) {
+            m_bpc = 1;
+        }
+        if (decoder == FX_BSTRC("JBIG2Decode")) {
+            m_nComponents = 1;
+        }
+
     }
     int ret = CreateDecoder();
     if (ret != 1) {
