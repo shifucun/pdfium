@@ -535,8 +535,8 @@ FX_BOOL CPDF_DIBSource::LoadColorInfo(CPDF_Dictionary* pFormResources, CPDF_Dict
             CPDF_Array* pArray = (CPDF_Array*)pMask;
             if (pArray->GetCount() >= m_nComponents * 2)
                 for (FX_DWORD i = 0; i < m_nComponents; i++) {
-                    m_pCompData[i].m_ColorKeyMin = FX_MAX(0, pArray->GetInteger(i*2));
-                    m_pCompData[i].m_ColorKeyMax = FX_MIN((1<<m_bpc)-1, pArray->GetInteger(i*2+1));
+                    m_pCompData[i].m_ColorKeyMin = FX_MIN( FX_MAX(0, pArray->GetInteger(i * 2)), (1 << m_bpc) - 1);
+                    m_pCompData[i].m_ColorKeyMax = FX_MAX( FX_MIN((1 << m_bpc) - 1, pArray->GetInteger(i * 2 + 1)), 0 );
                 }
             m_bColorKey = TRUE;
         }
