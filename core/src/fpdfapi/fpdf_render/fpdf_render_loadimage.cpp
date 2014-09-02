@@ -444,8 +444,6 @@ int	CPDF_DIBSource::ContinueLoadDIBSource(IFX_Pause* pPause)
 }
 FX_BOOL CPDF_DIBSource::LoadColorInfo(CPDF_Dictionary* pFormResources, CPDF_Dictionary* pPageResources)
 {
-    m_bpc_orig = m_pDict->GetInteger(FX_BSTRC("BitsPerComponent"));
-    ValidateDictParam();
     if (m_pDict->GetInteger("ImageMask")) {
         m_bImageMask = TRUE;
     }
@@ -499,6 +497,8 @@ FX_BOOL CPDF_DIBSource::LoadColorInfo(CPDF_Dictionary* pFormResources, CPDF_Dict
             m_nComponents = 4;
         }
     }
+    m_bpc_orig = m_pDict->GetInteger(FX_BSTRC("BitsPerComponent"));
+    ValidateDictParam();
     m_pCompData = FX_Alloc(DIB_COMP_DATA, m_nComponents);
     if (m_bpc == 0) {
         return TRUE;
