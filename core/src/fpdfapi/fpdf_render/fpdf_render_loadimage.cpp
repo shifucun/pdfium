@@ -165,7 +165,7 @@ FX_BOOL CPDF_DIBSource::Load(CPDF_Document* pDoc, const CPDF_Stream* pStream, CP
     }
     m_pDocument = pDoc;
     m_pDict = pStream->GetDict();
-    if (m_pDict = NULL) {
+    if (m_pDict == NULL) {
         return FALSE;
     }
     m_pStream = pStream;
