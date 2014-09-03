@@ -457,8 +457,7 @@ FX_BOOL CPDF_DIBSource::LoadColorInfo(CPDF_Dictionary* pFormResources, CPDF_Dict
                     if (filter == FX_BSTRC("JPXDecode")) {
                         return TRUE;
                     }
-                }
-                else if (pFilter->GetType() == PDFOBJ_ARRAY) {
+                } else if (pFilter->GetType() == PDFOBJ_ARRAY) {
                     CPDF_Array* pArray = (CPDF_Array*)pFilter;
                     if (pArray->GetString(pArray->GetCount() - 1) == FX_BSTRC("JPXDecode")) {
                         return TRUE;
@@ -492,11 +491,9 @@ FX_BOOL CPDF_DIBSource::LoadColorInfo(CPDF_Dictionary* pFormResources, CPDF_Dict
         CFX_ByteString cs = pCSObj->GetString();
         if (cs == FX_BSTRC("DeviceGray")) {
             m_nComponents = 1;
-        }
-        else if (cs == FX_BSTRC("DeviceRGB")) {
+        } else if (cs == FX_BSTRC("DeviceRGB")) {
             m_nComponents = 3;
-        }
-        else if (cs == FX_BSTRC("DeviceCMYK")) {
+        } else if (cs == FX_BSTRC("DeviceCMYK")) {
             m_nComponents = 4;
         }
     }
