@@ -182,6 +182,7 @@ FX_BOOL CPDF_DIBSource::Load(CPDF_Document* pDoc, const CPDF_Stream* pStream, CP
     if (m_bpc == 0 || m_nComponents == 0) {
         return FALSE;
     }
+    AllocCompData();
     FX_SAFE_DWORD src_pitch = m_bpc;
     src_pitch *= m_nComponents;
     src_pitch *= m_Width;
@@ -317,6 +318,7 @@ int	CPDF_DIBSource::StartLoadDIBSource(CPDF_Document* pDoc, const CPDF_Stream* p
     if (m_bpc == 0 || m_nComponents == 0) {
         return 0;
     }
+    AllocCompData();
     FX_SAFE_DWORD src_pitch = m_bpc;
     src_pitch *= m_nComponents;
     src_pitch *= m_Width;
@@ -455,7 +457,8 @@ FX_BOOL CPDF_DIBSource::LoadColorInfo(CPDF_Dictionary* pFormResources, CPDF_Dict
                     if (filter == FX_BSTRC("JPXDecode")) {
                         return TRUE;
                     }
-                } else if (pFilter->GetType() == PDFOBJ_ARRAY) {
+                }
+                else if (pFilter->GetType() == PDFOBJ_ARRAY) {
                     CPDF_Array* pArray = (CPDF_Array*)pFilter;
                     if (pArray->GetString(pArray->GetCount() - 1) == FX_BSTRC("JPXDecode")) {
                         return TRUE;
@@ -489,17 +492,20 @@ FX_BOOL CPDF_DIBSource::LoadColorInfo(CPDF_Dictionary* pFormResources, CPDF_Dict
         CFX_ByteString cs = pCSObj->GetString();
         if (cs == FX_BSTRC("DeviceGray")) {
             m_nComponents = 1;
-        } else if (cs == FX_BSTRC("DeviceRGB")) {
+        }
+        else if (cs == FX_BSTRC("DeviceRGB")) {
             m_nComponents = 3;
-        } else if (cs == FX_BSTRC("DeviceCMYK")) {
+        }
+        else if (cs == FX_BSTRC("DeviceCMYK")) {
             m_nComponents = 4;
         }
     }
     ValidateDictParam();
+    return TRUE;
+}
+void CPDF_DIBSource::AllocCompData()
+{
     m_pCompData = FX_Alloc(DIB_COMP_DATA, m_nComponents);
-    if (m_bpc == 0) {
-        return TRUE;
-    }
     int max_data = (1 << m_bpc) - 1;
     CPDF_Array* pDecode = m_pDict->GetArray(FX_BSTRC("Decode"));
     if (pDecode) {
@@ -529,7 +535,7 @@ FX_BOOL CPDF_DIBSource::LoadColorInfo(CPDF_Dictionary* pFormResources, CPDF_Dict
     if (!m_pDict->KeyExist(FX_BSTRC("SMask"))) {
         CPDF_Object* pMask = m_pDict->GetElementValue(FX_BSTRC("Mask"));
         if (pMask == NULL) {
-            return TRUE;
+            return;
         }
         if (pMask->GetType() == PDFOBJ_ARRAY) {
             CPDF_Array* pArray = (CPDF_Array*)pMask;
@@ -541,7 +547,6 @@ FX_BOOL CPDF_DIBSource::LoadColorInfo(CPDF_Dictionary* pFormResources, CPDF_Dict
             m_bColorKey = TRUE;
         }
     }
-    return TRUE;
 }
 ICodec_ScanlineDecoder* FPDFAPI_CreateFaxDecoder(FX_LPCBYTE src_buf, FX_DWORD src_size, int width, int height,
         const CPDF_Dictionary* pParams);
@@ -569,7 +574,11 @@ int CPDF_DIBSource::CreateDecoder()
             int comps, bpc;
             ICodec_JpegModule* pJpegModule = CPDF_ModuleMgr::Get()->GetJpegModule();
             if (pJpegModule->LoadInfo(src_data, src_size, m_Width, m_Height, comps, bpc, bTransform)) {
-                m_nComponents = comps;
+                if (m_nComponents != comps) {
+                    m_nComponents = comps;
+                    FX_Free(m_pCompData);
+                    AllocCompData();
+                }
                 m_bpc = bpc;
                 m_pDecoder = CPDF_ModuleMgr::Get()->GetJpegModule()->CreateDecoder(src_data, src_size, m_Width, m_Height,
                              m_nComponents, bTransform);
@@ -1156,8 +1165,7 @@ FX_LPCBYTE CPDF_DIBSource::GetScanline(int line) const
             FX_LPBYTE alpha_channel = m_pMaskedLine + 3;
             for (int col = 0; col < m_Width; col ++) {
                 FX_LPCBYTE pPixel = pSrcLine + col * 3;
-                alpha_channel[col * 4] = (pPixel[0] < m_pCompData[0].m_ColorKeyMin ||
-                                          pPixel[0] > m_pCompData[0].m_ColorKeyMax ||
+                alpha_channel[col * 4] = (pPixel[0] < m_pCompData[0].m_ColorKeyMin || pPixel[0] > m_pCompData[0].m_ColorKeyMax ||
                                           pPixel[1] < m_pCompData[1].m_ColorKeyMin || pPixel[1] > m_pCompData[1].m_ColorKeyMax ||
                                           pPixel[2] < m_pCompData[2].m_ColorKeyMin || pPixel[2] > m_pCompData[2].m_ColorKeyMax) ? 0xff : 0;
             }
