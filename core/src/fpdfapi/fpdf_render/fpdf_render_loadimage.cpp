@@ -539,11 +539,15 @@ void CPDF_DIBSource::AllocCompData()
         }
         if (pMask->GetType() == PDFOBJ_ARRAY) {
             CPDF_Array* pArray = (CPDF_Array*)pMask;
-            if (pArray->GetCount() >= m_nComponents * 2)
+            if (pArray->GetCount() >= m_nComponents * 2) {
+                int min_num, max_num;
                 for (FX_DWORD i = 0; i < m_nComponents; i++) {
-                    m_pCompData[i].m_ColorKeyMin = FX_MIN( FX_MAX(0, pArray->GetInteger(i * 2)), (1 << m_bpc) - 1);
-                    m_pCompData[i].m_ColorKeyMax = FX_MAX( FX_MIN((1 << m_bpc) - 1, pArray->GetInteger(i * 2 + 1)), 0 );
+                    min_num = pArray->GetInteger(i * 2);
+                    max_num = pArray->GetInteger(i * 2 + 1);
+                    m_pCompData[i].m_ColorKeyMin = FX_MAX(0, min_num);
+                    m_pCompData[i].m_ColorKeyMax = FX_MIN((1 << m_bpc) - 1, max_num);
                 }
+            }
             m_bColorKey = TRUE;
         }
     }
