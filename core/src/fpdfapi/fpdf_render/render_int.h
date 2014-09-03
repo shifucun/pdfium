@@ -412,7 +412,7 @@ public:
     FX_BOOL				m_bHasMask;
 protected:
     FX_BOOL				LoadColorInfo(CPDF_Dictionary* pFormResources, CPDF_Dictionary* pPageResources);
-    void                AllocCompData();
+    DIB_COMP_DATA*      GetDecodeAndMaskArray(FX_BOOL& DefaultDecode, FX_BOOL& ColorKey);
     CPDF_DIBSource*		LoadMask(FX_DWORD& MatteColor);
     CPDF_DIBSource*		LoadMaskDIB(CPDF_Stream* pMask);
     void				LoadJpxBitmap();

@@ -496,57 +496,60 @@ FX_BOOL CPDF_DIBSource::LoadColorInfo(CPDF_Dictionary* pFormResources, CPDF_Dict
         }
     }
     ValidateDictParam();
-    AllocCompData();
+    m_pCompData = GetDecodeAndMaskArray(m_bDefaultDecode, m_bColorKey);
     return TRUE;
 }
-void CPDF_DIBSource::AllocCompData()
+DIB_COMP_DATA* CPDF_DIBSource::GetDecodeAndMaskArray(FX_BOOL& DefaultDecode, FX_BOOL& ColorKey)
 {
-    m_pCompData = FX_Alloc(DIB_COMP_DATA, m_nComponents);
+    DIB_COMP_DATA* pCompData = FX_Alloc(DIB_COMP_DATA, m_nComponents);
+    if (pCompData == NULL) {
+        return NULL;
+    }
     int max_data = (1 << m_bpc) - 1;
     CPDF_Array* pDecode = m_pDict->GetArray(FX_BSTRC("Decode"));
     if (pDecode) {
         for (FX_DWORD i = 0; i < m_nComponents; i ++) {
-            m_pCompData[i].m_DecodeMin = pDecode->GetNumber(i * 2);
+            pCompData[i].m_DecodeMin = pDecode->GetNumber(i * 2);
             FX_FLOAT max = pDecode->GetNumber(i * 2 + 1);
-            m_pCompData[i].m_DecodeStep = (max - m_pCompData[i].m_DecodeMin) / max_data;
+            pCompData[i].m_DecodeStep = (max - pCompData[i].m_DecodeMin) / max_data;
             FX_FLOAT def_value, def_min, def_max;
             m_pColorSpace->GetDefaultValue(i, def_value, def_min, def_max);
             if (m_Family == PDFCS_INDEXED) {
                 def_max = (FX_FLOAT)max_data;
             }
-            if (def_min != m_pCompData[i].m_DecodeMin || def_max != max) {
-                m_bDefaultDecode = FALSE;
+            if (def_min != pCompData[i].m_DecodeMin || def_max != max) {
+                DefaultDecode = FALSE;
             }
         }
     } else {
         for (FX_DWORD i = 0; i < m_nComponents; i ++) {
             FX_FLOAT def_value;
-            m_pColorSpace->GetDefaultValue(i, def_value, m_pCompData[i].m_DecodeMin, m_pCompData[i].m_DecodeStep);
+            m_pColorSpace->GetDefaultValue(i, def_value, pCompData[i].m_DecodeMin, pCompData[i].m_DecodeStep);
             if (m_Family == PDFCS_INDEXED) {
-                m_pCompData[i].m_DecodeStep = (FX_FLOAT)max_data;
+                pCompData[i].m_DecodeStep = (FX_FLOAT)max_data;
             }
-            m_pCompData[i].m_DecodeStep = (m_pCompData[i].m_DecodeStep - m_pCompData[i].m_DecodeMin) / max_data;
+            pCompData[i].m_DecodeStep = (pCompData[i].m_DecodeStep - pCompData[i].m_DecodeMin) / max_data;
         }
     }
     if (!m_pDict->KeyExist(FX_BSTRC("SMask"))) {
         CPDF_Object* pMask = m_pDict->GetElementValue(FX_BSTRC("Mask"));
         if (pMask == NULL) {
-            return;
+            return pCompData;
         }
         if (pMask->GetType() == PDFOBJ_ARRAY) {
             CPDF_Array* pArray = (CPDF_Array*)pMask;
             if (pArray->GetCount() >= m_nComponents * 2) {
-                int min_num, max_num;
                 for (FX_DWORD i = 0; i < m_nComponents; i++) {
-                    min_num = pArray->GetInteger(i * 2);
-                    max_num = pArray->GetInteger(i * 2 + 1);
-                    m_pCompData[i].m_ColorKeyMin = FX_MAX(0, min_num);
-                    m_pCompData[i].m_ColorKeyMax = FX_MIN((1 << m_bpc) - 1, max_num);
+                    int min_num = pArray->GetInteger(i * 2);
+                    int max_num = pArray->GetInteger(i * 2 + 1);
+                    pCompData[i].m_ColorKeyMin = FX_MAX(min_num, 0);
+                    pCompData[i].m_ColorKeyMax = FX_MIN(max_num, max_data);
                 }
             }
-            m_bColorKey = TRUE;
+            ColorKey = TRUE;
         }
     }
+    return pCompData;
 }
 ICodec_ScanlineDecoder* FPDFAPI_CreateFaxDecoder(FX_LPCBYTE src_buf, FX_DWORD src_size, int width, int height,
         const CPDF_Dictionary* pParams);
@@ -577,7 +580,7 @@ int CPDF_DIBSource::CreateDecoder()
                 if (m_nComponents != comps) {
                     m_nComponents = comps;
                     FX_Free(m_pCompData);
-                    AllocCompData();
+                    m_pCompData = GetDecodeAndMaskArray(m_bDefaultDecode, m_bColorKey);
                 }
                 m_bpc = bpc;
                 m_pDecoder = CPDF_ModuleMgr::Get()->GetJpegModule()->CreateDecoder(src_data, src_size, m_Width, m_Height,
