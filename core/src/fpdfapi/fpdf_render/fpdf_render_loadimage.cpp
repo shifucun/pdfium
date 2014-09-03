@@ -182,7 +182,6 @@ FX_BOOL CPDF_DIBSource::Load(CPDF_Document* pDoc, const CPDF_Stream* pStream, CP
     if (m_bpc == 0 || m_nComponents == 0) {
         return FALSE;
     }
-    AllocCompData();
     FX_SAFE_DWORD src_pitch = m_bpc;
     src_pitch *= m_nComponents;
     src_pitch *= m_Width;
@@ -318,7 +317,6 @@ int	CPDF_DIBSource::StartLoadDIBSource(CPDF_Document* pDoc, const CPDF_Stream* p
     if (m_bpc == 0 || m_nComponents == 0) {
         return 0;
     }
-    AllocCompData();
     FX_SAFE_DWORD src_pitch = m_bpc;
     src_pitch *= m_nComponents;
     src_pitch *= m_Width;
@@ -498,6 +496,7 @@ FX_BOOL CPDF_DIBSource::LoadColorInfo(CPDF_Dictionary* pFormResources, CPDF_Dict
         }
     }
     ValidateDictParam();
+    AllocCompData();
     return TRUE;
 }
 void CPDF_DIBSource::AllocCompData()
