@@ -1088,7 +1088,11 @@ CPDF_ColorSpace* CPDF_ColorSpace::Load(CPDF_Document* pDoc, CPDF_Object* pObj)
         return NULL;
     }
     if (pObj->GetType() == PDFOBJ_NAME) {
-        return _CSFromName(pObj->GetString());
+	CPDF_ColorSpace *pRet = _CSFromName(pObj->GetString());
+	if(pRet) {
+		pRet->m_pDocument = pDoc;
+	}
+        return pRet;
     }
     if (pObj->GetType() == PDFOBJ_STREAM) {
         CPDF_Dictionary *pDict = ((CPDF_Stream *)pObj)->GetDict();
@@ -1104,6 +1108,7 @@ CPDF_ColorSpace* CPDF_ColorSpace::Load(CPDF_Document* pDoc, CPDF_Object* pObj)
                 pRet = _CSFromName(pValue->GetString());
             }
             if (pRet) {
+		pRet->m_pDocument = pDoc;
                 return pRet;
             }
         }
@@ -1122,7 +1127,10 @@ CPDF_ColorSpace* CPDF_ColorSpace::Load(CPDF_Document* pDoc, CPDF_Object* pObj)
     }
     CFX_ByteString familyname = pFamilyObj->GetString();
     if (pArray->GetCount() == 1) {
-        return _CSFromName(familyname);
+	CPDF_ColorSpace *pRet = _CSFromName(familyname);
+	if(pRet) {
+		pRet->m_pDocument = pDoc;
+	}
     }
     CPDF_ColorSpace* pCS = NULL;
     FX_DWORD id = familyname.GetID();
