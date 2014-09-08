@@ -1386,11 +1386,12 @@ void CPDF_Color::Copy(const CPDF_Color* pSrc)
     if (m_pCS == NULL) {
         return;
     }
+    m_pDocument = m_pCS->m_pDocument;
     m_pBuffer = m_pCS->CreateBuf();
     FXSYS_memcpy32(m_pBuffer, pSrc->m_pBuffer, m_pCS->GetBufSize());
     if (m_pCS->GetFamily() == PDFCS_PATTERN) {
         PatternValue* pvalue = (PatternValue*)m_pBuffer;
-        if (pvalue->m_pPattern && m_pDocument) {
+        if (pvalue->m_pPattern && m_pCS->m_pDocument) {
             pvalue->m_pPattern = m_pDocument->GetPageData()->GetPattern(pvalue->m_pPattern->m_pPatternObj, FALSE, &pvalue->m_pPattern->m_ParentMatrix);
         }
     }
