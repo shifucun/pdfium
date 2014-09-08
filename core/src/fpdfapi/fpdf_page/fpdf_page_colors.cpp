@@ -1088,7 +1088,7 @@ CPDF_ColorSpace* CPDF_ColorSpace::Load(CPDF_Document* pDoc, CPDF_Object* pObj)
         return NULL;
     }
     if (pObj->GetType() == PDFOBJ_NAME) {
-	CPDF_ColorSpace *pRet = _CSFromName(pObj->GetString());
+        CPDF_ColorSpace *pRet = _CSFromName(pObj->GetString());
         if(pRet) {
             pRet->m_pDocument = pDoc;
         }
@@ -1127,7 +1127,7 @@ CPDF_ColorSpace* CPDF_ColorSpace::Load(CPDF_Document* pDoc, CPDF_Object* pObj)
     }
     CFX_ByteString familyname = pFamilyObj->GetString();
     if (pArray->GetCount() == 1) {
-	CPDF_ColorSpace *pRet = _CSFromName(familyname);
+        CPDF_ColorSpace *pRet = _CSFromName(familyname);
         if(pRet) {
             pRet->m_pDocument = pDoc;
         }
