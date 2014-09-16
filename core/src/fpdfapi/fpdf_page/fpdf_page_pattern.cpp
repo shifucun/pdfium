@@ -13,6 +13,7 @@ CPDF_Pattern::CPDF_Pattern(const CFX_AffineMatrix* pParentMatrix) :
     if (pParentMatrix) {
         m_ParentMatrix = *pParentMatrix;
     }
+    m_bForceClear = FALSE;
 }
 CPDF_Pattern::~CPDF_Pattern()
 {
@@ -97,7 +98,7 @@ void CPDF_ShadingPattern::Clear()
         m_pFunctions[i] = NULL;
     }
     CPDF_ColorSpace* pCS = m_pCS;
-    if (pCS && m_pDocument) {
+    if (!m_bForceClear && pCS && m_pDocument) {
         m_pDocument->GetPageData()->ReleaseColorSpace(pCS->GetArray());
     }
     m_ShadingType = 0;

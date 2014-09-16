@@ -739,9 +739,9 @@ public:
     CFX_AffineMatrix            m_ParentMatrix;
 
     CPDF_Document*              m_pDocument;
-
+    void        SetForceClear(FX_BOOL bForceClear) { m_bForceClear = bForceClear; }
 protected:
-    
+    FX_BOOL     m_bForceClear;
     CPDF_Pattern(const CFX_AffineMatrix* pParentMatrix);
 };
 
