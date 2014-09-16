@@ -332,7 +332,14 @@ CPDFSDK_Document::CPDFSDK_Document(CPDF_Document* pDoc,CPDFDoc_Environment* pEnv
 
 CPDFSDK_Document::~CPDFSDK_Document()
 {
-	m_pageMap.RemoveAll();
+	FX_POSITION pos = m_pageMap.GetStartPosition();
+	while (pos) {
+            CPDF_Page* pPage = NULL;
+            CPDFSDK_PageView* pPageView = NULL;
+            m_pageMap.GetNextAssoc(pos, pPage, pPageView);
+            delete pPageView;
+        }
+        m_pageMap.RemoveAll();
 	if(m_pInterForm)
 	{
 		m_pInterForm->Destroy();
@@ -453,7 +460,7 @@ CPDF_OCContext*	CPDFSDK_Document::GetOCContext()
 void CPDFSDK_Document::ReMovePageView(CPDF_Page* pPDFPage)
 {
 	CPDFSDK_PageView* pPageView = (CPDFSDK_PageView*)m_pageMap.GetValueAt(pPDFPage);
-	if(pPageView)
+	if(pPageView && !pPageView->IsLocked())
 	{
 		delete pPageView;
 		m_pageMap.RemoveKey(pPDFPage);
@@ -615,7 +622,7 @@ CPDFSDK_PageView::CPDFSDK_PageView(CPDFSDK_Document* pSDKDoc,CPDF_Page* page):m_
 	m_bExitWidget = FALSE;
 	m_bOnWidget = FALSE;
 	m_CaptureWidget = NULL;
-	m_bValid = FALSE;
+	m_bFlag = 0;
 }
 
 CPDFSDK_PageView::~CPDFSDK_PageView()
@@ -981,6 +988,9 @@ void CPDFSDK_PageView::LoadFXAnnots()
 
 		CPDFSDK_AnnotHandlerMgr* pAnnotHandlerMgr = pEnv->GetAnnotHandlerMgr();
 		ASSERT(pAnnotHandlerMgr != NULL);
+
+                SetLock();
+                m_page->AddRef();
 		if(pAnnotHandlerMgr)
 		{
 			CPDFSDK_Annot* pAnnot = pAnnotHandlerMgr->NewAnnot(pPDFAnnot, this);
@@ -992,6 +1002,8 @@ void CPDFSDK_PageView::LoadFXAnnots()
 		}
 
 	}
+        m_page->Release();
+        ClearLock();
 }
 
 void	CPDFSDK_PageView::UpdateRects(CFX_RectArray& rects)
