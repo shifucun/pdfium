@@ -8,12 +8,11 @@
 #include "pageint.h"
 
 CPDF_Pattern::CPDF_Pattern(const CFX_AffineMatrix* pParentMatrix) :
-    m_pPatternObj(NULL), m_PatternType(PATTERN_TILING), m_pDocument(NULL)
+    m_pPatternObj(NULL), m_PatternType(PATTERN_TILING), m_pDocument(NULL), m_bForceClear(FALSE)
 {
     if (pParentMatrix) {
         m_ParentMatrix = *pParentMatrix;
     }
-    m_bForceClear = FALSE;
 }
 CPDF_Pattern::~CPDF_Pattern()
 {
