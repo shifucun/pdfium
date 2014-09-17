@@ -630,7 +630,6 @@ CPDFSDK_PageView::~CPDFSDK_PageView()
 	CPDFDoc_Environment* pEnv = m_pSDKDoc->GetEnv();	
 	int nAnnotCount = m_fxAnnotArray.GetSize();
 
-        SetLock();
 	for (int i=0; i<nAnnotCount; i++)
 	{
 		CPDFSDK_Annot* pAnnot = (CPDFSDK_Annot*)m_fxAnnotArray.GetAt(i);
@@ -647,7 +646,6 @@ CPDFSDK_PageView::~CPDFSDK_PageView()
 		delete m_pAnnotList;
 		m_pAnnotList = NULL;
 	}
-        ClearLock();
 }
 
 void CPDFSDK_PageView::PageView_OnDraw(CFX_RenderDevice* pDevice, CPDF_Matrix* pUser2Device,CPDF_RenderOptions* pOptions)
