@@ -980,6 +980,7 @@ void CPDFSDK_PageView::LoadFXAnnots()
 	m_pAnnotList = new CPDF_AnnotList(m_page);
 	CPDF_InterForm::EnableUpdateAP(enableAPUpdate);
 	int nCount = m_pAnnotList->Count();
+        SetLock();
 	for(int i=0; i<nCount; i++)
 	{
 		CPDF_Annot* pPDFAnnot = m_pAnnotList->GetAt(i);
@@ -990,7 +991,6 @@ void CPDFSDK_PageView::LoadFXAnnots()
 		CPDFSDK_AnnotHandlerMgr* pAnnotHandlerMgr = pEnv->GetAnnotHandlerMgr();
 		ASSERT(pAnnotHandlerMgr != NULL);
 
-                SetLock();
 		if(pAnnotHandlerMgr)
 		{
 			CPDFSDK_Annot* pAnnot = pAnnotHandlerMgr->NewAnnot(pPDFAnnot, this);
