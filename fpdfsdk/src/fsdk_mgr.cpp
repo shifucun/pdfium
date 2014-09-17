@@ -622,13 +622,15 @@ CPDFSDK_PageView::CPDFSDK_PageView(CPDFSDK_Document* pSDKDoc,CPDF_Page* page):m_
 	m_bExitWidget = FALSE;
 	m_bOnWidget = FALSE;
 	m_CaptureWidget = NULL;
-	m_bFlag = 0;
+	m_Flag = 0;
 }
 
 CPDFSDK_PageView::~CPDFSDK_PageView()
 {
 	CPDFDoc_Environment* pEnv = m_pSDKDoc->GetEnv();	
 	int nAnnotCount = m_fxAnnotArray.GetSize();
+
+        SetLock();
 	for (int i=0; i<nAnnotCount; i++)
 	{
 		CPDFSDK_Annot* pAnnot = (CPDFSDK_Annot*)m_fxAnnotArray.GetAt(i);
@@ -645,6 +647,7 @@ CPDFSDK_PageView::~CPDFSDK_PageView()
 		delete m_pAnnotList;
 		m_pAnnotList = NULL;
 	}
+        ClearLock();
 }
 
 void CPDFSDK_PageView::PageView_OnDraw(CFX_RenderDevice* pDevice, CPDF_Matrix* pUser2Device,CPDF_RenderOptions* pOptions)
@@ -990,7 +993,6 @@ void CPDFSDK_PageView::LoadFXAnnots()
 		ASSERT(pAnnotHandlerMgr != NULL);
 
                 SetLock();
-                m_page->AddRef();
 		if(pAnnotHandlerMgr)
 		{
 			CPDFSDK_Annot* pAnnot = pAnnotHandlerMgr->NewAnnot(pPDFAnnot, this);
@@ -1002,7 +1004,6 @@ void CPDFSDK_PageView::LoadFXAnnots()
 		}
 
 	}
-        m_page->Release();
         ClearLock();
 }
 
