@@ -16,21 +16,18 @@ T FXSYS_StrToInt(STR_T str)
         neg = TRUE;
         str ++;
     }
-    base::CheckedNumeric<T> num = 0;
-    base::CheckedNumeric<T> num_new = num;
+    T num = 0;
     while (*str) {
         if ((*str) < '0' || (*str) > '9') {
             break;
         }
-        num_new *= 10;
-        num_new += (*str) - '0';
-        if (!num_new.IsValid()) {
+        if (num > (std::numeric_limits<T>::max() - 9) / 10) {
             break;
         }
-        num = num_new;
+        num = num * 10 + (*str) - '0';
         str ++;
     }
-    return neg ? -num.ValueOrDie() : num.ValueOrDie();
+    return neg ? -num : num;
 }
 template <typename T, typename STR_T>
 STR_T FXSYS_IntToStr(T value, STR_T string, int radix)
