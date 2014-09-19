@@ -4,6 +4,7 @@
  
 // Original code copyright 2014 Foxit Software Inc. http://www.foxitsoftware.com
 
+#include <limits>
 #include "../../include/fxcrt/fx_ext.h"
 template <class T, class STR_T>
 T FXSYS_StrToInt(STR_T str)
