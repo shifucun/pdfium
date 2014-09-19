@@ -17,11 +17,16 @@ T FXSYS_StrToInt(STR_T str)
         str ++;
     }
     T num = 0;
+    T num_new = 0;
     while (*str) {
         if ((*str) < '0' || (*str) > '9') {
             break;
         }
-        num = num * 10 + (*str) - '0';
+        num_new = num * 10 + (*str) - '0';
+        if (num_new < 0) {
+            break;
+        }
+        num = num_new;
         str ++;
     }
     return neg ? -num : num;
