@@ -16,20 +16,21 @@ T FXSYS_StrToInt(STR_T str)
         neg = TRUE;
         str ++;
     }
-    T num = 0;
-    T num_new = 0;
+    base::CheckedNumeric<T> num = 0;
+    base::CheckedNumeric<T> num_new = num;
     while (*str) {
         if ((*str) < '0' || (*str) > '9') {
             break;
         }
-        num_new = num * 10 + (*str) - '0';
-        if (num_new < 0) {
+        num_new *= 10;
+        num_new += (*str) - '0';
+        if (!num_new.IsValid()) {
             break;
         }
         num = num_new;
         str ++;
     }
-    return neg ? -num : num;
+    return neg ? -num.ValueOrDie() : num.ValueOrDie();
 }
 template <typename T, typename STR_T>
 STR_T FXSYS_IntToStr(T value, STR_T string, int radix)
