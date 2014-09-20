@@ -529,11 +529,11 @@ private:
 	FX_BOOL m_bExitWidget;
 	FX_BOOL m_bOnWidget;
 public:
-        void SetValid(FX_BOOL bValid) {m_Flag &= PAGEVIEW_FLAG_VALID;}
+        void SetValid(FX_BOOL bValid) {m_Flag |= PAGEVIEW_FLAG_VALID;}
         FX_BOOL IsValid() {return m_Flag & PAGEVIEW_FLAG_VALID;}
 
         FX_BOOL IsLocked() {return m_Flag & PAGEVIEW_FLAG_LOCK;}
-        void SetLock() {m_Flag &= PAGEVIEW_FLAG_LOCK;}
+        void SetLock() {m_Flag |= PAGEVIEW_FLAG_LOCK;}
         void ClearLock() {m_Flag &= ~PAGEVIEW_FLAG_LOCK;}
 private:
 	FX_BOOL m_Flag;
