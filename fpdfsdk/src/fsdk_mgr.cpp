@@ -615,7 +615,7 @@ CPDFSDK_PageView::CPDFSDK_PageView(CPDFSDK_Document* pSDKDoc,CPDF_Page* page):m_
 		CPDF_InterForm* pPDFInterForm = pInterForm->GetInterForm();
 		pPDFInterForm->FixPageFields(page);
 	}
-
+        m_page->SetPrivateData((FX_LPVOID)m_page, (FX_LPVOID)this, NULL);
 	m_fxAnnotArray.RemoveAll();
 
 	m_bEnterWidget = FALSE;
@@ -646,6 +646,10 @@ CPDFSDK_PageView::~CPDFSDK_PageView()
 		delete m_pAnnotList;
 		m_pAnnotList = NULL;
 	}
+        m_page->RemovePrivateData((FX_LPVOID)m_page);
+        if(m_Flag & PAGEVIEW_FLAG_TAKEOVERPAGE) {
+            delete m_page;
+        }
 }
 
 void CPDFSDK_PageView::PageView_OnDraw(CFX_RenderDevice* pDevice, CPDF_Matrix* pUser2Device,CPDF_RenderOptions* pOptions)
