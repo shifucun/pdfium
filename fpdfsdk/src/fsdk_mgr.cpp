@@ -622,7 +622,9 @@ CPDFSDK_PageView::CPDFSDK_PageView(CPDFSDK_Document* pSDKDoc,CPDF_Page* page):m_
 	m_bExitWidget = FALSE;
 	m_bOnWidget = FALSE;
 	m_CaptureWidget = NULL;
-	m_Flag = 0;
+	m_bValid = FALSE;
+        m_bLocked = FALSE;
+        m_bTakeOverPage = FALSE;
 }
 
 CPDFSDK_PageView::~CPDFSDK_PageView()
@@ -647,7 +649,7 @@ CPDFSDK_PageView::~CPDFSDK_PageView()
 		m_pAnnotList = NULL;
 	}
         m_page->RemovePrivateData((FX_LPVOID)m_page);
-        if(m_Flag & PAGEVIEW_FLAG_TAKEOVERPAGE) {
+        if(m_bTakeOverPage) {
             delete m_page;
         }
 }
@@ -984,7 +986,7 @@ void CPDFSDK_PageView::LoadFXAnnots()
 	m_pAnnotList = new CPDF_AnnotList(m_page);
 	CPDF_InterForm::EnableUpdateAP(enableAPUpdate);
 	int nCount = m_pAnnotList->Count();
-        SetLock();
+        SetLock(TRUE);
 	for(int i=0; i<nCount; i++)
 	{
 		CPDF_Annot* pPDFAnnot = m_pAnnotList->GetAt(i);
@@ -1006,7 +1008,7 @@ void CPDFSDK_PageView::LoadFXAnnots()
 		}
 
 	}
-        ClearLock();
+        SetLock(FALSE);
 }
 
 void	CPDFSDK_PageView::UpdateRects(CFX_RectArray& rects)
