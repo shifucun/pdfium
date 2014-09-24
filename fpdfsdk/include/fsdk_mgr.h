@@ -510,7 +510,6 @@ public:
         void TakeOverPage() {m_bTakeOverPage = TRUE;}
 private:
 	void PageView_OnHighlightFormFields(CFX_RenderDevice* pDevice, CPDFSDK_Widget* pWidget);
-	
         CPDF_Matrix m_curMatrix;
 	CPDF_Page* m_page;
 	CPDF_AnnotList* m_pAnnotList;
