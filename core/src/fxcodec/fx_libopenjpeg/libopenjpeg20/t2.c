@@ -218,7 +218,7 @@ OPJ_BOOL opj_t2_encode_packets( opj_t2_t* p_t2,
         opj_image_t *l_image = p_t2->image;
         opj_cp_t *l_cp = p_t2->cp;
         opj_tcp_t *l_tcp = &l_cp->tcps[p_tile_no];
-        OPJ_UINT32 pocno = l_cp->m_specific_param.m_enc.m_cinema == OPJ_CINEMA4K_24? 2: 1;
+        OPJ_UINT32 pocno = (l_cp->rsiz == OPJ_PROFILE_CINEMA_4K)? 2: 1;
         OPJ_UINT32 l_max_comp = l_cp->m_specific_param.m_enc.m_max_comp_size > 0 ? l_image->numcomps : 1;
         OPJ_UINT32 l_nb_pocs = l_tcp->numpocs + 1;
 
@@ -477,11 +477,10 @@ OPJ_BOOL opj_t2_decode_packets( opj_t2_t *p_t2,
 opj_t2_t* opj_t2_create(opj_image_t *p_image, opj_cp_t *p_cp)
 {
         /* create the t2 structure */
-        opj_t2_t *l_t2 = (opj_t2_t*)opj_malloc(sizeof(opj_t2_t));
+        opj_t2_t *l_t2 = (opj_t2_t*)opj_calloc(1,sizeof(opj_t2_t));
         if (!l_t2) {
                 return NULL;
         }
-        memset(l_t2,0,sizeof(opj_t2_t));
 
         l_t2->image = p_image;
         l_t2->cp = p_cp;
@@ -599,6 +598,10 @@ OPJ_BOOL opj_t2_encode_packet(  OPJ_UINT32 tileno,
         }
 
         bio = opj_bio_create();
+        if (!bio) {
+                /* FIXME event manager error callback */
+                return OPJ_FALSE;
+        }
         opj_bio_init_enc(bio, c, length);
         opj_bio_write(bio, 1, 1);           /* Empty header bit */
 
@@ -1129,7 +1132,8 @@ OPJ_BOOL opj_t2_read_packet_data(   opj_t2_t* p_t2,
                         }
 
                         do {
-                                if (l_current_data + l_seg->newlen > p_src_data + p_max_length) {
+                                /* Check possible overflow (on l_current_data only, assumes input args already checked) then size */
+                                if (((OPJ_SIZE_T)(l_current_data + l_seg->newlen) < (OPJ_SIZE_T)l_current_data) || (l_current_data + l_seg->newlen > p_src_data + p_max_length)) {
                                         fprintf(stderr, "read: segment too long (%d) with max (%d) for codeblock %d (p=%d, b=%d, r=%d, c=%d)\n",
                                                 l_seg->newlen, p_max_length, cblkno, p_pi->precno, bandno, p_pi->resno, p_pi->compno);
                                         return OPJ_FALSE;
