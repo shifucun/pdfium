@@ -866,11 +866,10 @@ OPJ_BOOL opj_t2_read_packet_header( opj_t2_t* p_t2,
         if (p_tcp->csty & J2K_CP_CSTY_SOP) {
                 if (p_max_length < 6) {
                         /* TODO opj_event_msg(p_t2->cinfo->event_mgr, EVT_WARNING, "Not enough space for expected SOP marker\n"); */
-                        printf("Not enough space for expected SOP marker\n");
+                        fprintf(stderr, "Not enough space for expected SOP marker\n");
                 } else if ((*l_current_data) != 0xff || (*(l_current_data + 1) != 0x91)) {
                         /* TODO opj_event_msg(p_t2->cinfo->event_mgr, EVT_WARNING, "Expected SOP marker\n"); */
-                        printf("Expected SOP marker\n");
-                        fprintf(stderr, "Error : expected SOP marker\n");
+                        fprintf(stderr, "Warning: expected SOP marker\n");
                 } else {
                         l_current_data += 6;
                 }
@@ -920,7 +919,7 @@ OPJ_BOOL opj_t2_read_packet_header( opj_t2_t* p_t2,
 
                 /* EPH markers */
                 if (p_tcp->csty & J2K_CP_CSTY_EPH) {
-                        if (p_max_length < 2) {
+                        if ((*l_modified_length_ptr - (OPJ_UINT32)(l_header_data - *l_header_data_start)) < 2U) {
                                 fprintf(stderr, "Not enough space for expected EPH marker\n");
                         } else if ((*l_header_data) != 0xff || (*(l_header_data + 1) != 0x92)) {
                                 fprintf(stderr, "Error : expected EPH marker\n");
@@ -1048,7 +1047,7 @@ OPJ_BOOL opj_t2_read_packet_header( opj_t2_t* p_t2,
 
         /* EPH markers */
         if (p_tcp->csty & J2K_CP_CSTY_EPH) {
-                if (p_max_length < 2) {
+                if ((*l_modified_length_ptr - (OPJ_UINT32)(l_header_data - *l_header_data_start)) < 2U) {
                         fprintf(stderr, "Not enough space for expected EPH marker\n");
                 } else if ((*l_header_data) != 0xff || (*(l_header_data + 1) != 0x92)) {
                         /* TODO opj_event_msg(t2->cinfo->event_mgr, EVT_ERROR, "Expected EPH marker\n"); */
@@ -1158,11 +1157,18 @@ OPJ_BOOL opj_t2_read_packet_data(   opj_t2_t* p_t2,
                                 };
 
 #endif /* USE_JPWL */
+                                /* Check possible overflow on size */
+                                if ((l_cblk->data_current_size + l_seg->newlen) < l_cblk->data_current_size) {
+                                        fprintf(stderr, "read: segment too long (%d) with current size (%d > %d) for codeblock %d (p=%d, b=%d, r=%d, c=%d)\n",
+                                                l_seg->newlen, l_cblk->data_current_size, 0xFFFFFFFF - l_seg->newlen, cblkno, p_pi->precno, bandno, p_pi->resno, p_pi->compno);
+                                        return OPJ_FALSE;
+                                }
                                 /* Check if the cblk->data have allocated enough memory */
                                 if ((l_cblk->data_current_size + l_seg->newlen) > l_cblk->data_max_size) {
                                     OPJ_BYTE* new_cblk_data = (OPJ_BYTE*) opj_realloc(l_cblk->data, l_cblk->data_current_size + l_seg->newlen);
                                     if(! new_cblk_data) {
                                         opj_free(l_cblk->data);
+                                        l_cblk->data = NULL;
                                         l_cblk->data_max_size = 0;
                                         /* opj_event_msg(p_manager, EVT_ERROR, "Not enough memory to realloc code block cata!\n"); */
                                         return OPJ_FALSE;
@@ -1200,6 +1206,7 @@ OPJ_BOOL opj_t2_read_packet_data(   opj_t2_t* p_t2,
         }
 
         *(p_data_read) = (OPJ_UINT32)(l_current_data - p_src_data);
+
 
         return OPJ_TRUE;
 }
