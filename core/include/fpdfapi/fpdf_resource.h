@@ -792,6 +792,7 @@ public:
 
     CPDF_ColorSpace*	m_pCS;
 
+    CPDF_ColorSpace**	m_pPtrCS;
 
     CPDF_Function*		m_pFunctions[4];
 
