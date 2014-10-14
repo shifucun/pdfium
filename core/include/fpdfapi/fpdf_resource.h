@@ -38,6 +38,22 @@ class CFX_DIBitmap;
 typedef struct FT_FaceRec_* FXFT_Face;
 class CFX_CTTGSUBTable;
 class CPDF_Page;
+
+template <class ObjClass> class CPDF_CountedObject : public CFX_Object
+{
+public:
+    ObjClass	m_Obj;
+    FX_DWORD	m_nCount;
+};
+typedef CPDF_CountedObject<CPDF_ColorSpace*> CPDF_CountedColorSpace;
+typedef CPDF_CountedObject<CPDF_Pattern*> CPDF_CountedPattern;
+typedef CFX_MapPtrTemplate<CPDF_Dictionary*, CPDF_CountedObject<CPDF_Font*>*>		CPDF_FontMap;
+typedef CFX_MapPtrTemplate<CPDF_Object*, CPDF_CountedColorSpace*>		CPDF_ColorSpaceMap;
+typedef CFX_MapPtrTemplate<CPDF_Object*, CPDF_CountedPattern*>		CPDF_PatternMap;
+typedef CFX_MapPtrTemplate<FX_DWORD, CPDF_CountedObject<CPDF_Image*>*>				CPDF_ImageMap;
+typedef CFX_MapPtrTemplate<CPDF_Stream*, CPDF_CountedObject<CPDF_IccProfile*>*>		CPDF_IccProfileMap;
+typedef CFX_MapPtrTemplate<CPDF_Stream*, CPDF_CountedObject<CPDF_StreamAcc*>*>		CPDF_FontFileMap;
+
 #define PDFFONT_TYPE1			1
 #define PDFFONT_TRUETYPE		2
 #define PDFFONT_TYPE3			3
@@ -790,9 +806,9 @@ public:
 
     int					m_ShadingType;
 
-    CPDF_ColorSpace*	m_pCS;
+    CPDF_ColorSpace*	m_pCS; // Still keep m_pCS as some CPDF_ColorSpace (name object) are not managed as counted objects. Refer to CPDF_DocPageData::GetColorSpace.
 
-    CPDF_ColorSpace**	m_pPtrCS;
+    CPDF_CountedColorSpace*	m_pCountedCS;
 
     CPDF_Function*		m_pFunctions[4];
 

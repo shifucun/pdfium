@@ -83,7 +83,7 @@ CPDF_ShadingPattern::CPDF_ShadingPattern(CPDF_Document* pDoc, CPDF_Object* pPatt
     for (int i = 0; i < 4; i ++) {
         m_pFunctions[i] = NULL;
     }
-    m_pPtrCS = NULL;
+    m_pCountedCS = NULL;
 }
 CPDF_ShadingPattern::~CPDF_ShadingPattern()
 {
@@ -97,13 +97,13 @@ void CPDF_ShadingPattern::Clear()
         }
         m_pFunctions[i] = NULL;
     }
-    CPDF_ColorSpace* pCS = m_pPtrCS ? *m_pPtrCS : NULL;
+    CPDF_ColorSpace* pCS = m_pCountedCS ? m_pCountedCS->m_Obj : NULL;
     if (pCS && m_pDocument) {
         m_pDocument->GetPageData()->ReleaseColorSpace(pCS->GetArray());
     }
     m_ShadingType = 0;
     m_pCS = NULL;
-    m_pPtrCS = NULL;
+    m_pCountedCS = NULL;
     m_nFuncs = 0;
 }
 FX_BOOL CPDF_ShadingPattern::Load()
@@ -144,7 +144,7 @@ FX_BOOL CPDF_ShadingPattern::Load()
     CPDF_DocPageData* pDocPageData = m_pDocument->GetPageData();
     m_pCS = pDocPageData->GetColorSpace(pCSObj, NULL);
     if (m_pCS) {
-        m_pPtrCS = pDocPageData->FindColorSpacePtr(m_pCS->GetArray());
+        m_pCountedCS = pDocPageData->FindColorSpacePtr(m_pCS->GetArray());
     }
     m_ShadingType = pShadingDict->GetInteger(FX_BSTRC("ShadingType"));
     return TRUE;
