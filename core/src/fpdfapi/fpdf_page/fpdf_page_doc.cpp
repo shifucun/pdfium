@@ -147,8 +147,7 @@ CPDF_DocPageData::~CPDF_DocPageData()
 {
     Clear(FALSE);
     Clear(TRUE);
-    FX_POSITION pos = NULL;
-    pos = m_PatternMap.GetStartPosition();
+    FX_POSITION pos = m_PatternMap.GetStartPosition();
     while (pos)
     {
         CPDF_Object* ptObj;
