@@ -285,7 +285,6 @@ void CPDF_ColorState::SetStrokePattern(CPDF_Pattern* pPattern, FX_FLOAT* pValue,
 CPDF_TextStateData::CPDF_TextStateData()
 {
     m_pFont = NULL;
-    m_pPtrFont = NULL;
     m_pDocument = NULL;
     m_FontSize = 1.0f;
     m_WordSpace = 0;
@@ -308,31 +307,24 @@ CPDF_TextStateData::CPDF_TextStateData(const CPDF_TextStateData& src)
 }
 CPDF_TextStateData::~CPDF_TextStateData()
 {
-    CPDF_Font* pFont = m_pFont;
-    pFont = m_pPtrFont ? *m_pPtrFont : NULL;
-    if (pFont && pFont->m_pDocument) {
-        CPDF_DocPageData *pPageData = pFont->m_pDocument->GetPageData();
-        if (pPageData) {
-            pPageData->ReleaseFont(pFont->GetFontDict());
+    if (m_pDocument && m_pFont) {
+        CPDF_DocPageData *pPageData = m_pDocument->GetPageData();
+        if (pPageData && !pPageData->IsForceClear()) {
+            pPageData->ReleaseFont(m_pFont->GetFontDict());
         }
     }
 }
 void CPDF_TextState::SetFont(CPDF_Font* pFont)
 {
-    CPDF_Font*& pStateFont = GetModify()->m_pFont;
-    CPDF_DocPageData *pPageData = NULL;
-    if (pStateFont && pStateFont->m_pDocument) {
-        pPageData = pStateFont->m_pDocument->GetPageData();
-        pPageData->ReleaseFont(pStateFont->GetFontDict());
-    }
-    pStateFont = pFont;
-    m_pObject->m_pPtrFont = NULL;
-    if (pStateFont && pStateFont->m_pDocument)
-    {
-        if (!pPageData) {
-            pPageData = pStateFont->m_pDocument->GetPageData();
+    CPDF_TextStateData* pStateData = GetModify();
+    if (pStateData) {
+        CPDF_Document* pDoc = pStateData->m_pDocument;
+        CPDF_DocPageData *pPageData = pDoc ? pDoc->GetPageData() : NULL;
+        if (pPageData && pStateData->m_pFont && !pPageData->IsForceClear()) {
+            pPageData->ReleaseFont(pStateData->m_pFont->GetFontDict());
         }
-        m_pObject->m_pPtrFont = pPageData->FindFontPtr(pStateFont->GetFontDict());
+        pStateData->m_pDocument = pFont ? pFont->m_pDocument : NULL;
+        pStateData->m_pFont = pFont;
     }
 }
 FX_FLOAT CPDF_TextState::GetFontSizeV() const

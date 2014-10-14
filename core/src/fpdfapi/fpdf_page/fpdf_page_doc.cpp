@@ -134,6 +134,7 @@ CPDF_DocPageData::CPDF_DocPageData(CPDF_Document *pPDFDoc)
     , m_ImageMap()
     , m_IccProfileMap()
     , m_FontFileMap()
+    , m_bForceClear(FALSE)
 {
     m_FontMap.InitHashTable(64);
     m_ColorSpaceMap.InitHashTable(32);
@@ -178,6 +179,8 @@ CPDF_DocPageData::~CPDF_DocPageData()
 void CPDF_DocPageData::Clear(FX_BOOL bForceRelease)
 {
     FX_POSITION pos;
+
+    m_bForceClear = bForceRelease;
 
     // Release objects saved in the resource maps like font map and color space map.
     // The compound objects shall be released before simple ones.
