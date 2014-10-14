@@ -189,9 +189,9 @@ void CPDF_DocPageData::Clear(FX_BOOL bForceRelease)
             continue;
         }
         if (bForceRelease || ptData->m_nCount < 2) {
-            ptData->m_Obj->SetForceClear(bForceRelease); // May need to remove
+            ptData->m_Obj->SetForceClear(bForceRelease);
             delete ptData->m_Obj;
-            ptData->m_Obj = NULL;  // This is to ensure mPtrPattern  = NULL for the check in ReleaseColorSpace
+            ptData->m_Obj = NULL;
         }
     }
     pos = m_FontMap.GetStartPosition();
@@ -269,8 +269,8 @@ void CPDF_DocPageData::Clear(FX_BOOL bForceRelease)
         }
         if (bForceRelease || imageData->m_nCount < 2) {
             delete imageData->m_Obj;
-            delete imageData; // Here is responsible for deleting imageData;
-            m_ImageMap.RemoveKey(objNum); // Is it necessary to remove key here?
+            delete imageData;
+            m_ImageMap.RemoveKey(objNum);
         }
     }
 }

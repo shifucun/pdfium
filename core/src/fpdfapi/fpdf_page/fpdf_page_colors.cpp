@@ -779,11 +779,10 @@ CPDF_IndexedCS::~CPDF_IndexedCS()
     if (m_pCompMinMax) {
         FX_Free(m_pCompMinMax);
     }
-    CPDF_ColorSpace* pCS = m_pBaseCS;
-	pCS = m_pPtrBaseCS ? *m_pPtrBaseCS : NULL;
-	if (pCS && m_pDocument) {
-		m_pDocument->GetPageData()->ReleaseColorSpace(pCS->GetArray());
-	}
+    CPDF_ColorSpace* pCS = m_pPtrBaseCS ? *m_pPtrBaseCS : NULL;
+    if (pCS && m_pDocument) {
+        m_pDocument->GetPageData()->ReleaseColorSpace(pCS->GetArray());
+    }
 }
 FX_BOOL CPDF_IndexedCS::v_Load(CPDF_Document* pDoc, CPDF_Array* pArray)
 {
@@ -799,7 +798,7 @@ FX_BOOL CPDF_IndexedCS::v_Load(CPDF_Document* pDoc, CPDF_Array* pArray)
     if (m_pBaseCS == NULL) {
         return FALSE;
     }
-	m_pPtrBaseCS = pDocPageData->FindColorSpacePtr(m_pBaseCS->GetArray());
+    m_pPtrBaseCS = pDocPageData->FindColorSpacePtr(m_pBaseCS->GetArray());
     m_nBaseComponents = m_pBaseCS->CountComponents();
     m_pCompMinMax = FX_Alloc(FX_FLOAT, m_nBaseComponents * 2);
     FX_FLOAT defvalue;
@@ -862,15 +861,14 @@ CPDF_PatternCS::CPDF_PatternCS()
     m_Family = PDFCS_PATTERN;
     m_pBaseCS = NULL;
     m_nComponents = 1;
-	m_pPtrBaseCS = NULL;
+    m_pPtrBaseCS = NULL;
 }
 CPDF_PatternCS::~CPDF_PatternCS()
 {
-	CPDF_ColorSpace* pCS = m_pBaseCS;
-	pCS = m_pPtrBaseCS ? *m_pPtrBaseCS : NULL;
-	if (pCS && m_pDocument) {
-		m_pDocument->GetPageData()->ReleaseColorSpace(pCS->GetArray());
-	}
+    CPDF_ColorSpace* pCS = m_pPtrBaseCS ? *m_pPtrBaseCS : NULL;
+    if (pCS && m_pDocument) {
+	    m_pDocument->GetPageData()->ReleaseColorSpace(pCS->GetArray());
+    }
 }
 FX_BOOL CPDF_PatternCS::v_Load(CPDF_Document* pDoc, CPDF_Array* pArray)
 {
@@ -884,7 +882,7 @@ FX_BOOL CPDF_PatternCS::v_Load(CPDF_Document* pDoc, CPDF_Array* pArray)
         if (m_pBaseCS->GetFamily() == PDFCS_PATTERN) {
             return FALSE;
         }
-		m_pPtrBaseCS = pDocPageData->FindColorSpacePtr(m_pBaseCS->GetArray());
+        m_pPtrBaseCS = pDocPageData->FindColorSpacePtr(m_pBaseCS->GetArray());
         m_nComponents = m_pBaseCS->CountComponents() + 1;
         if (m_pBaseCS->CountComponents() > MAX_PATTERN_COLORCOMPS) {
             return FALSE;
@@ -1307,8 +1305,7 @@ void CPDF_Color::ReleaseBuffer()
     }
     if (m_pCS->GetFamily() == PDFCS_PATTERN) {
         PatternValue* pvalue = (PatternValue*)m_pBuffer;
-        CPDF_Pattern* pPattern = pvalue->m_pPattern;
-        pPattern = pvalue->m_pPtrPattern ? *(pvalue->m_pPtrPattern) : NULL;
+        CPDF_Pattern* pPattern = pvalue->m_pPtrPattern ? *(pvalue->m_pPtrPattern) : NULL;
         if (pPattern && pPattern->m_pDocument) {
             CPDF_DocPageData *pPageData = pPattern->m_pDocument->GetPageData();
             if (pPageData) {
