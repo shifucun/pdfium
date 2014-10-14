@@ -1293,7 +1293,7 @@ void CPDF_Color::ReleaseBuffer()
     if (m_pCS->GetFamily() == PDFCS_PATTERN) {
         PatternValue* pvalue = (PatternValue*)m_pBuffer;
         CPDF_Pattern* pPattern = pvalue->m_pPattern;
-        //pPattern = pvalue->m_pPtrPattern ? *(pvalue->m_pPtrPattern) : NULL;
+        pPattern = pvalue->m_pPtrPattern ? *(pvalue->m_pPtrPattern) : NULL;
         if (pPattern && pPattern->m_pDocument) {
             CPDF_DocPageData *pPageData = pPattern->m_pDocument->GetPageData();
             if (pPageData && !pPageData->IsForceClear()) {
