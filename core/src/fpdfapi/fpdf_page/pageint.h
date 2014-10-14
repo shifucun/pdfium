@@ -431,6 +431,7 @@ public:
     CPDF_StreamAcc*             GetFontFileStreamAcc(CPDF_Stream* pFontStream);
     void                        ReleaseFontFileStreamAcc(CPDF_Stream* pFontStream, FX_BOOL bForce = FALSE);
     FX_BOOL                     IsForceClear() const {return m_bForceClear;}
+    CPDF_Pattern**			    FindPatternPtr(CPDF_Object* pPatternObj);
 
     CPDF_Document*              m_pPDFDoc;
     CPDF_FontMap                m_FontMap;

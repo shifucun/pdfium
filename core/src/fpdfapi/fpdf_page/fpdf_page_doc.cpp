@@ -654,3 +654,14 @@ void CPDF_DocPageData::ReleaseFontFileStreamAcc(CPDF_Stream* pFontStream, FX_BOO
     }
     PDF_DocPageData_Release<CPDF_Stream*, CPDF_StreamAcc*>(m_FontFileMap, pFontStream, NULL, bForce);
 }
+
+CPDF_Pattern** CPDF_DocPageData::FindPatternPtr(CPDF_Object* pPatternObj)
+{
+    if (!pPatternObj) return NULL;
+    CPDF_CountedObject<CPDF_Pattern*>* ptData;
+    if (m_PatternMap.Lookup(pPatternObj, ptData))
+    {
+        return &ptData->m_Obj;
+    }
+    return NULL;
+}
