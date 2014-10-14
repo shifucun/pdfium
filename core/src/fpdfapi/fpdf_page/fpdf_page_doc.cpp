@@ -179,11 +179,7 @@ CPDF_DocPageData::~CPDF_DocPageData()
 void CPDF_DocPageData::Clear(FX_BOOL bForceRelease)
 {
     FX_POSITION pos;
-
     m_bForceClear = bForceRelease;
-
-    // Release objects saved in the resource maps like font map and color space map.
-    // The compound objects shall be released before simple ones.
     pos = m_PatternMap.GetStartPosition();
     while (pos) {
         CPDF_Object* ptObj;
