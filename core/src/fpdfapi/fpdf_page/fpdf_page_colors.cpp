@@ -1313,7 +1313,6 @@ void CPDF_Color::ReleaseBuffer()
             CPDF_DocPageData *pPageData = pPattern->m_pDocument->GetPageData();
             if (pPageData) {
                 pPageData->ReleasePattern(pPattern->m_pPatternObj);
-                int haha = 1;
             }
         }
     }

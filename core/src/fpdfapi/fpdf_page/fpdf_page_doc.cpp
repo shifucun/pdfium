@@ -679,16 +679,6 @@ void CPDF_DocPageData::ReleaseFontFileStreamAcc(CPDF_Stream* pFontStream, FX_BOO
     }
     PDF_DocPageData_Release<CPDF_Stream*, CPDF_StreamAcc*>(m_FontFileMap, pFontStream, NULL, bForce);
 }
-CPDF_Font** CPDF_DocPageData::FindFontPtr(CPDF_Dictionary* pFontDict)
-{
-    if (!pFontDict) return NULL;
-    CPDF_CountedObject<CPDF_Font*>* fontData;
-    if (m_FontMap.Lookup(pFontDict, fontData))
-    {
-        return &fontData->m_Obj;
-    }
-    return NULL;
-}
 CPDF_ColorSpace** CPDF_DocPageData::FindColorSpacePtr(CPDF_Object* pCSObj)
 {
     if (!pCSObj) return NULL;
