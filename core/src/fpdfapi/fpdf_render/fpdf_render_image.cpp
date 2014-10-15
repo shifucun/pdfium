@@ -898,7 +898,7 @@ CPDF_QuickStretcher::~CPDF_QuickStretcher()
         delete m_pBitmap;
     }
     if (m_pCS) {
-        m_pCS->ReleaseCS();
+        delete m_pCS;
     }
     if (m_pDecoder) {
         delete m_pDecoder;
@@ -952,7 +952,7 @@ FX_BOOL CPDF_QuickStretcher::Start(CPDF_ImageObject* pImageObj, CFX_AffineMatrix
     }
     m_Bpp = m_pCS->CountComponents();
     if (m_pCS->sRGB()) {
-        m_pCS->ReleaseCS();
+        delete m_pCS;
         m_pCS = NULL;
     }
     CPDF_Stream* pStream = pImageObj->m_pImage->GetStream();

@@ -147,79 +147,19 @@ CPDF_DocPageData::~CPDF_DocPageData()
 {
     Clear(FALSE);
     Clear(TRUE);
-    FX_POSITION pos = m_PatternMap.GetStartPosition();
-    while (pos)
-    {
-        CPDF_Object* ptObj;
-        CPDF_CountedObject<CPDF_Pattern*>* ptData;
-        m_PatternMap.GetNextAssoc(pos, ptObj, ptData);
-        delete ptData;
-    }
-    m_PatternMap.RemoveAll();
-    pos = m_FontMap.GetStartPosition();
-    while (pos)
-    {
-        CPDF_Dictionary* fontDict;
-        CPDF_CountedObject<CPDF_Font*>* fontData;
-        m_FontMap.GetNextAssoc(pos, fontDict, fontData);
-        delete fontData;
-    }
-    m_FontMap.RemoveAll();
-    pos = m_ColorSpaceMap.GetStartPosition();
-    while (pos)
-    {
-        CPDF_Object* csKey;
-        CPDF_CountedObject<CPDF_ColorSpace*>* csData;
-        m_ColorSpaceMap.GetNextAssoc(pos, csKey, csData);
-        delete csData;
-    }
-    m_ColorSpaceMap.RemoveAll();
+    m_PatternMap.ClearMap(TRUE, TRUE);
+    m_FontMap.ClearMap(TRUE, TRUE);
+    m_ColorSpaceMap.ClearMap(TRUE, TRUE);
 }
 void CPDF_DocPageData::Clear(FX_BOOL bForceRelease)
 {
+    m_PatternMap.ClearMap(bForceRelease, FALSE);
+    m_FontMap.ClearMap(bForceRelease, FALSE);
+    m_ColorSpaceMap.ClearMap(bForceRelease, FALSE); // This needs more work for delete colorspace
+    m_FontFileMap.ClearMap(bForceRelease, TRUE);
+    m_ImageMap.ClearMap(bForceRelease, TRUE);
+
     FX_POSITION pos;
-    m_bForceClear = bForceRelease;
-    pos = m_PatternMap.GetStartPosition();
-    while (pos) {
-        CPDF_Object* ptObj;
-        CPDF_CountedObject<CPDF_Pattern*>* ptData;
-        m_PatternMap.GetNextAssoc(pos, ptObj, ptData);
-        if (!ptData->m_Obj) {
-            continue;
-        }
-        if (bForceRelease || ptData->m_nCount < 2) {
-            ptData->m_Obj->SetForceClear(bForceRelease);
-            delete ptData->m_Obj;
-            ptData->m_Obj = NULL;
-        }
-    }
-    pos = m_FontMap.GetStartPosition();
-    while (pos) {
-        CPDF_Dictionary* fontDict;
-        CPDF_CountedObject<CPDF_Font*>* fontData;
-        m_FontMap.GetNextAssoc(pos, fontDict, fontData);
-        if (!fontData->m_Obj) {
-            continue;
-        }
-        if (bForceRelease || fontData->m_nCount < 2) {
-            delete fontData->m_Obj;
-            fontData->m_Obj = NULL;
-        }
-    }
-    pos = m_ColorSpaceMap.GetStartPosition();
-    while (pos) {
-        CPDF_Object* csKey;
-        CPDF_CountedObject<CPDF_ColorSpace*>* csData;
-        m_ColorSpaceMap.GetNextAssoc(pos, csKey, csData);
-        if (!csData->m_Obj) {
-            continue;
-        }
-        if (bForceRelease || csData->m_nCount < 2) {
-            // csData->m_Obj is deleted in the function of ReleaseCS().
-            csData->m_Obj->ReleaseCS();
-            csData->m_Obj = NULL;
-        }
-    }
     pos = m_IccProfileMap.GetStartPosition();
     while (pos) {
         CPDF_Stream* ipKey;
@@ -244,34 +184,7 @@ void CPDF_DocPageData::Clear(FX_BOOL bForceRelease)
             m_IccProfileMap.RemoveKey(ipKey);
         }
     }
-    pos = m_FontFileMap.GetStartPosition();
-    while (pos) {
-        CPDF_Stream* ftKey;
-        CPDF_CountedObject<CPDF_StreamAcc*>* ftData;
-        m_FontFileMap.GetNextAssoc(pos, ftKey, ftData);
-        if (!ftData->m_Obj) {
-            continue;
-        }
-        if (bForceRelease || ftData->m_nCount < 2) {
-            delete ftData->m_Obj;
-            delete ftData;
-            m_FontFileMap.RemoveKey(ftKey);
-        }
-    }
-    pos = m_ImageMap.GetStartPosition();
-    while (pos) {
-        FX_DWORD objNum;
-        CPDF_CountedObject<CPDF_Image*>* imageData;
-        m_ImageMap.GetNextAssoc(pos, objNum, imageData);
-        if (!imageData->m_Obj) {
-            continue;
-        }
-        if (bForceRelease || imageData->m_nCount < 2) {
-            delete imageData->m_Obj;
-            delete imageData;
-            m_ImageMap.RemoveKey(objNum);
-        }
-    }
+
 }
 CPDF_Font* CPDF_DocPageData::GetFont(CPDF_Dictionary* pFontDict, FX_BOOL findOnly)
 {
@@ -486,7 +399,7 @@ void CPDF_DocPageData::ReleaseColorSpace(CPDF_Object* pColorSpace)
         return;
     }
     if (csData->m_Obj && --csData->m_nCount == 0) {
-        csData->m_Obj->ReleaseCS();
+        delete csData->m_Obj;
         csData->m_Obj = NULL;
     }
 }

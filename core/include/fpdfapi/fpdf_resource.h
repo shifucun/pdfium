@@ -594,7 +594,6 @@ protected:
     CFX_CTTGSUBTable*			m_pTTGSUBTable;
 };
 #define PDFCS_DEVICEGRAY		1
-
 #define PDFCS_DEVICERGB			2
 #define PDFCS_DEVICECMYK		3
 #define PDFCS_CALGRAY			4
@@ -608,12 +607,11 @@ protected:
 class CPDF_ColorSpace : public CFX_Object
 {
 public:
+    virtual ~CPDF_ColorSpace() {}
 
     static CPDF_ColorSpace* GetStockCS(int Family);
 
     static CPDF_ColorSpace*	Load(CPDF_Document* pDoc, CPDF_Object* pCSObj);
-
-    void					ReleaseCS();
 
     int						GetBufSize() const;
 
@@ -678,7 +676,6 @@ protected:
 
     CPDF_ColorSpace();
 
-    virtual ~CPDF_ColorSpace() {}
     virtual FX_BOOL			v_Load(CPDF_Document* pDoc, CPDF_Array* pArray)
     {
         return TRUE;

@@ -18,6 +18,7 @@
 #ifndef _FX_STREAM_H_
 #include "fx_stream.h"
 #endif
+
 class CFX_BinaryBuf : public CFX_Object
 {
 public:
@@ -896,6 +897,31 @@ public:
     FX_BOOL	RemoveKey(KeyType key)
     {
         return CFX_MapPtrToPtr::RemoveKey((void*)(FX_UINTPTR)key);
+    }
+
+    void ClearMap(FX_BOOL bForceClear, FX_BOOL bIsKeyRemove)
+    {
+        FX_POSITION pos = GetStartPosition();
+        while (pos) {
+            KeyType pKey = NULL;
+            ValueType pValue = NULL;
+            GetNextAssoc(pos, pKey, pValue);
+            if (!pValue->m_Obj) {
+                if (bIsKeyRemove){
+                    delete pValue;
+                    RemoveKey(pKey);
+                }
+                continue;
+            }
+            if (bForceClear || pValue->m_nCount < 2) {
+                delete pValue->m_Obj;
+                pValue->m_Obj = NULL;
+                if (bIsKeyRemove){
+                    delete pValue;
+                    RemoveKey(pKey);
+                }
+            }
+        }
     }
 
     void GetNextAssoc(FX_POSITION& rNextPosition, KeyType& rKey, ValueType& rValue) const

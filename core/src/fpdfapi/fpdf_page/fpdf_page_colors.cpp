@@ -33,6 +33,18 @@ CPDF_DeviceCS::CPDF_DeviceCS(int family)
         m_nComponents = 4;
     }
 }
+void CPDF_DeviceCS::operator delete(void *p)
+{
+    if (p == GetStockCS(PDFCS_DEVICERGB)) {
+        return;
+    }
+    if (p == GetStockCS(PDFCS_DEVICEGRAY)) {
+        return;
+    }
+    if (p == GetStockCS(PDFCS_DEVICECMYK)) {
+        return;
+    }
+}
 FX_BOOL CPDF_DeviceCS::GetRGB(FX_FLOAT* pBuf, FX_FLOAT& R, FX_FLOAT& G, FX_FLOAT& B) const
 {
     if (m_Family == PDFCS_DEVICERGB) {
@@ -576,7 +588,7 @@ CPDF_ICCBasedCS::~CPDF_ICCBasedCS()
         FX_Free(m_pRanges);
     }
     if (m_pAlterCS && m_bOwn) {
-        m_pAlterCS->ReleaseCS();
+        delete m_pAlterCS;
     }
     if (m_pProfile && m_pDocument) {
         m_pDocument->GetPageData()->ReleaseIccProfile(NULL, m_pProfile);
@@ -606,7 +618,8 @@ FX_BOOL CPDF_ICCBasedCS::v_Load(CPDF_Document* pDoc, CPDF_Array* pArray)
                         m_bOwn = TRUE;
                     }
                     else { // No valid alternative colorspace
-                        pAlterCS->ReleaseCS();
+                        delete pAlterCS;
+                        pAlterCS = NULL;
                         FX_INT32 nDictComponents = pDict ? pDict->GetInteger(FX_BSTRC("N")) : 0;
                         if (nDictComponents != 1 && nDictComponents != 3 && nDictComponents != 4) {
                             return FALSE;
@@ -617,7 +630,8 @@ FX_BOOL CPDF_ICCBasedCS::v_Load(CPDF_Document* pDoc, CPDF_Array* pArray)
                 }
                 else { // Using sRGB
                     if (pAlterCS->CountComponents() != m_nComponents) {
-                        pAlterCS->ReleaseCS();
+                        delete pAlterCS;
+                        pAlterCS = NULL;
                     }
                     else {
                         m_pAlterCS = pAlterCS;
@@ -870,6 +884,12 @@ CPDF_PatternCS::~CPDF_PatternCS()
 	    m_pDocument->GetPageData()->ReleaseColorSpace(pCS->GetArray());
     }
 }
+void CPDF_PatternCS::operator delete(void *p)
+{
+    if (p == GetStockCS(PDFCS_PATTERN))
+        return;
+    ::delete p;
+}
 FX_BOOL CPDF_PatternCS::v_Load(CPDF_Document* pDoc, CPDF_Array* pArray)
 {
     CPDF_Object* pBaseCS = pArray->GetElementValue(1);
@@ -932,7 +952,7 @@ CPDF_SeparationCS::CPDF_SeparationCS()
 CPDF_SeparationCS::~CPDF_SeparationCS()
 {
     if (m_pAltCS) {
-        m_pAltCS->ReleaseCS();
+        delete m_pAltCS;
     }
     if (m_pFunc) {
         delete m_pFunc;
@@ -1028,7 +1048,7 @@ CPDF_DeviceNCS::~CPDF_DeviceNCS()
         delete m_pFunc;
     }
     if (m_pAltCS) {
-        m_pAltCS->ReleaseCS();
+        delete m_pAltCS;
     }
 }
 FX_BOOL CPDF_DeviceNCS::v_Load(CPDF_Document* pDoc, CPDF_Array* pArray)
@@ -1162,7 +1182,8 @@ CPDF_ColorSpace* CPDF_ColorSpace::Load(CPDF_Document* pDoc, CPDF_Object* pObj)
     pCS->m_pDocument = pDoc;
     pCS->m_pArray = pArray;
     if (!pCS->v_Load(pDoc, pArray)) {
-        pCS->ReleaseCS();
+        delete pCS;
+        pCS = NULL;
         return NULL;
     }
     return pCS;
@@ -1173,22 +1194,6 @@ CPDF_ColorSpace::CPDF_ColorSpace()
     m_pArray = NULL;
     m_dwStdConversion = 0;
     m_pDocument = NULL;
-}
-void CPDF_ColorSpace::ReleaseCS()
-{
-    if (this == GetStockCS(PDFCS_DEVICERGB)) {
-        return;
-    }
-    if (this == GetStockCS(PDFCS_DEVICEGRAY)) {
-        return;
-    }
-    if (this == GetStockCS(PDFCS_DEVICECMYK)) {
-        return;
-    }
-    if (this == GetStockCS(PDFCS_PATTERN)) {
-        return;
-    }
-    delete this;
 }
 int CPDF_ColorSpace::GetBufSize() const
 {
