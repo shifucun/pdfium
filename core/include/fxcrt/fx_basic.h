@@ -898,27 +898,21 @@ public:
         return CFX_MapPtrToPtr::RemoveKey((void*)(FX_UINTPTR)key);
     }
 
-    void ClearMap(FX_BOOL bForceClear, FX_BOOL bIsKeyRemove)
+    void Clear(FX_BOOL bForceClear, FX_BOOL bRemoveKey)
     {
+        KeyType pKey;
+        ValueType pValue;
         FX_POSITION pos = GetStartPosition();
         while (pos) {
-            KeyType pKey;
-            ValueType pValue;
             GetNextAssoc(pos, pKey, pValue);
-            if (!pValue->m_Obj) {
-                if (bIsKeyRemove){
-                    delete pValue;
-                    RemoveKey(pKey);
-                }
-                continue;
-            }
-            if (bForceClear || pValue->m_nCount < 2) {
-                delete pValue->m_Obj;
+            if (pValue->m_Obj && (bForceClear || pValue->m_nCount < 2)) {
+                void* tmp = pValue->m_Obj;
                 pValue->m_Obj = NULL;
-                if (bIsKeyRemove){
-                    delete pValue;
-                    RemoveKey(pKey);
-                }
+                delete tmp;
+            }
+            if (!pValue->m_Obj && bRemoveKey) {
+                RemoveKey(pKey);
+                delete pValue;
             }
         }
     }

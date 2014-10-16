@@ -147,16 +147,16 @@ CPDF_DocPageData::~CPDF_DocPageData()
 {
     Clear(FALSE);
     Clear(TRUE);
-    m_PatternMap.ClearMap(TRUE, TRUE);
-    m_FontMap.ClearMap(TRUE, TRUE);
-    m_ColorSpaceMap.ClearMap(TRUE, TRUE);
+    m_PatternMap.Clear(TRUE, TRUE);
+    m_FontMap.Clear(TRUE, TRUE);
+    m_ColorSpaceMap.Clear(TRUE, TRUE);
 }
 void CPDF_DocPageData::Clear(FX_BOOL bForceRelease)
 {
-    m_PatternMap.ClearMap(bForceRelease, FALSE);
-    m_FontMap.ClearMap(bForceRelease, FALSE);
-    m_FontFileMap.ClearMap(bForceRelease, TRUE);
-    m_ImageMap.ClearMap(bForceRelease, TRUE);
+    m_PatternMap.Clear(bForceRelease, FALSE);
+    m_FontMap.Clear(bForceRelease, FALSE);
+    m_FontFileMap.Clear(bForceRelease, TRUE);
+    m_ImageMap.Clear(bForceRelease, TRUE);
 
     FX_POSITION pos;
     pos = m_ColorSpaceMap.GetStartPosition();
