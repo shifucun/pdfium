@@ -155,11 +155,24 @@ void CPDF_DocPageData::Clear(FX_BOOL bForceRelease)
 {
     m_PatternMap.ClearMap(bForceRelease, FALSE);
     m_FontMap.ClearMap(bForceRelease, FALSE);
-    m_ColorSpaceMap.ClearMap(bForceRelease, FALSE); // This needs more work for delete colorspace
     m_FontFileMap.ClearMap(bForceRelease, TRUE);
     m_ImageMap.ClearMap(bForceRelease, TRUE);
 
     FX_POSITION pos;
+    pos = m_ColorSpaceMap.GetStartPosition();
+    while (pos) {
+        CPDF_Object* csKey;
+        CPDF_CountedObject<CPDF_ColorSpace*>* csData;
+        m_ColorSpaceMap.GetNextAssoc(pos, csKey, csData);
+        if (!csData->m_Obj) {
+            continue;
+        }
+        if (bForceRelease || csData->m_nCount < 2) {
+            // csData->m_Obj is deleted in the function of ReleaseCS().
+            csData->m_Obj->ReleaseCS();
+            csData->m_Obj = NULL;
+        }
+    }
     pos = m_IccProfileMap.GetStartPosition();
     while (pos) {
         CPDF_Stream* ipKey;
@@ -399,7 +412,7 @@ void CPDF_DocPageData::ReleaseColorSpace(CPDF_Object* pColorSpace)
         return;
     }
     if (csData->m_Obj && --csData->m_nCount == 0) {
-        delete csData->m_Obj;
+        csData->m_Obj->ReleaseCS();
         csData->m_Obj = NULL;
     }
 }

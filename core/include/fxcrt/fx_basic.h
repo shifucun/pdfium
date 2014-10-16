@@ -18,7 +18,6 @@
 #ifndef _FX_STREAM_H_
 #include "fx_stream.h"
 #endif
-
 class CFX_BinaryBuf : public CFX_Object
 {
 public:
@@ -903,8 +902,8 @@ public:
     {
         FX_POSITION pos = GetStartPosition();
         while (pos) {
-            KeyType pKey = NULL;
-            ValueType pValue = NULL;
+            KeyType pKey;
+            ValueType pValue;
             GetNextAssoc(pos, pKey, pValue);
             if (!pValue->m_Obj) {
                 if (bIsKeyRemove){

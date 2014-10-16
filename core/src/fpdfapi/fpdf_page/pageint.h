@@ -470,7 +470,6 @@ class CPDF_DeviceCS : public CPDF_ColorSpace
 {
 public:
     CPDF_DeviceCS(int family);
-    void operator delete(void *p);
     virtual FX_BOOL	GetRGB(FX_FLOAT* pBuf, FX_FLOAT& R, FX_FLOAT& G, FX_FLOAT& B) const;
     FX_BOOL	SetRGB(FX_FLOAT* pBuf, FX_FLOAT R, FX_FLOAT G, FX_FLOAT B) const;
     FX_BOOL	v_GetCMYK(FX_FLOAT* pBuf, FX_FLOAT& c, FX_FLOAT& m, FX_FLOAT& y, FX_FLOAT& k) const;
@@ -482,7 +481,6 @@ class CPDF_PatternCS : public CPDF_ColorSpace
 public:
     CPDF_PatternCS();
     ~CPDF_PatternCS();
-    void operator delete(void *p);
     virtual FX_BOOL		v_Load(CPDF_Document* pDoc, CPDF_Array* pArray);
     virtual FX_BOOL		GetRGB(FX_FLOAT* pBuf, FX_FLOAT& R, FX_FLOAT& G, FX_FLOAT& B) const;
     virtual CPDF_ColorSpace*	GetBaseCS() const

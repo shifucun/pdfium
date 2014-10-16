@@ -613,6 +613,8 @@ public:
 
     static CPDF_ColorSpace*	Load(CPDF_Document* pDoc, CPDF_Object* pCSObj);
 
+    void					ReleaseCS();
+
     int						GetBufSize() const;
 
     FX_FLOAT*			CreateBuf();
