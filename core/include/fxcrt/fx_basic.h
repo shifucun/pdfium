@@ -906,9 +906,8 @@ public:
         while (pos) {
             GetNextAssoc(pos, pKey, pValue);
             if (pValue->m_Obj && (bForceClear || pValue->m_nCount < 2)) {
-                void* tmp = pValue->m_Obj;
+                delete pValue->m_Obj;
                 pValue->m_Obj = NULL;
-                delete tmp;
             }
             if (!pValue->m_Obj && bRemoveKey) {
                 RemoveKey(pKey);
