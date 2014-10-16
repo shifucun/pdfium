@@ -931,6 +931,16 @@ public:
         rKey = (KeyType)(FX_UINTPTR)pKey;
         rValue = (ValueType)(FX_UINTPTR)pValue;
     }
+
+    ValueType FindValue(void* pObj) const
+    {
+        if (!pObj) return NULL;
+        ValueType pValue;
+        if (Lookup((KeyType)pObj, pValue)) {
+            return pValue;
+        }
+        return NULL;
+    }
 };
 class CFX_CMapDWordToDWord : public CFX_Object
 {

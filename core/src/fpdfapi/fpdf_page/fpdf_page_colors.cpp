@@ -798,7 +798,7 @@ FX_BOOL CPDF_IndexedCS::v_Load(CPDF_Document* pDoc, CPDF_Array* pArray)
     if (m_pBaseCS == NULL) {
         return FALSE;
     }
-    m_pCountedBaseCS = pDocPageData->FindColorSpacePtr(m_pBaseCS->GetArray());
+    m_pCountedBaseCS = pDocPageData->m_ColorSpaceMap.FindValue(m_pBaseCS->GetArray());
     m_nBaseComponents = m_pBaseCS->CountComponents();
     m_pCompMinMax = FX_Alloc(FX_FLOAT, m_nBaseComponents * 2);
     FX_FLOAT defvalue;
@@ -882,7 +882,7 @@ FX_BOOL CPDF_PatternCS::v_Load(CPDF_Document* pDoc, CPDF_Array* pArray)
         if (m_pBaseCS->GetFamily() == PDFCS_PATTERN) {
             return FALSE;
         }
-        m_pCountedBaseCS = pDocPageData->FindColorSpacePtr(m_pBaseCS->GetArray());
+        m_pCountedBaseCS = pDocPageData->m_ColorSpaceMap.FindValue(m_pBaseCS->GetArray());
         m_nComponents = m_pBaseCS->CountComponents() + 1;
         if (m_pBaseCS->CountComponents() > MAX_PATTERN_COLORCOMPS) {
             return FALSE;
@@ -1381,7 +1381,7 @@ void CPDF_Color::SetValue(CPDF_Pattern* pPattern, FX_FLOAT* comps, int ncomps)
         if (!pDocPageData) {
             pDocPageData = pPattern->m_pDocument->GetPageData();
         }
-        pvalue->m_pCountedPattern = pDocPageData->FindPatternPtr(pPattern->m_pPatternObj);
+        pvalue->m_pCountedPattern = pDocPageData->m_PatternMap.FindValue(pPattern->m_pPatternObj);
     }
 }
 void CPDF_Color::Copy(const CPDF_Color* pSrc)

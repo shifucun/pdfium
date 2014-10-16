@@ -144,7 +144,7 @@ FX_BOOL CPDF_ShadingPattern::Load()
     CPDF_DocPageData* pDocPageData = m_pDocument->GetPageData();
     m_pCS = pDocPageData->GetColorSpace(pCSObj, NULL);
     if (m_pCS) {
-        m_pCountedCS = pDocPageData->FindColorSpacePtr(m_pCS->GetArray());
+        m_pCountedCS = pDocPageData->m_ColorSpaceMap.FindValue(m_pCS->GetArray());
     }
     m_ShadingType = pShadingDict->GetInteger(FX_BSTRC("ShadingType"));
     return TRUE;
