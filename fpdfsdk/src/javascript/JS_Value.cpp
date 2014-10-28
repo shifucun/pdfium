@@ -39,9 +39,15 @@ CJS_Value::CJS_Value(v8::Isolate* isolate, const double &dValue):m_isolate(isola
 	operator =(dValue);
 }
 
-CJS_Value::CJS_Value(v8::Isolate* isolate, JSFXObject  pJsObj):m_isolate(isolate) 
+CJS_Value::CJS_Value(v8::Isolate* isolate, JSFXObject pJsObj, FX_BOOL isCloneJSObject) : m_isolate(isolate)
 {
-	operator =(pJsObj);
+    if (isCloneJSObject)
+        operator =(pJsObj);
+    else
+    {
+        m_pValue = pJsObj;
+        m_eType = VT_object;
+    }
 }
 
 CJS_Value::CJS_Value(v8::Isolate* isolate, CJS_Object * pJsObj):m_isolate(isolate) 

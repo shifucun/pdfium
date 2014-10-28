@@ -19,7 +19,7 @@ public:
 	CJS_Value(v8::Isolate* isolate, const double &dValue);
 	CJS_Value(v8::Isolate* isolate, const float &fValue);	
 	CJS_Value(v8::Isolate* isolate, const bool &bValue);
-	CJS_Value(v8::Isolate* isolate, JSFXObject);
+    CJS_Value(v8::Isolate* isolate, JSFXObject, FX_BOOL isCloneJSObject = TRUE);
 	CJS_Value(v8::Isolate* isolate, CJS_Object *);
 	CJS_Value(v8::Isolate* isolate, FX_LPCSTR pStr);
 	CJS_Value(v8::Isolate* isolate, FX_LPCWSTR pWstr);

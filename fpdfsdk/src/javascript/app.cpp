@@ -177,8 +177,9 @@ FX_BOOL app::activeDocs(OBJ_PROP_PARAMS)
 					
 					//			pDocument->AttachDoc(pDoc);
 				}
-				
-				aDocs.SetElement(0,CJS_Value(pRuntime->GetIsolate(),pJSDocument));
+				    //Global object should not be cloned.
+                    if (pJSDocument && ((JSFXObject)(*pJSDocument) == JS_GetThisObj(*pRuntime)))
+                        aDocs.SetElement(0, CJS_Value(pRuntime->GetIsolate(), (JSFXObject)(*pJSDocument), FALSE));
 			}
 	//		}
 		
