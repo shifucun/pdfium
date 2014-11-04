@@ -298,7 +298,10 @@ void CBC_PDF417HighLevelEncoder::encodeNumeric(CFX_WideString msg, FX_INT32 star
     while (idx < count - 1) {
         FX_INT32 len = 44 < count - idx ? 44 : count - idx;
         CFX_WideString part = (FX_WCHAR)'1' + msg.Mid(startpos + idx, len);
-        FX_INT32 bigint = part.GetInteger();
+        FX_INT64 bigint = 0;
+        for (int i = 0; i < part.GetLength(); i++) {
+            bigint = bigint * 10 + (part.GetAt(i) - '0');
+        }
         do {
             FX_INT32 c = bigint % num900;
             tmp += (FX_WCHAR) (c);
