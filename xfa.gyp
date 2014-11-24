@@ -5,7 +5,6 @@
       "type":"static_library",
       'dependencies': [
         '<(DEPTH)/v8/tools/gyp/v8.gyp:v8',
-        'bigint',
       ],
       'export_dependent_settings': [
         '<(DEPTH)/v8/tools/gyp/v8.gyp:v8',
@@ -711,24 +710,6 @@
           }
         ]
       ]
-    },
-    {
-      'target_name': 'bigint',
-      'type': 'none',
-      'sources': [
-        'third_party/bigint/BigInteger.hh',
-        'third_party/bigint/BigIntegerAlgorithms.hh',
-        'third_party/bigint/BigIntegerLibrary.hh',
-        'third_party/bigint/BigIntegerUtils.hh',
-        'third_party/bigint/BigUnsigned.hh',
-        'third_party/bigint/BigUnsignedInABase.hh',
-        'third_party/bigint/NumberlikeArray.hh',
-        'third_party/bigint/BigInteger.cc',
-        'third_party/bigint/BigIntegerAlgorithms.cc',
-        'third_party/bigint/BigIntegerUtils.cc',
-        'third_party/bigint/BigUnsigned.cc',
-        'third_party/bigint/BigUnsignedInABase.cc',
-      ],
-    },
-  ],
+    }
+  ]
 }
