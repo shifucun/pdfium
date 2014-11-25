@@ -143,17 +143,14 @@
       'type': 'static_library',
       'sources': [
         'third_party/bigint/BigInteger.hh',
-        'third_party/bigint/BigIntegerAlgorithms.hh',
         'third_party/bigint/BigIntegerLibrary.hh',
         'third_party/bigint/BigIntegerUtils.hh',
         'third_party/bigint/BigUnsigned.hh',
-        'third_party/bigint/BigUnsignedInABase.hh',
         'third_party/bigint/NumberlikeArray.hh',
         'third_party/bigint/BigInteger.cc',
-        'third_party/bigint/BigIntegerAlgorithms.cc',
         'third_party/bigint/BigIntegerUtils.cc',
         'third_party/bigint/BigUnsigned.cc',
-        'third_party/bigint/BigUnsignedInABase.cc',
+
       ],
     },
     {
