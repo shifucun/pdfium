@@ -14,7 +14,11 @@ BigInteger::BigInteger(const Blk *b, Index blen, Sign s) : mag(b, blen) {
 	switch (s) {
 	case zero:
 		if (!mag.isZero())
+#ifdef FOXIT_CHROME_BUILD
+            abort();
+#else
 			throw "BigInteger::BigInteger(const Blk *, Index, Sign): Cannot use a sign of zero with a nonzero magnitude";
+#endif
 		sign = zero;
 		break;
 	case positive:
@@ -25,7 +29,11 @@ BigInteger::BigInteger(const Blk *b, Index blen, Sign s) : mag(b, blen) {
 	default:
 		/* g++ seems to be optimizing out this case on the assumption
 		 * that the sign is a valid member of the enumeration.  Oh well. */
+#ifdef FOXIT_CHROME_BUILD
+        abort();
+#else
 		throw "BigInteger::BigInteger(const Blk *, Index, Sign): Invalid sign";
+#endif
 	}
 }
 
@@ -33,7 +41,11 @@ BigInteger::BigInteger(const BigUnsigned &x, Sign s) : mag(x) {
 	switch (s) {
 	case zero:
 		if (!mag.isZero())
+#ifdef FOXIT_CHROME_BUILD
+            abort();
+#else
 			throw "BigInteger::BigInteger(const BigUnsigned &, Sign): Cannot use a sign of zero with a nonzero magnitude";
+#endif
 		sign = zero;
 		break;
 	case positive:
@@ -44,7 +56,11 @@ BigInteger::BigInteger(const BigUnsigned &x, Sign s) : mag(x) {
 	default:
 		/* g++ seems to be optimizing out this case on the assumption
 		 * that the sign is a valid member of the enumeration.  Oh well. */
+#ifdef FOXIT_CHROME_BUILD
+        abort();
+#else
 		throw "BigInteger::BigInteger(const BigUnsigned &, Sign): Invalid sign";
+#endif
 	}
 }
 
@@ -92,8 +108,12 @@ inline X convertBigUnsignedToPrimitiveAccess(const BigUnsigned &a) {
 template <class X>
 X BigInteger::convertToUnsignedPrimitive() const {
 	if (sign == negative)
+#ifdef FOXIT_CHROME_BUILD
+        abort();
+#else
 		throw "BigInteger::to<Primitive>: "
 			"Cannot convert a negative integer to an unsigned type";
+#endif
 	else
 		return convertBigUnsignedToPrimitiveAccess<X>(mag);
 }
@@ -120,8 +140,12 @@ X BigInteger::convertToSignedPrimitive() const {
 		}
 		// Otherwise fall through.
 	}
+#ifdef FOXIT_CHROME_BUILD
+    abort();
+#else
 	throw "BigInteger::to<Primitive>: "
 		"Value is too big to fit in the requested type";
+#endif
 }
 
 unsigned long  BigInteger::toUnsignedLong () const { return convertToUnsignedPrimitive<unsigned long >       (); }
@@ -149,7 +173,11 @@ BigInteger::CmpRes BigInteger::compareTo(const BigInteger &x) const {
 		// Compare the magnitudes, but return the opposite result
 		return CmpRes(-mag.compareTo(x.mag));
 	default:
+#ifdef FOXIT_CHROME_BUILD
+        abort();
+#else
 		throw "BigInteger internal error";
+#endif
 	}
 }
 
@@ -281,7 +309,11 @@ void BigInteger::divideWithRemainder(const BigInteger &b, BigInteger &q) {
 	// Defend against aliased calls;
 	// same idea as in BigUnsigned::divideWithRemainder .
 	if (this == &q)
+#ifdef FOXIT_CHROME_BUILD
+        abort();
+#else
 		throw "BigInteger::divideWithRemainder: Cannot write quotient and remainder into the same variable";
+#endif
 	if (this == &b || &q == &b) {
 		BigInteger tmpB(b);
 		divideWithRemainder(tmpB, q);

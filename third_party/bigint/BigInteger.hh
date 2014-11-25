@@ -157,14 +157,24 @@ inline BigInteger BigInteger::operator *(const BigInteger &x) const {
 	return ans;
 }
 inline BigInteger BigInteger::operator /(const BigInteger &x) const {
-	if (x.isZero()) throw "BigInteger::operator /: division by zero";
+	if (x.isZero())
+#ifdef FOXIT_CHROME_BUILD
+        abort();
+#else
+        throw "BigInteger::operator /: division by zero";
+#endif
 	BigInteger q, r;
 	r = *this;
 	r.divideWithRemainder(x, q);
 	return q;
 }
 inline BigInteger BigInteger::operator %(const BigInteger &x) const {
-	if (x.isZero()) throw "BigInteger::operator %: division by zero";
+	if (x.isZero())
+#ifdef FOXIT_CHROME_BUILD
+        abort();
+#else
+        throw "BigInteger::operator %: division by zero";
+#endif
 	BigInteger q, r;
 	r = *this;
 	r.divideWithRemainder(x, q);
@@ -193,7 +203,12 @@ inline void BigInteger::operator *=(const BigInteger &x) {
 	multiply(*this, x);
 }
 inline void BigInteger::operator /=(const BigInteger &x) {
-	if (x.isZero()) throw "BigInteger::operator /=: division by zero";
+	if (x.isZero())
+#ifdef FOXIT_CHROME_BUILD
+        abort();
+#else
+        throw "BigInteger::operator /=: division by zero";
+#endif
 	/* The following technique is slightly faster than copying *this first
 	 * when x is large. */
 	BigInteger q;
@@ -202,7 +217,12 @@ inline void BigInteger::operator /=(const BigInteger &x) {
 	*this = q;
 }
 inline void BigInteger::operator %=(const BigInteger &x) {
-	if (x.isZero()) throw "BigInteger::operator %=: division by zero";
+	if (x.isZero())
+#ifdef FOXIT_CHROME_BUILD
+        abort();
+#else
+        throw "BigInteger::operator %=: division by zero";
+#endif
 	BigInteger q;
 	// Mods *this by x.  Don't care about quotient left in q.
 	divideWithRemainder(x, q);
