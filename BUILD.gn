@@ -137,9 +137,11 @@ static_library("bigint") {
     "third_party/bigint/BigIntegerUtils.hh",
     "third_party/bigint/BigUnsigned.hh",
     "third_party/bigint/NumberlikeArray.hh",
+    "third_party/bigint/BigUnsignedInABase.hh",
     "third_party/bigint/BigInteger.cc",
     "third_party/bigint/BigIntegerUtils.cc",
     "third_party/bigint/BigUnsigned.cc",
+    "third_party/bigint/BigUnsignedInABase.cc",
   ]
 }
 
