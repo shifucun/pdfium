@@ -1,6 +1,7 @@
 #ifndef NUMBERLIKEARRAY_H
 #define NUMBERLIKEARRAY_H
 
+#include <stdlib.h> // abort()
 // Make sure we have NULL.
 #ifndef NULL
 #define NULL 0

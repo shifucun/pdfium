@@ -3,6 +3,5 @@
 #include "NumberlikeArray.hh"
 #include "BigUnsigned.hh"
 #include "BigInteger.hh"
-#include "BigIntegerAlgorithms.hh"
-#include "BigUnsignedInABase.hh"
 #include "BigIntegerUtils.hh"
+#include "BigUnsignedInABase.hh"
