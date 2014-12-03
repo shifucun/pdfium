@@ -18,8 +18,10 @@
 #define    BEGIN_MACRO_PDF417_OPTIONAL_FIELD     923
 #define    MACRO_PDF417_TERMINATOR               922
 #define    MODE_SHIFT_TO_BYTE_COMPACTION_MODE    913
+
+const int EXP900_TABLE_SIZE = 16;
 FX_INT32 CBC_DecodedBitStreamPaser::MAX_NUMERIC_CODEWORDS = 15;
-FX_INT32 CBC_DecodedBitStreamPaser::EXP900[16] = {0};
+BigInteger CBC_DecodedBitStreamPaser::EXP900[EXP900_TABLE_SIZE] = { 0 };
 FX_INT32 CBC_DecodedBitStreamPaser::NUMBER_OF_SEQUENCE_CODEWORDS = 2;
 FX_INT32 CBC_DecodedBitStreamPaser::PL = 25;
 FX_INT32 CBC_DecodedBitStreamPaser::LL = 27;
@@ -41,9 +43,9 @@ FX_CHAR CBC_DecodedBitStreamPaser::MIXED_CHARS[30] = {
 void CBC_DecodedBitStreamPaser::Initialize()
 {
     EXP900[0] = 1;
-    FX_INT32 nineHundred = 900;
+    BigInteger nineHundred = 900;
     EXP900[1] = nineHundred;
-    for (FX_INT32 i = 2; i < sizeof(EXP900) / sizeof(FX_INT32); i++) {
+    for (FX_INT32 i = 2; i < EXP900_TABLE_SIZE; i++) {
         EXP900[i] = EXP900[i - 1] * nineHundred;
     }
 }
@@ -460,12 +462,12 @@ FX_INT32 CBC_DecodedBitStreamPaser::numericCompaction(CFX_Int32Array &codewords,
 }
 CFX_ByteString CBC_DecodedBitStreamPaser::decodeBase900toBase10(CFX_Int32Array &codewords, FX_INT32 count, FX_INT32 &e)
 {
-    FX_INT32 result = 0;
+    BigInteger result = 0;
     for (FX_INT32 i = 0; i < count; i++) {
-        result += EXP900[count - i - 1] * codewords[i];
+        result += EXP900[count - i - 1] * BigInteger(codewords[i]);
     }
     CFX_ByteString resultString;
-    resultString = resultString.FormatInteger(result);
+    resultString = resultString.FormatInteger(result.toInt());
     if (resultString.GetAt(0) != '1') {
         e =  BCExceptionFormatInstance;
         return ' ';
