@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-// Original code by Matt McCutchen, see the LICENSE file
+// Original code by Matt McCutchen, see the LICENSE file.
 
 #ifndef BIGUNSIGNED_H
 #define BIGUNSIGNED_H
@@ -26,7 +26,7 @@ public:
 	typedef unsigned long Blk;
 
 	typedef NumberlikeArray<Blk>::Index Index;
-	using NumberlikeArray<Blk>::N;
+	NumberlikeArray<Blk>::N;
 
 protected:
 	// Creates a BigUnsigned with a capacity; for internal use.
