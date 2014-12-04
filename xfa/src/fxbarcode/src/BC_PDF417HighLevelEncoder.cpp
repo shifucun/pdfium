@@ -294,16 +294,15 @@ void CBC_PDF417HighLevelEncoder::encodeNumeric(CFX_WideString msg, FX_INT32 star
     FX_INT32 idx = 0;
     CFX_WideString tmp;
     BigInteger num900 = 900;
-    BigInteger num0 = 0;
     while (idx < count - 1) {
         FX_INT32 len = 44 < count - idx ? 44 : count - idx;
         CFX_ByteString part = ((FX_WCHAR)'1' + msg.Mid(startpos + idx, len)).UTF8Encode();
         BigInteger bigint = stringToBigInteger(FX_LPCSTR(part));
         do {
-            BigInteger c = bigint % num900;
-            tmp += (FX_WCHAR)(std::stoi(bigIntegerToString(c)));
+            FX_INT32 c = (bigint % num900).toInt();
+            tmp += (FX_WCHAR)(c);
             bigint = bigint / num900;
-        } while (bigint != num0);
+        } while (!bigint.isZero());
         for (FX_INT32 i = tmp.GetLength() - 1; i >= 0; i--) {
             sb += tmp.GetAt(i);
         }
