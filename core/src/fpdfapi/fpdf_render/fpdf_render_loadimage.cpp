@@ -946,7 +946,7 @@ void CPDF_DIBSource::ValidateDictParam()
                 m_bpc = 1;
                 m_nComponents = 1;
             }
-            if (pArray->GetString(pArray->GetCount() - 1) == FX_BSTRC("RunLengthDecode") ||
+            if (//pArray->GetString(pArray->GetCount() - 1) == FX_BSTRC("RunLengthDecode") ||
                     pArray->GetString(pArray->GetCount() - 1) == FX_BSTRC("DCTDecode")) {
                 m_bpc = 8;
             }
