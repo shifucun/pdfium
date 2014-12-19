@@ -4,4 +4,4 @@
  
 // Original code copyright 2014 Foxit Software Inc. http://www.foxitsoftware.com
 
-#include "../fxft2.5.01/src/raster/fxft_raster.c"
+#include "../fxft2.5.4/src/raster/raster.c"

@@ -4,4 +4,4 @@
  
 // Original code copyright 2014 Foxit Software Inc. http://www.foxitsoftware.com
 
-#include "../fxft2.5.01/src/cff/fxft_cff.c"
+#include "../fxft2.5.4/src/cff/cff.c"

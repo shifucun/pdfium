@@ -6,5 +6,5 @@
 
 #ifndef _FXFT_FTMM_H_
 #define _FXFT_FTMM_H_
-#include "../fxft2.5.01/include/freetype/ftmm.h"
+#include "../fxft2.5.4/include/freetype/ftmm.h"
 #endif

@@ -6,5 +6,5 @@
 
 #ifndef _FXFT_FTOUTLN_H_
 #define _FXFT_FTOUTLN_H_
-#include "../fxft2.5.01/include/freetype/ftoutln.h"
+#include "../fxft2.5.4/include/freetype/ftoutln.h"
 #endif

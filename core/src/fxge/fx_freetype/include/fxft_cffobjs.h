@@ -6,5 +6,5 @@
 
 #ifndef _FXFT_CFFOBJS_H_
 #define _FXFT_CFFOBJS_H_
-#include "../fxft2.5.01/src/cff/cffobjs.h"
+#include "../fxft2.5.4/src/cff/cffobjs.h"
 #endif

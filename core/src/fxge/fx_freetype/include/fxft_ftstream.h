@@ -6,5 +6,5 @@
 
 #ifndef _FXFT_FTSTREAM_H_
 #define _FXFT_FTSTREAM_H_
-#include "../fxft2.5.01/include/freetype/internal/ftstream.h"
+#include "../fxft2.5.4/include/freetype/internal/ftstream.h"
 #endif

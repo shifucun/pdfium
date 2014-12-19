@@ -6,5 +6,5 @@
 
 #ifndef _FXFT_FT2BUILD_H_
 #define _FXFT_FT2BUILD_H_
-#include "../fxft2.5.01/include/ft2build.h"
+#include "../fxft2.5.4/include/ft2build.h"
 #endif

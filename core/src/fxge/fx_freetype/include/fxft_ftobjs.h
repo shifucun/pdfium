@@ -6,5 +6,5 @@
 
 #ifndef _FXFT_FTOBJS_H_
 #define _FXFT_FTOBJS_H_
-#include "../fxft2.5.01/include/freetype/internal/ftobjs.h"
+#include "../fxft2.5.4/include/freetype/internal/ftobjs.h"
 #endif

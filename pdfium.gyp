@@ -4,7 +4,7 @@
   },
   'target_defaults': {
     'defines' : [
-      '_FXFT_VERSION_=2501',
+	  'FT2_BUILD_LIBRARY',
       '_FPDFSDK_LIB',
       '_NO_GDIPLUS_',  # workaround text rendering issues on Windows
       'OPJ_STATIC',
@@ -194,6 +194,9 @@
       'target_name': 'fpdfapi',
       'type': 'static_library',
       'ldflags': [ '-L<(PRODUCT_DIR)',],
+	  'include_dirs': [
+		'core/include/thirdparties/freetype',
+      ],
       'sources': [
         'core/include/fpdfapi/fpdfapi.h',
         'core/include/fpdfapi/fpdf_module.h',
@@ -551,6 +554,9 @@
       'target_name': 'fxge',
       'type': 'static_library',
       'ldflags': [ '-L<(PRODUCT_DIR)',],
+	  'include_dirs': [
+		'core/include/thirdparties/freetype',
+      ],
       'sources': [
         'core/include/fxge/fpf.h',
         'core/include/fxge/fx_dib.h',

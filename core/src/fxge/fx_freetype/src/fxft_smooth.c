@@ -4,4 +4,4 @@
  
 // Original code copyright 2014 Foxit Software Inc. http://www.foxitsoftware.com
 
-#include "../fxft2.5.01/src/smooth/fxft_smooth.c"
+#include "../fxft2.5.4/src/smooth/smooth.c"

@@ -6,5 +6,5 @@
 
 #ifndef _FXFT_TTTABLES_H_
 #define _FXFT_TTTABLES_H_
-#include "../fxft2.5.01/include/freetype/tttables.h"
+#include "../fxft2.5.4/include/freetype/tttables.h"
 #endif

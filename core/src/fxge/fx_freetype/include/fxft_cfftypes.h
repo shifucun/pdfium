@@ -6,5 +6,5 @@
 
 #ifndef _FXFT_FREETYPE_H_
 #define _FXFT_FREETYPE_H_
-#include "../fxft2.5.01/src/cff/cfftypes.h"
+#include "../fxft2.5.4/src/cff/cfftypes.h"
 #endif

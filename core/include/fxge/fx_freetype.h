@@ -5,11 +5,11 @@
 // Original code copyright 2014 Foxit Software Inc. http://www.foxitsoftware.com
 
 #include "../thirdparties/freetype/ft2build.h"
-#include "../thirdparties/freetype/freetype/freetype.h"
-#include "../thirdparties/freetype/freetype/ftoutln.h"
-#include "../thirdparties/freetype/freetype/ftmm.h"
-#include "../thirdparties/freetype/freetype/internal/ftobjs.h"
-#include "../thirdparties/freetype/freetype/tttables.h"
+#include "../thirdparties/freetype/freetype.h"
+#include "../thirdparties/freetype/ftoutln.h"
+#include "../thirdparties/freetype/ftmm.h"
+#include "../thirdparties/freetype/internal/ftobjs.h"
+#include "../thirdparties/freetype/tttables.h"
 #ifdef __cplusplus
 extern "C" {
 #endif

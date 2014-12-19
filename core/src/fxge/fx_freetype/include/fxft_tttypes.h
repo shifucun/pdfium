@@ -6,5 +6,5 @@
 
 #ifndef _FXFT_TTTYPES_H_
 #define _FXFT_TTTYPES_H_
-#include "../fxft2.5.01/include/freetype/internal/tttypes.h"
+#include "../fxft2.5.4/include/freetype/internal/tttypes.h"
 #endif
