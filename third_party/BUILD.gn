@@ -3,7 +3,11 @@
 # found in the LICENSE file.
 
 group("third_party") {
-
+  deps = [
+    ":bigint",
+    ":freetype",
+    ":safemath",
+  ]
 }
 
 static_library("bigint") {
@@ -71,3 +75,4 @@ component("safemath") {
     "numerics/safe_math_impl.h",
   ]
 }
+

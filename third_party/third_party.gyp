@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 {
+  'targets': [
     {
       'target_name': 'bigint',
       'type': 'static_library',
@@ -59,7 +60,6 @@
         'freetype/src/cid/type1cid.c',
       ],
     },
-    'targets': [
     {
       'target_name': 'safemath',
       'type': 'none',
