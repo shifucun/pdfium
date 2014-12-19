@@ -91,9 +91,9 @@ static_library("pdfium") {
   configs += [ ":pdfium_config", "//build/config/compiler:no_chromium_code" ]
 
   deps = [
-    "third_party:safemath",
     "third_party:bigint",
     "third_party:freetype",
+    "third_party:safemath",
     ":fdrm",
     ":formfiller",
     ":fpdfapi",

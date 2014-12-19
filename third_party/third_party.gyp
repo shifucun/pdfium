@@ -3,20 +3,6 @@
 # found in the LICENSE file.
 
 {
-  'targets': [
-    {
-      'target_name': 'safemath',
-      'type': 'none',
-      'sources': [
-        'logging.h',
-        'macros.h',
-        'template_util.h',
-        'numerics/safe_conversions.h',
-        'numerics/safe_conversions_impl.h',
-        'numerics/safe_math.h',
-        'numerics/safe_math_impl.h',
-      ],
-    },
     {
       'target_name': 'bigint',
       'type': 'static_library',
@@ -33,12 +19,12 @@
         'bigint/BigUnsignedInABase.cc',
       ],
     },
-	{
+    {
       'target_name': 'freetype',
       'type': 'static_library',
-	  'defines': [
-	    'FT2_BUILD_LIBRARY',
-	  ],
+      'defines': [
+        'FT2_BUILD_LIBRARY',
+      ],
       'include_dirs': [
          'freetype/include',
       ],
@@ -71,6 +57,20 @@
         'freetype/src/truetype/truetype.c',
         'freetype/src/type1/type1.c',
         'freetype/src/cid/type1cid.c',
+      ],
+    },
+    'targets': [
+    {
+      'target_name': 'safemath',
+      'type': 'none',
+      'sources': [
+        'logging.h',
+        'macros.h',
+        'template_util.h',
+        'numerics/safe_conversions.h',
+        'numerics/safe_conversions_impl.h',
+        'numerics/safe_math.h',
+        'numerics/safe_math_impl.h',
       ],
     },
   ],

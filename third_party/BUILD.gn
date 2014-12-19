@@ -3,21 +3,7 @@
 # found in the LICENSE file.
 
 group("third_party") {
-  deps = [
-    ":third_party",
-  ]
-}
 
-component("safemath") {
-  sources = [
-    "logging.h",
-    "macros.h",
-    "template_util.h",
-    "numerics/safe_conversions.h",
-    "numerics/safe_conversions_impl.h",
-    "numerics/safe_math.h",
-    "numerics/safe_math_impl.h",
-  ]
 }
 
 static_library("bigint") {
@@ -52,7 +38,7 @@ static_library("freetype") {
     "freetype/include/internal/ftobjs.h",
     "freetype/include/internal/ftstream.h",
     "freetype/include/internal/tttypes.h",
-	"freetype/src/cff/cffobjs.h",
+    "freetype/src/cff/cffobjs.h",
     "freetype/src/cff/cfftypes.h",
     "freetype/src/cff/cff.c",
     "freetype/src/base/ftbase.c",
@@ -71,5 +57,17 @@ static_library("freetype") {
     "freetype/src/truetype/truetype.c",
     "freetype/src/type1/type1.c",
     "freetype/src/cid/type1cid.c",
+  ]
+}
+
+component("safemath") {
+  sources = [
+    "logging.h",
+    "macros.h",
+    "template_util.h",
+    "numerics/safe_conversions.h",
+    "numerics/safe_conversions_impl.h",
+    "numerics/safe_math.h",
+    "numerics/safe_math_impl.h",
   ]
 }

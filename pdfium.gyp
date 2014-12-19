@@ -37,9 +37,9 @@
       'target_name': 'pdfium',
       'type': 'static_library',
       'dependencies': [
-        'third_party/third_party.gyp:safemath',
         'third_party/third_party.gyp:bigint',
         'third_party/third_party.gyp:freetype',
+        'third_party/third_party.gyp:safemath',
         'fdrm',
         'fpdfdoc',
         'fpdfapi',
