@@ -590,7 +590,6 @@
         'core/src/fxge/fontdata/chromefontdata/FoxitSerifItalic.c',
         'core/src/fxge/fontdata/chromefontdata/FoxitSerifMM.c',
         'core/src/fxge/fontdata/chromefontdata/FoxitSymbol.c',
-        'core/src/fxge/freetype/fx_freetype.h',
         'core/src/fxge/freetype/fx_freetype.c',
         'core/src/fxge/ge/fx_ge.cpp',
         'core/src/fxge/ge/fx_ge_device.cpp',

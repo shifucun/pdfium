@@ -4,12 +4,12 @@
  
 // Original code copyright 2014 Foxit Software Inc. http://www.foxitsoftware.com
 
-#include <ft2build.h>
-#include <freetype.h>
-#include <ftoutln.h>
-#include <ftmm.h>
-#include <internal/ftobjs.h>
-#include <tttables.h>
+#include "../../../third_party/freetype/include/ft2build.h"
+#include "../../../third_party/freetype/include/freetype.h"
+#include "../../../third_party/freetype/include/ftoutln.h"
+#include "../../../third_party/freetype/include/ftmm.h"
+#include "../../../third_party/freetype/include/internal/ftobjs.h"
+#include "../../../third_party/freetype/include/tttables.h"
 #ifdef __cplusplus
 extern "C" {
 #endif

@@ -51,8 +51,6 @@
          'freetype/include',
       ],
       'sources': [
-	    'freetype/src/cff/cffobjs.h',
-        'freetype/src/cff/cfftypes.h',
         'freetype/include/freetype.h',
         'freetype/include/ft2build.h',
         'freetype/include/ftmm.h',
@@ -62,6 +60,8 @@
         'freetype/include/internal/ftobjs.h',
         'freetype/include/internal/ftstream.h',
         'freetype/include/internal/tttypes.h',
+        'freetype/src/cff/cffobjs.h',
+        'freetype/src/cff/cfftypes.h',
         'freetype/src/cff/cff.c',
         'freetype/src/base/ftbase.c',
         'freetype/src/base/ftbitmap.c',
