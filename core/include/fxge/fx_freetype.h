@@ -138,7 +138,7 @@ typedef FT_CharMap		FXFT_CharMap;
 #define FXFT_Done_Glyph(glyph)	FT_Done_Glyph(glyph)
 #define FXFT_Library_SetLcdFilter(library, filter) FT_Library_SetLcdFilter((FT_Library)(library), filter)
 int FXFT_unicode_from_adobe_name(const char*  glyph_name);
-void FXFT_adobe_name_from_unicode(char* name, FT_UInt32 unicode);
+void FXFT_adobe_name_from_unicode(char* name, wchar_t unicode);
 #ifdef __cplusplus
 };
 #endif

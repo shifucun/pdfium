@@ -7,7 +7,7 @@
 #include "../../../include/fxge/fx_freetype.h"
 #include <psnames/pstables.h>
 
-static int xyq_search_node(char* glyph_name, int name_offset, int table_offset, FT_UInt32 unicode)
+static int xyq_search_node(char* glyph_name, int name_offset, int table_offset, wchar_t unicode)
 {
     int i, count;
 
@@ -26,7 +26,7 @@ static int xyq_search_node(char* glyph_name, int name_offset, int table_offset, 
     // check if we have value for this node
     if (ft_adobe_glyph_list[table_offset] & 0x80) {
         unsigned short thiscode = ft_adobe_glyph_list[table_offset + 1] * 256 + ft_adobe_glyph_list[table_offset + 2];
-        if (thiscode == unicode)	// found it!
+        if (thiscode == (unsigned short)unicode)	// found it!
             return 1;
         table_offset += 3;
     }
@@ -165,7 +165,7 @@ int FXFT_unicode_from_adobe_name(const char*  glyph_name)
     }
 }
 
-void FXFT_adobe_name_from_unicode(char* glyph_name, FT_UInt32 unicode)
+void FXFT_adobe_name_from_unicode(char* glyph_name, wchar_t unicode)
 {
     int i, count;
 
