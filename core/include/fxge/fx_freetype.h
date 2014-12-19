@@ -4,12 +4,12 @@
  
 // Original code copyright 2014 Foxit Software Inc. http://www.foxitsoftware.com
 
-#include "../thirdparties/freetype/ft2build.h"
-#include "../thirdparties/freetype/freetype.h"
-#include "../thirdparties/freetype/ftoutln.h"
-#include "../thirdparties/freetype/ftmm.h"
-#include "../thirdparties/freetype/internal/ftobjs.h"
-#include "../thirdparties/freetype/tttables.h"
+#include <ft2build.h>
+#include <freetype.h>
+#include <ftoutln.h>
+#include <ftmm.h>
+#include <internal/ftobjs.h>
+#include <tttables.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -137,8 +137,8 @@ typedef FT_CharMap		FXFT_CharMap;
 #define FXFT_Glyph_Get_CBox(glyph, bbox_mode, acbox) FT_Glyph_Get_CBox(glyph, bbox_mode, acbox)
 #define FXFT_Done_Glyph(glyph)	FT_Done_Glyph(glyph)
 #define FXFT_Library_SetLcdFilter(library, filter) FT_Library_SetLcdFilter((FT_Library)(library), filter)
-int FXFT_unicode_from_adobe_name(const char* name);
-void FXFT_adobe_name_from_unicode(char* name, unsigned int unicode);
+int FXFT_unicode_from_adobe_name(const char*  glyph_name);
+void FXFT_adobe_name_from_unicode(char* name, FT_UInt32 unicode);
 #ifdef __cplusplus
 };
 #endif

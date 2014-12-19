@@ -6,10 +6,10 @@
 
 #ifndef _FX_SRC_FREETYPE_H_
 #define _FX_SRC_FREETYPE_H_
-#include "./fxge/fx_freetype/fxft2.5.4/include/ft2build.h"
-#include "./fxge/fx_freetype/fxft2.5.4/include/freetype.h"
-#include "./fxge/fx_freetype/fxft2.5.4/include/ftoutln.h"
-#include "./fxge/fx_freetype/fxft2.5.4/include/ftmm.h"
-#include "./fxge/fx_freetype/fxft2.5.4/include/internal/ftobjs.h"
-#include "./fxge/fx_freetype/fxft2.5.4/include/tttables.h"
+#include "../../../third_party/freetype/include/ft2build.h"
+#include "../../../third_party/freetype/include/freetype.h"
+#include "../../../third_party/freetype/include/ftoutln.h"
+#include "../../../third_party/freetype/include/ftmm.h"
+#include "../../../third_party/freetype/include/internal/ftobjs.h"
+#include "../../../third_party/freetype/include/tttables.h"
 #endif
