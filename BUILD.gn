@@ -6,12 +6,17 @@ pdf_use_skia = false
 
 config("pdfium_config") {
   cflags = []
+
+  include_dirs = [
+    "third_party/freetype/include"
+  ]
   defines = [
-    "_FXFT_VERSION_=2501",
+    "FT2_BUILD_LIBRARY",
     "_FPDFSDK_LIB",
     "_NO_GDIPLUS_",  # workaround text rendering issues on Windows
     "OPJ_STATIC",
   ]
+
 
   if (pdf_use_skia) {
     defines += [ "_SKIA_SUPPORT_" ]

@@ -3,14 +3,6 @@
 # found in the LICENSE file.
 
 {
-  'target_defaults': {
-    'defines' : [
-	  'FT2_BUILD_LIBRARY',
-    ],
-    'include_dirs': [
-      'freetype/include',
-    ],
-  },
   'targets': [
     {
       'target_name': 'safemath',

@@ -4,7 +4,7 @@
   },
   'target_defaults': {
     'defines' : [
-	  'FT2_BUILD_LIBRARY',
+      'FT2_BUILD_LIBRARY',
       '_FPDFSDK_LIB',
       '_NO_GDIPLUS_',  # workaround text rendering issues on Windows
       'OPJ_STATIC',
@@ -526,9 +526,6 @@
       'target_name': 'fxge',
       'type': 'static_library',
       'ldflags': [ '-L<(PRODUCT_DIR)',],
-      'include_dirs': [
-        'third_party/freetype/src',
-      ],
       'sources': [
         'core/include/fxge/fpf.h',
         'core/include/fxge/fx_dib.h',

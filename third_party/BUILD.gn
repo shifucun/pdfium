@@ -36,6 +36,12 @@ static_library("bigint") {
 }
 
 static_library("freetype") {
+  defines = [
+    "FT2_BUILD_LIBRARY",
+  ]
+  include_dirs = [
+    "freetype/include",
+  ]
   sources = [
     "freetype/include/freetype.h",
     "freetype/include/ft2build.h",
@@ -65,8 +71,5 @@ static_library("freetype") {
     "freetype/src/truetype/truetype.c",
     "freetype/src/type1/type1.c",
     "freetype/src/cid/type1cid.c",
-  ]
-  include_dirs = [
-    "freetype/include",
   ]
 }
