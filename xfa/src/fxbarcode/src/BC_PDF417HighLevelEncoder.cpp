@@ -292,9 +292,9 @@ void CBC_PDF417HighLevelEncoder::encodeBinary(CFX_ByteArray* bytes, FX_INT32 sta
 void CBC_PDF417HighLevelEncoder::encodeNumeric(CFX_WideString msg, FX_INT32 startpos, FX_INT32 count, CFX_WideString &sb)
 {
     FX_INT32 idx = 0;
-    CFX_WideString tmp;
     BigInteger num900 = 900;
     while (idx < count - 1) {
+        CFX_WideString tmp;
         FX_INT32 len = 44 < count - idx ? 44 : count - idx;
         CFX_ByteString part = ((FX_WCHAR)'1' + msg.Mid(startpos + idx, len)).UTF8Encode();
         BigInteger bigint = stringToBigInteger(FX_LPCSTR(part));
