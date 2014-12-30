@@ -184,10 +184,18 @@ public:
 
     static CFX_ByteString	FromUnicode(const CFX_WideString& str);
 
+    // Explicit conversion to raw string
+    FX_LPCSTR c_str() const
+    {
+        return m_pData ? m_pData->m_String : "";
+    }
+
+    // Implicit conversion to C-style string -- deprecated
     operator				FX_LPCSTR() const
     {
         return m_pData ? m_pData->m_String : "";
     }
+
 
     operator				FX_LPCBYTE() const
     {
