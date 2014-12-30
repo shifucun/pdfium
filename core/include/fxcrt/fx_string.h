@@ -196,7 +196,6 @@ public:
         return m_pData ? m_pData->m_String : "";
     }
 
-
     operator				FX_LPCBYTE() const
     {
         return m_pData ? (FX_LPCBYTE)m_pData->m_String : NULL;
