@@ -848,11 +848,9 @@ DLLEXPORT FPDF_DEST STDCALL FPDF_GetNamedDest(FPDF_DOCUMENT document, int index,
     if (!pDestObj) return NULL;
     if (pDestObj->GetType() == PDFOBJ_DICTIONARY)
         pDestObj = ((CPDF_Dictionary*)pDestObj)->GetArray(FX_BSTRC("D"));
-    if (pDestObj->GetType() != PDFOBJ_ARRAY)
-        return NULL;
+    if (pDestObj->GetType() != PDFOBJ_ARRAY)  return NULL;
     CFX_WideString wsName = PDF_DecodeText(bsName);
     CFX_ByteString utf16Name = wsName.UTF16LE_Encode();
-    name = (FX_LPCSTR)utf16Name;
-
+    name = utf16Name.c_str();
     return (FPDF_DEST)pDestObj;
 }

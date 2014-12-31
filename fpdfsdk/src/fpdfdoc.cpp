@@ -54,7 +54,7 @@ DLLEXPORT unsigned long STDCALL FPDFBookmark_GetTitle(FPDF_BOOKMARK bookmark, FX
     CFX_ByteString bstr = title.UTF16LE_Encode(FALSE);
     unsigned long len = bstr.GetLength();
     if (buffer != NULL && buflen >= len + 2) {
-        FXSYS_memcpy(buffer, (FX_LPCSTR)bstr, len); // needs to change to bstr.c_str()
+        FXSYS_memcpy(buffer, bstr.c_str(), len);
         *(buffer + len) = '\0';
         *(buffer + len + 1) = '\0';
     }
