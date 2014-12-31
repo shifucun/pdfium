@@ -45,7 +45,7 @@ DLLEXPORT FPDF_BOOKMARK STDCALL FPDFBookmark_GetNextSibling(FPDF_DOCUMENT docume
     return (CPDF_Dictionary*)tree.GetNextSibling((CPDF_Dictionary*)bookmark);
 }
 
-DLLEXPORT unsigned long STDCALL FPDFBookmark_GetTitle(FPDF_BOOKMARK bookmark, FX_BYTE* buffer, unsigned long buflen)
+DLLEXPORT unsigned long STDCALL FPDFBookmark_GetTitle(FPDF_BOOKMARK bookmark, void* buffer, unsigned long buflen)
 {
     if (bookmark == NULL) return 0;
 
@@ -55,8 +55,7 @@ DLLEXPORT unsigned long STDCALL FPDFBookmark_GetTitle(FPDF_BOOKMARK bookmark, FX
     unsigned long len = bstr.GetLength();
     if (buffer != NULL && buflen >= len + 2) {
         FXSYS_memcpy(buffer, bstr.c_str(), len);
-        *(buffer + len) = '\0';
-        *(buffer + len + 1) = '\0';
+        ((FX_BYTE*)buffer)[len] = ((FX_BYTE*)buffer)[len + 1] = 0;
     }
     return len + 2;
 }

@@ -51,7 +51,7 @@ DLLEXPORT FPDF_BOOKMARK STDCALL FPDFBookmark_GetNextSibling(FPDF_DOCUMENT docume
 //          The return value always indicates the number of bytes required for the buffer, even if no buffer is specified
 //          or the buffer size is less then required. In these cases, the buffer will not be modified.
 //
-DLLEXPORT unsigned long STDCALL FPDFBookmark_GetTitle(FPDF_BOOKMARK bookmark, FX_BYTE* buffer, unsigned long buflen);
+DLLEXPORT unsigned long STDCALL FPDFBookmark_GetTitle(FPDF_BOOKMARK bookmark, void* buffer, unsigned long buflen);
 
 // Function: FPDFBookmark_Find
 //			Find a bookmark in the document, using the bookmark title.
