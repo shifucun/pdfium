@@ -8,6 +8,7 @@
 #ifndef _FPDFVIEW_H_
 #define _FPDFVIEW_H_
 
+#include <string>
 #if defined(_WIN32) && !defined(__WINDOWS__)
 #include <windows.h>
 #endif
@@ -602,6 +603,14 @@ DLLEXPORT FPDF_PAGERANGE STDCALL FPDF_VIEWERREF_GetPrintPageRange(FPDF_DOCUMENT 
 //
 DLLEXPORT FPDF_DUPLEXTYPE STDCALL FPDF_VIEWERREF_GetDuplex(FPDF_DOCUMENT document);
 
+// Function: FPDF_CountNamedDests
+//			Get the count of named destinations in the PDF document.
+// Parameters:
+//			document	-	Handle to a document
+// Return value:
+//			The count of named destinations.
+DLLEXPORT FPDF_DWORD STDCALL FPDF_CountNamedDests(FPDF_DOCUMENT document);
+
 // Function: FPDF_GetNamedDestByName
 //			get a special dest handle by the index.
 // Parameters: 
@@ -611,6 +620,17 @@ DLLEXPORT FPDF_DUPLEXTYPE STDCALL FPDF_VIEWERREF_GetDuplex(FPDF_DOCUMENT documen
 //			The handle of the dest.
 //
 DLLEXPORT FPDF_DEST STDCALL FPDF_GetNamedDestByName(FPDF_DOCUMENT document,FPDF_BYTESTRING name);
+
+// Function: FPDF_GetNamedDest
+//			Get the specified named destinations of the PDF document by index.
+// Parameters:
+//			document	-	Handle to a document
+//			index		-	The index of named destination.
+//			name		-	The name of the named destination.
+// Return value:
+//			The destination handle of a named destination.
+DLLEXPORT FPDF_DEST STDCALL FPDF_GetNamedDest(FPDF_DOCUMENT document, int index, std::string name);
+
 
 #ifdef __cplusplus
 };

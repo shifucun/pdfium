@@ -27,6 +27,40 @@ static CPDF_Bookmark FindBookmark(const CPDF_BookmarkTree& tree, CPDF_Bookmark b
 	return CPDF_Bookmark();
 }
 
+DLLEXPORT FPDF_BOOKMARK STDCALL FPDFBookmark_GetFirstChild(FPDF_DOCUMENT document, FPDF_BOOKMARK bookmark)
+{
+    if (document == NULL) return NULL;
+
+    CPDF_Document* pDoc = (CPDF_Document*)document;
+    CPDF_BookmarkTree tree(pDoc);
+    return (CPDF_Dictionary*)tree.GetFirstChild((CPDF_Dictionary*)bookmark);
+}
+
+DLLEXPORT FPDF_BOOKMARK STDCALL FPDFBookmark_GetNextSibling(FPDF_DOCUMENT document, FPDF_BOOKMARK bookmark)
+{
+    if (!document || !bookmark) return NULL;
+
+    CPDF_Document* pDoc = (CPDF_Document*)document;
+    CPDF_BookmarkTree tree(pDoc);
+    return (CPDF_Dictionary*)tree.GetNextSibling((CPDF_Dictionary*)bookmark);
+}
+
+DLLEXPORT unsigned long STDCALL FPDFBookmark_GetTitle(FPDF_BOOKMARK bookmark, FX_BYTE* buffer, unsigned long buflen)
+{
+    if (bookmark == NULL) return 0;
+
+    CPDF_Bookmark Bookmark = (CPDF_Dictionary*)bookmark;
+    CFX_WideString title = Bookmark.GetTitle();
+    CFX_ByteString bstr = title.UTF16LE_Encode(FALSE);
+    unsigned long len = bstr.GetLength();
+    if (buffer != NULL && buflen >= len + 2) {
+        FXSYS_memcpy(buffer, (FX_LPCSTR)bstr, len); // needs to change to bstr.c_str()
+        *(buffer + len) = '\0';
+        *(buffer + len + 1) = '\0';
+    }
+    return len + 2;
+}
+
 DLLEXPORT FPDF_BOOKMARK STDCALL FPDFBookmark_Find(FPDF_DOCUMENT document, FPDF_WIDESTRING title)
 {
 	if (!document)
