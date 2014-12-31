@@ -807,11 +807,11 @@ FX_INT32 CJBig2_Context::parseSymbolDict(CJBig2_Segment *pSegment, IFX_Pause* pP
     }
     pSegment->m_nResultType = JBIG2_SYMBOL_DICT_POINTER;
     for(std::list<CJBig2_CachePair>::iterator it =
-            (*m_pSymbolDictCache).begin(); it != (*m_pSymbolDictCache).end(); ++it) {
+            m_pSymbolDictCache->begin(); it != m_pSymbolDictCache->end(); ++it) {
         if (it->first == key) {
             pSegment->m_Result.sd = it->second->DeepCopy();
-            (*m_pSymbolDictCache).push_front(*it);
-            (*m_pSymbolDictCache).erase(it);
+            m_pSymbolDictCache->push_front(*it);
+            m_pSymbolDictCache->erase(it);
             cache_hit = true;
             break;
         }
@@ -837,11 +837,11 @@ FX_INT32 CJBig2_Context::parseSymbolDict(CJBig2_Segment *pSegment, IFX_Pause* pP
         }
         CJBig2_SymbolDict *value = pSegment->m_Result.sd->DeepCopy();
         if (value && kSymbolDictCacheMaxSize > 0) {
-            while ((*m_pSymbolDictCache).size() >= kSymbolDictCacheMaxSize) {
-                delete (*m_pSymbolDictCache).back().second;
-                (*m_pSymbolDictCache).pop_back();
+            while (m_pSymbolDictCache->size() >= kSymbolDictCacheMaxSize) {
+                delete m_pSymbolDictCache->back().second;
+                m_pSymbolDictCache->pop_back();
             }
-            (*m_pSymbolDictCache).push_front(CJBig2_CachePair(key, value));
+            m_pSymbolDictCache->push_front(CJBig2_CachePair(key, value));
         }
     }
     if(wFlags & 0x0200) {
