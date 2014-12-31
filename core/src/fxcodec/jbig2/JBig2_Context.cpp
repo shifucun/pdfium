@@ -836,7 +836,7 @@ FX_INT32 CJBig2_Context::parseSymbolDict(CJBig2_Segment *pSegment, IFX_Pause* pP
             m_pStream->alignByte();
         }
         CJBig2_SymbolDict *value = pSegment->m_Result.sd->DeepCopy();
-        if (value) {
+        if (value && kSymbolDictCacheMaxSize > 0) {
             while ((*m_pSymbolDictCache).size() >= kSymbolDictCacheMaxSize) {
                 delete (*m_pSymbolDictCache).back().second;
                 (*m_pSymbolDictCache).pop_back();
