@@ -5,6 +5,7 @@
 // Original code copyright 2014 Foxit Software Inc. http://www.foxitsoftware.com
 
 #include <limits.h>
+#include <list>
 class CCodec_BasicModule : public ICodec_BasicModule
 {
 public:
@@ -268,5 +269,6 @@ public:
     FXCODEC_STATUS		ContinueDecode(void* pJbig2Context, IFX_Pause* pPause);
     void				DestroyJbig2Context(void* pJbig2Context);
     CPDF_Jbig2Interface	m_Module;
+    std::list<CJBig2_CachePair> m_SymbolDictCache;
 private:
 };
