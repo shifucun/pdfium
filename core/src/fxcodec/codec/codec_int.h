@@ -6,6 +6,7 @@
 
 #include <limits.h>
 #include <list>
+#include "../jbig2/JBig2_Context.h"
 class CCodec_BasicModule : public ICodec_BasicModule
 {
 public:
@@ -197,7 +198,6 @@ public:
     FX_BOOL		Decode(void* ctx, FX_LPBYTE dest_data, int pitch, FX_BOOL bTranslateColor, FX_LPBYTE offsets);
     void		DestroyDecoder(void* ctx);
 };
-#include "../jbig2/JBig2_Context.h"
 class CPDF_Jbig2Interface : public CFX_Object, public CJBig2_Module
 {
 public:
