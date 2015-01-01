@@ -9,7 +9,7 @@
 
 static int THISMODULE = 0;
 
-static CPDF_Bookmark FindBookmark(CPDF_BookmarkTree& tree, CPDF_Bookmark bookmark, const CFX_WideString& title)
+static CPDF_Bookmark FindBookmark(const CPDF_BookmarkTree& tree, CPDF_Bookmark bookmark, const CFX_WideString& title)
 {
 	if (bookmark.GetDict() && bookmark.GetTitle().CompareNoCase(title) == 0) {
 		// First check this item

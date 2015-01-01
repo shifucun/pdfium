@@ -76,26 +76,15 @@ protected:
 class CPDF_BookmarkTree : public CFX_Object
 {
 public:
+	CPDF_BookmarkTree(CPDF_Document* pDoc) : m_pDocument(pDoc) {}
 
-    CPDF_BookmarkTree(CPDF_Document* pDoc)
-    {
-        m_pDocument = pDoc;
-    }
-public:
+    CPDF_Bookmark		GetFirstChild(CPDF_Bookmark parent) const;
 
+    CPDF_Bookmark		GetNextSibling(CPDF_Bookmark bookmark) const;
 
+    CPDF_Document*		GetDocument() const { return m_pDocument; }
 
-    CPDF_Bookmark		GetFirstChild(CPDF_Bookmark parent);
-
-    CPDF_Bookmark		GetNextSibling(CPDF_Bookmark bookmark);
-
-
-    CPDF_Document*		GetDocument() const
-    {
-        return m_pDocument;
-    }
 protected:
-
     CPDF_Document*		m_pDocument;
 };
 #define PDFBOOKMARK_ITALIC			1
@@ -104,31 +93,19 @@ class CPDF_Bookmark : public CFX_Object
 {
 public:
 
-    CPDF_Bookmark(CPDF_Dictionary* pDict = NULL)
-    {
-        m_pDict = pDict;
-    }
+	CPDF_Bookmark(CPDF_Dictionary* pDict = NULL) : m_pDict(pDict) {}
 
-    CPDF_Dictionary* GetDict() const
-    {
-        return m_pDict;
-    }
+	CPDF_Dictionary* GetDict() const {return m_pDict;}
 
+    FX_DWORD			GetColorRef() const;
 
+    FX_DWORD			GetFontStyle() const;
 
-    FX_DWORD			GetColorRef();
+    CFX_WideString		GetTitle() const;
 
-    FX_DWORD			GetFontStyle();
+    CPDF_Dest			GetDest(CPDF_Document* pDocument) const;
 
-    CFX_WideString		GetTitle();
-
-
-
-
-    CPDF_Dest			GetDest(CPDF_Document* pDocument);
-
-    CPDF_Action			GetAction();
-
+    CPDF_Action			GetAction() const;
 
     CPDF_Dictionary*	m_pDict;
 };
@@ -139,7 +116,6 @@ public:
 #define PDFZOOM_FITRECT				5
 #define PDFZOOM_FITBBOX				6
 #define PDFZOOM_FITBHORZ			7
-
 #define PDFZOOM_FITBVERT			8
 class CPDF_Dest : public CFX_Object
 {
