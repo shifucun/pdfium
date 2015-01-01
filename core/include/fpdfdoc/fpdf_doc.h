@@ -109,7 +109,7 @@ public:
         m_pDict = pDict;
     }
 
-    operator CPDF_Dictionary*() const
+    CPDF_Dictionary* GetDict() const
     {
         return m_pDict;
     }
