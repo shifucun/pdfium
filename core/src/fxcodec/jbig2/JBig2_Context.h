@@ -13,6 +13,7 @@
 #include "JBig2_GeneralDecoder.h"
 #include "../../../include/fxcodec/fx_codec_def.h"
 #include "../../../include/fxcrt/fx_basic.h"
+#include <utility>
 typedef std::pair<FX_BYTE*, CJBig2_SymbolDict*> CJBig2_CachePair;
 typedef enum {
     JBIG2_OUT_OF_PAGE = 0,
