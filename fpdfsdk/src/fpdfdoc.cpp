@@ -259,7 +259,8 @@ DLLEXPORT unsigned long STDCALL FPDF_GetMetaText(FPDF_DOCUMENT doc, FPDF_BYTESTR
 	if (buffer && buflen >= len + 2) {
 		FXSYS_memcpy(buffer, encodedText.c_str(), len);
 		// use double zero as trailer
-		((FX_BYTE*)buffer)[len] = ((FX_BYTE*)buffer)[len+1] = 0;
+		((FX_BYTE*)buffer)[len] = 0;
+		((FX_BYTE*)buffer)[len + 1] = 0;
 	}
 	return len+2;
 }
