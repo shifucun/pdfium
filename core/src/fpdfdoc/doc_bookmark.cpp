@@ -18,11 +18,11 @@ CPDF_Bookmark CPDF_BookmarkTree::GetFirstChild(CPDF_Bookmark parent) const
 }
 CPDF_Bookmark CPDF_BookmarkTree::GetNextSibling(CPDF_Bookmark bookmark) const
 {
-	if (!bookmark.m_pDict) {
+    if (!bookmark.m_pDict) {
         return NULL;
     }
-	CPDF_Dictionary *pNext = bookmark.m_pDict->GetDict("Next");
-	return pNext == bookmark.m_pDict ? NULL : pNext;
+    CPDF_Dictionary *pNext = bookmark.m_pDict->GetDict("Next");
+    return pNext == bookmark.m_pDict ? NULL : pNext;
 }
 FX_DWORD CPDF_Bookmark::GetColorRef() const
 {
@@ -57,11 +57,11 @@ CFX_WideString CPDF_Bookmark::GetTitle() const
     CFX_WideString title = pString->GetUnicodeText();
     FX_LPWSTR buf = title.LockBuffer();
     int len = title.GetLength(), i;
-	for (i = 0; i < len; i++) {
-		if (buf[i] < 0x20) {
-			buf[i] = 0x20;
-		}
-	}
+    for (i = 0; i < len; i++) {
+        if (buf[i] < 0x20) {
+            buf[i] = 0x20;
+        }
+    }
     title.ReleaseBuffer(len);
     return title;
 }

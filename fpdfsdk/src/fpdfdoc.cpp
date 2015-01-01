@@ -33,7 +33,6 @@ DLLEXPORT FPDF_BOOKMARK STDCALL FPDFBookmark_Find(FPDF_DOCUMENT document, FPDF_W
 		return NULL;
 	if (!title || title[0] == 0)
 		return NULL;
-
 	CPDF_Document* pDoc = (CPDF_Document*)document;
 	CPDF_BookmarkTree tree(pDoc);
 	FX_STRSIZE len = CFX_WideString::WStringLength(title);
@@ -47,7 +46,6 @@ DLLEXPORT FPDF_DEST STDCALL FPDFBookmark_GetDest(FPDF_DOCUMENT document, FPDF_BO
 		return NULL;
 	if (!pDict)
 		return NULL;
-
 	CPDF_Bookmark bookmark = (CPDF_Dictionary*)pDict;
 	CPDF_Document* pDoc = (CPDF_Document*)document;
 	CPDF_Dest dest = bookmark.GetDest(pDoc);
@@ -64,8 +62,7 @@ DLLEXPORT FPDF_ACTION STDCALL FPDFBookmark_GetAction(FPDF_BOOKMARK pDict)
 {
 	if (!pDict)
 		return NULL;
-
-	CPDF_Bookmark bookmark((CPDF_Dictionary*)pDict);
+	CPDF_Bookmark bookmark = (CPDF_Dictionary*)pDict;
 	return bookmark.GetAction();
 }
 
@@ -73,7 +70,6 @@ DLLEXPORT unsigned long STDCALL FPDFAction_GetType(FPDF_ACTION pDict)
 {
 	if (!pDict)
 		return 0;
-
 	CPDF_Action action = (CPDF_Dictionary*)pDict;
 	CPDF_Action::ActionType type = action.GetType();
 	switch (type) {
@@ -126,7 +122,6 @@ DLLEXPORT unsigned long STDCALL FPDFDest_GetPageIndex(FPDF_DOCUMENT document, FP
 		return 0;
 	CPDF_Document* pDoc = (CPDF_Document*)document;
 	CPDF_Dest dest = (CPDF_Array*)pDict;
-
 	return dest.GetPageIndex(pDoc);
 }
 
@@ -140,7 +135,6 @@ DLLEXPORT FPDF_LINK STDCALL FPDFLink_GetLinkAtPoint(FPDF_PAGE page, double x, do
 	if (!page)
 		return NULL;
 	CPDF_Page* pPage = (CPDF_Page*)page;
-
 	// Link list is stored with the document
 	CPDF_Document* pDoc = pPage->m_pDocument;
 	CPDF_LinkList* pLinkList = (CPDF_LinkList*)pDoc->GetPrivateData(&THISMODULE);
@@ -148,7 +142,6 @@ DLLEXPORT FPDF_LINK STDCALL FPDFLink_GetLinkAtPoint(FPDF_PAGE page, double x, do
 		pLinkList = FX_NEW CPDF_LinkList(pDoc);
 		pDoc->SetPrivateData(&THISMODULE, pLinkList, ReleaseLinkList);
 	}
-
 	return pLinkList->GetLinkAtPoint(pPage, (FX_FLOAT)x, (FX_FLOAT)y);
 }
 
@@ -164,7 +157,6 @@ DLLEXPORT FPDF_DEST STDCALL FPDFLink_GetDest(FPDF_DOCUMENT document, FPDF_LINK p
 	FPDF_DEST dest = link.GetDest(pDoc);
 	if (dest)
 		return dest;
-
 	// If this link is not directly associated with a dest, we try to get action
 	CPDF_Action action = link.GetAction();
 	if (!action)
@@ -177,7 +169,6 @@ DLLEXPORT FPDF_ACTION STDCALL FPDFLink_GetAction(FPDF_LINK pDict)
 	if (!pDict)
 		return NULL;
 	CPDF_Link link = (CPDF_Dictionary*)pDict;
-
 	return link.GetAction();
 }
 

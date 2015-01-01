@@ -76,7 +76,7 @@ protected:
 class CPDF_BookmarkTree : public CFX_Object
 {
 public:
-	CPDF_BookmarkTree(CPDF_Document* pDoc) : m_pDocument(pDoc) {}
+    CPDF_BookmarkTree(CPDF_Document* pDoc) : m_pDocument(pDoc) {}
 
     CPDF_Bookmark		GetFirstChild(CPDF_Bookmark parent) const;
 
@@ -93,9 +93,9 @@ class CPDF_Bookmark : public CFX_Object
 {
 public:
 
-	CPDF_Bookmark(CPDF_Dictionary* pDict = NULL) : m_pDict(pDict) {}
+    CPDF_Bookmark(CPDF_Dictionary* pDict = NULL) : m_pDict(pDict) {}
 
-	CPDF_Dictionary* GetDict() const {return m_pDict;}
+    CPDF_Dictionary* GetDict() const {return m_pDict;}
 
     FX_DWORD			GetColorRef() const;
 
