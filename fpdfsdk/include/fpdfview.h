@@ -124,17 +124,6 @@ extern const char g_ModuleCodes[];
 extern "C" {
 #endif
 
-#ifndef _FPDF_DEF_STR_
-#define _FPDF_DEF_STR_
-	// brief Structure for byte string.
-	// note In SDK, a byte string commonly means a UTF-16LE format string.
-	typedef struct
-	{
-		char*	str;
-		int	len;
-	} FPDF_BSTR;
-#endif
-
 // Function: FPDF_InitLibrary
 //			Initialize the FPDFSDK library 
 // Parameters:
@@ -640,7 +629,7 @@ DLLEXPORT FPDF_DEST STDCALL FPDF_GetNamedDestByName(FPDF_DOCUMENT document,FPDF_
 //			name		-	The name of the named destination.
 // Return value:
 //			The destination handle of a named destination.
-DLLEXPORT FPDF_DEST STDCALL FPDF_GetNamedDest(FPDF_DOCUMENT document, int index, std::string name);
+DLLEXPORT FPDF_DEST STDCALL FPDF_GetNamedDest(FPDF_DOCUMENT document, int index, std::string& name);
 
 
 #ifdef __cplusplus
