@@ -11,16 +11,16 @@ static int THISMODULE = 0;
 
 static CPDF_Bookmark FindBookmark(const CPDF_BookmarkTree& tree, CPDF_Bookmark bookmark, const CFX_WideString& title)
 {
-	if (bookmark.GetDict() && bookmark.GetTitle().CompareNoCase(title) == 0) {
+	if (bookmark && bookmark.GetTitle().CompareNoCase(title) == 0) {
 		// First check this item
 		return bookmark;
 	}
 	// go into children items
 	CPDF_Bookmark child = tree.GetFirstChild(bookmark);
-	while (child.GetDict()) {
+	while (child) {
 		// check if this item
 		CPDF_Bookmark found = FindBookmark(tree, child, title);
-		if (found.GetDict())
+		if (found)
 			return found;
 		child = tree.GetNextSibling(child);
 	}

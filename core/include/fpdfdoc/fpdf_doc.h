@@ -78,9 +78,9 @@ class CPDF_BookmarkTree : public CFX_Object
 public:
     CPDF_BookmarkTree(CPDF_Document* pDoc) : m_pDocument(pDoc) {}
 
-    CPDF_Bookmark		GetFirstChild(CPDF_Bookmark parent) const;
+    CPDF_Bookmark		GetFirstChild(const CPDF_Bookmark& parent) const;
 
-    CPDF_Bookmark		GetNextSibling(CPDF_Bookmark bookmark) const;
+    CPDF_Bookmark		GetNextSibling(const CPDF_Bookmark& bookmark) const;
 
     CPDF_Document*		GetDocument() const { return m_pDocument; }
 
@@ -95,7 +95,9 @@ public:
 
     CPDF_Bookmark(CPDF_Dictionary* pDict = NULL) : m_pDict(pDict) {}
 
-    CPDF_Dictionary* GetDict() const {return m_pDict;}
+    CPDF_Dictionary* GetDict() const { return m_pDict; }
+
+    operator bool() const { return m_pDict != NULL; }
 
     FX_DWORD			GetColorRef() const;
 

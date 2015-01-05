@@ -5,7 +5,7 @@
 // Original code copyright 2014 Foxit Software Inc. http://www.foxitsoftware.com
 
 #include "../../include/fpdfdoc/fpdf_doc.h"
-CPDF_Bookmark CPDF_BookmarkTree::GetFirstChild(CPDF_Bookmark parent) const
+CPDF_Bookmark CPDF_BookmarkTree::GetFirstChild(const CPDF_Bookmark& parent) const
 {
     if (!parent.m_pDict) {
         CPDF_Dictionary* pRoot = m_pDocument->GetRoot()->GetDict("Outlines");
@@ -16,7 +16,7 @@ CPDF_Bookmark CPDF_BookmarkTree::GetFirstChild(CPDF_Bookmark parent) const
     }
     return parent.m_pDict->GetDict("First");
 }
-CPDF_Bookmark CPDF_BookmarkTree::GetNextSibling(CPDF_Bookmark bookmark) const
+CPDF_Bookmark CPDF_BookmarkTree::GetNextSibling(const CPDF_Bookmark& bookmark) const
 {
     if (!bookmark.m_pDict) {
         return NULL;
@@ -56,8 +56,8 @@ CFX_WideString CPDF_Bookmark::GetTitle() const
     }
     CFX_WideString title = pString->GetUnicodeText();
     FX_LPWSTR buf = title.LockBuffer();
-    int len = title.GetLength(), i;
-    for (i = 0; i < len; i++) {
+    int len = title.GetLength();
+    for (int i = 0; i < len; i++) {
         if (buf[i] < 0x20) {
             buf[i] = 0x20;
         }
