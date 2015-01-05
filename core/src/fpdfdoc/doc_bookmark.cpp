@@ -10,19 +10,19 @@ CPDF_Bookmark CPDF_BookmarkTree::GetFirstChild(const CPDF_Bookmark& parent) cons
     if (!parent.m_pDict) {
         CPDF_Dictionary* pRoot = m_pDocument->GetRoot()->GetDict("Outlines");
         if (!pRoot) {
-            return NULL;
+            return CPDF_Bookmark();
         }
-        return pRoot->GetDict("First");
+        return CPDF_Bookmark(pRoot->GetDict("First"));
     }
-    return parent.m_pDict->GetDict("First");
+    return CPDF_Bookmark(parent.m_pDict->GetDict("First"));
 }
 CPDF_Bookmark CPDF_BookmarkTree::GetNextSibling(const CPDF_Bookmark& bookmark) const
 {
     if (!bookmark.m_pDict) {
-        return NULL;
+        return CPDF_Bookmark();
     }
     CPDF_Dictionary *pNext = bookmark.m_pDict->GetDict("Next");
-    return pNext == bookmark.m_pDict ? NULL : pNext;
+    return pNext == bookmark.m_pDict ? CPDF_Bookmark() : CPDF_Bookmark(pNext);
 }
 FX_DWORD CPDF_Bookmark::GetColorRef() const
 {

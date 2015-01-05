@@ -93,7 +93,9 @@ class CPDF_Bookmark : public CFX_Object
 {
 public:
 
-    CPDF_Bookmark(CPDF_Dictionary* pDict = NULL) : m_pDict(pDict) {}
+    CPDF_Bookmark() : m_pDict(NULL) {}
+
+    explicit CPDF_Bookmark(CPDF_Dictionary* pDict) : m_pDict(pDict) {}
 
     CPDF_Dictionary* GetDict() const { return m_pDict; }
 

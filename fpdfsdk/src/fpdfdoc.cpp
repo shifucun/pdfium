@@ -24,7 +24,7 @@ static CPDF_Bookmark FindBookmark(const CPDF_BookmarkTree& tree, CPDF_Bookmark b
 			return found;
 		child = tree.GetNextSibling(child);
 	}
-	return CPDF_Bookmark(NULL);
+	return CPDF_Bookmark();
 }
 
 DLLEXPORT FPDF_BOOKMARK STDCALL FPDFBookmark_Find(FPDF_DOCUMENT document, FPDF_WIDESTRING title)
@@ -37,7 +37,7 @@ DLLEXPORT FPDF_BOOKMARK STDCALL FPDFBookmark_Find(FPDF_DOCUMENT document, FPDF_W
 	CPDF_BookmarkTree tree(pDoc);
 	FX_STRSIZE len = CFX_WideString::WStringLength(title);
 	CFX_WideString encodedTitle = CFX_WideString::FromUTF16LE(title, len);
-	return FindBookmark(tree, NULL, encodedTitle).GetDict();
+	return FindBookmark(tree, CPDF_Bookmark(), encodedTitle).GetDict();
 }
 
 DLLEXPORT FPDF_DEST STDCALL FPDFBookmark_GetDest(FPDF_DOCUMENT document, FPDF_BOOKMARK pDict)
@@ -46,7 +46,7 @@ DLLEXPORT FPDF_DEST STDCALL FPDFBookmark_GetDest(FPDF_DOCUMENT document, FPDF_BO
 		return NULL;
 	if (!pDict)
 		return NULL;
-	CPDF_Bookmark bookmark = (CPDF_Dictionary*)pDict;
+	CPDF_Bookmark bookmark((CPDF_Dictionary*)pDict);
 	CPDF_Document* pDoc = (CPDF_Document*)document;
 	CPDF_Dest dest = bookmark.GetDest(pDoc);
 	if (dest)
@@ -62,7 +62,7 @@ DLLEXPORT FPDF_ACTION STDCALL FPDFBookmark_GetAction(FPDF_BOOKMARK pDict)
 {
 	if (!pDict)
 		return NULL;
-	CPDF_Bookmark bookmark = (CPDF_Dictionary*)pDict;
+	CPDF_Bookmark bookmark((CPDF_Dictionary*)pDict);
 	return bookmark.GetAction();
 }
 
