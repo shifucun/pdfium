@@ -124,6 +124,17 @@ extern const char g_ModuleCodes[];
 extern "C" {
 #endif
 
+#ifndef _FPDF_DEF_STR_
+#define _FPDF_DEF_STR_
+	// brief Structure for byte string.
+	// note In SDK, a byte string commonly means a UTF-16LE format string.
+	typedef struct
+	{
+		char*	str;
+		int	len;
+	} FPDF_BSTR;
+#endif
+
 // Function: FPDF_InitLibrary
 //			Initialize the FPDFSDK library 
 // Parameters:

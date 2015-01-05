@@ -27,35 +27,38 @@ static CPDF_Bookmark FindBookmark(const CPDF_BookmarkTree& tree, CPDF_Bookmark b
 	return CPDF_Bookmark();
 }
 
-DLLEXPORT FPDF_BOOKMARK STDCALL FPDFBookmark_GetFirstChild(FPDF_DOCUMENT document, FPDF_BOOKMARK bookmark)
+DLLEXPORT FPDF_BOOKMARK STDCALL FPDFBookmark_GetFirstChild(FPDF_DOCUMENT document, FPDF_BOOKMARK pDict)
 {
-    if (document == NULL) return NULL;
-
+    if (!document)
+		return NULL;
     CPDF_Document* pDoc = (CPDF_Document*)document;
     CPDF_BookmarkTree tree(pDoc);
-    return (CPDF_Dictionary*)tree.GetFirstChild((CPDF_Dictionary*)bookmark);
+	CPDF_Bookmark bookmark = CPDF_Bookmark((CPDF_Dictionary*)pDict);
+    return tree.GetFirstChild(bookmark).GetDict();
 }
 
-DLLEXPORT FPDF_BOOKMARK STDCALL FPDFBookmark_GetNextSibling(FPDF_DOCUMENT document, FPDF_BOOKMARK bookmark)
+DLLEXPORT FPDF_BOOKMARK STDCALL FPDFBookmark_GetNextSibling(FPDF_DOCUMENT document, FPDF_BOOKMARK pDict)
 {
-    if (!document || !bookmark) return NULL;
-
+    if (!document || !pDict)
+		return NULL;
     CPDF_Document* pDoc = (CPDF_Document*)document;
     CPDF_BookmarkTree tree(pDoc);
-    return (CPDF_Dictionary*)tree.GetNextSibling((CPDF_Dictionary*)bookmark);
+	CPDF_Bookmark bookmark = CPDF_Bookmark((CPDF_Dictionary*)pDict);
+	return tree.GetNextSibling(bookmark).GetDict();
 }
 
-DLLEXPORT unsigned long STDCALL FPDFBookmark_GetTitle(FPDF_BOOKMARK bookmark, void* buffer, unsigned long buflen)
+DLLEXPORT unsigned long STDCALL FPDFBookmark_GetTitle(FPDF_BOOKMARK pDict, void* buffer, unsigned long buflen)
 {
-    if (bookmark == NULL) return 0;
-
-    CPDF_Bookmark Bookmark = (CPDF_Dictionary*)bookmark;
-    CFX_WideString title = Bookmark.GetTitle();
-    CFX_ByteString bstr = title.UTF16LE_Encode(FALSE);
-    unsigned long len = bstr.GetLength();
-    if (buffer != NULL && buflen >= len + 2) {
-        FXSYS_memcpy(buffer, bstr.c_str(), len);
-        ((FX_BYTE*)buffer)[len] = ((FX_BYTE*)buffer)[len + 1] = 0;
+    if (!NULL)
+		return 0;
+    CPDF_Bookmark bookmark((CPDF_Dictionary*)pDict);
+    CFX_WideString title = bookmark.GetTitle();
+    CFX_ByteString encodedTitle = title.UTF16LE_Encode(FALSE);
+	unsigned long len = encodedTitle.GetLength();
+    if (buffer && buflen >= len + 2) {
+		FXSYS_memcpy(buffer, encodedTitle.c_str(), len);
+		((FX_BYTE*)buffer)[len] = 0;
+		((FX_BYTE*)buffer)[len + 1] = 0;
     }
     return len + 2;
 }

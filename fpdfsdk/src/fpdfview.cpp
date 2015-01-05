@@ -793,6 +793,7 @@ DLLEXPORT FPDF_DWORD STDCALL FPDF_CountNamedDests(FPDF_DOCUMENT document)
 {
     if (!document) return 0;
     CPDF_Document* pDoc = (CPDF_Document*)document;
+
     CPDF_Dictionary* pRoot = pDoc->GetRoot();
     if (!pRoot) return 0;
 
@@ -806,9 +807,9 @@ DLLEXPORT FPDF_DWORD STDCALL FPDF_CountNamedDests(FPDF_DOCUMENT document)
 
 DLLEXPORT FPDF_DEST STDCALL FPDF_GetNamedDestByName(FPDF_DOCUMENT document,FPDF_BYTESTRING name)
 {
-	if (document == NULL)
+	if (!document)
 		return NULL;
-	if (name == NULL || name[0] == 0) 
+	if (!name || name[0] == 0) 
 		return NULL;
 
 	CPDF_Document* pDoc = (CPDF_Document*)document;
@@ -820,19 +821,18 @@ DLLEXPORT FPDF_DEST STDCALL FPDF_GetNamedDest(FPDF_DOCUMENT document, int index,
 {
     if (!document || index < 0) return NULL;
     CPDF_Document* pDoc = (CPDF_Document*)document;
+
     CPDF_Dictionary* pRoot = pDoc->GetRoot();
     if (!pRoot) return NULL;
 
     CPDF_Object* pDestObj = NULL;
     CFX_ByteString bsName;
-
     CPDF_NameTree nameTree(pDoc, FX_BSTRC("Dests"));
     int count = nameTree.GetCount();
     if (index >= count) {
         CPDF_Dictionary* pDest = pRoot->GetDict(FX_BSTRC("Dests"));
         if (!pDest) return NULL;
-        if (index >= count + pDest->GetCount())
-            return NULL;
+        if (index >= count + pDest->GetCount()) return NULL;
         index -= count;
         FX_POSITION pos = pDest->GetStartPos();
         int i = 0;
@@ -848,7 +848,7 @@ DLLEXPORT FPDF_DEST STDCALL FPDF_GetNamedDest(FPDF_DOCUMENT document, int index,
     if (!pDestObj) return NULL;
     if (pDestObj->GetType() == PDFOBJ_DICTIONARY)
         pDestObj = ((CPDF_Dictionary*)pDestObj)->GetArray(FX_BSTRC("D"));
-    if (pDestObj->GetType() != PDFOBJ_ARRAY)  return NULL;
+    if (pDestObj->GetType() != PDFOBJ_ARRAY) return NULL;
     CFX_WideString wsName = PDF_DecodeText(bsName);
     CFX_ByteString utf16Name = wsName.UTF16LE_Encode();
     name = utf16Name.c_str();
