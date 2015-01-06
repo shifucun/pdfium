@@ -627,9 +627,15 @@ DLLEXPORT FPDF_DEST STDCALL FPDF_GetNamedDestByName(FPDF_DOCUMENT document,FPDF_
 //			document	-	Handle to a document
 //			index		-	The index of named destination.
 //			name		-	The name of the named destination.
+//			len		-	The length of name.
 // Return value:
-//			The destination handle of a named destination.
-DLLEXPORT FPDF_DEST STDCALL FPDF_GetNamedDest(FPDF_DOCUMENT document, int index, std::string& name);
+//			The destination handle of a named destination, NULL when retrieving the length.
+// Comments:
+//			Call this function twice to get the name of the named destination:
+//			1) First time pass in |name| as NULL and retrieve length of |name|, including the trailing '\0'.
+//			2) Second time pass in allocated |name| and its length to retrieve |name|.
+//
+DLLEXPORT FPDF_DEST STDCALL FPDF_GetNamedDest(FPDF_DOCUMENT document, int index, char* name, unsigned int& len);
 
 
 #ifdef __cplusplus

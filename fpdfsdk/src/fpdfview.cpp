@@ -817,8 +817,10 @@ DLLEXPORT FPDF_DEST STDCALL FPDF_GetNamedDestByName(FPDF_DOCUMENT document,FPDF_
 	return name_tree.LookupNamedDest(pDoc, name);
 }
 
-DLLEXPORT FPDF_DEST STDCALL FPDF_GetNamedDest(FPDF_DOCUMENT document, int index, std::string& name)
+DLLEXPORT FPDF_DEST STDCALL FPDF_GetNamedDest(FPDF_DOCUMENT document, int index, char* name, unsigned int& len)
 {
+    if (!name)
+        len = 0;
     if (!document || index < 0) return NULL;
     CPDF_Document* pDoc = (CPDF_Document*)document;
 
@@ -849,8 +851,13 @@ DLLEXPORT FPDF_DEST STDCALL FPDF_GetNamedDest(FPDF_DOCUMENT document, int index,
     if (pDestObj->GetType() == PDFOBJ_DICTIONARY)
         pDestObj = ((CPDF_Dictionary*)pDestObj)->GetArray(FX_BSTRC("D"));
     if (pDestObj->GetType() != PDFOBJ_ARRAY) return NULL;
-    CFX_WideString wsName = PDF_DecodeText(bsName);
-    CFX_ByteString utf16Name = wsName.UTF16LE_Encode();
-    name = utf16Name.c_str();
+    if (!name) {
+        len = bsName.GetLength() + 1;
+    } else {
+        CFX_WideString wsName = PDF_DecodeText(bsName);
+        CFX_ByteString utf16Name = wsName.UTF16LE_Encode();
+        memcpy(name, utf16Name.c_str(), len-1);
+        name[len-1] = '\0';
+    }
     return (FPDF_DEST)pDestObj;
 }
