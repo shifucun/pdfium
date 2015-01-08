@@ -21,12 +21,12 @@
  */
 
 #include "../barcode.h"
-#include "../BC_Encoder.h"
+#include "BC_Encoder.h"
 #include "../BC_Dimension.h"
 #include "BC_SymbolShapeHint.h"
 #include "BC_SymbolInfo.h"
 #include "BC_EncoderContext.h"
-#include "../BC_HighLevelEncoder.h"
+#include "BC_HighLevelEncoder.h"
 #include "BC_ASCIIEncoder.h"
 CBC_ASCIIEncoder::CBC_ASCIIEncoder()
 {

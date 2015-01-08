@@ -21,13 +21,13 @@
  */
 
 #include "../barcode.h"
-#include "../BC_Encoder.h"
+#include "BC_Encoder.h"
 #include "../BC_Dimension.h"
 #include "../common/BC_CommonBitMatrix.h"
 #include "BC_SymbolShapeHint.h"
 #include "BC_SymbolInfo.h"
 #include "BC_EncoderContext.h"
-#include "../BC_HighLevelEncoder.h"
+#include "BC_HighLevelEncoder.h"
 #include "BC_C40Encoder.h"
 CBC_C40Encoder::CBC_C40Encoder()
 {

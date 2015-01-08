@@ -21,7 +21,7 @@
  */
 
 #include "../barcode.h"
-#include "../BC_Encoder.h"
+#include "BC_Encoder.h"
 #include "BC_DefaultPlacement.h"
 CBC_DefaultPlacement::CBC_DefaultPlacement(CFX_WideString codewords, FX_INT32 numcols, FX_INT32 numrows)
 {
