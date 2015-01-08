@@ -21,7 +21,7 @@
  */
 
 #include "barcode.h"
-#include "include/BC_LuminanceSource.h"
+#include "BC_LuminanceSource.h"
 CBC_LuminanceSource::CBC_LuminanceSource(FX_INT32 width, FX_INT32 height): m_width(width), m_height(height)
 {
 }

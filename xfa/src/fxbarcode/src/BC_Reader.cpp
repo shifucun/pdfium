@@ -5,7 +5,7 @@
 // Original code copyright 2014 Foxit Software Inc. http://www.foxitsoftware.com
 
 #include "barcode.h"
-#include "include/BC_Reader.h"
+#include "BC_Reader.h"
 CBC_Reader::CBC_Reader()
 {
 }
