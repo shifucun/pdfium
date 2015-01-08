@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 // Original code copyright 2014 Foxit Software Inc. http://www.foxitsoftware.com
+// Original code is licensed as follows:
 /*
  * Copyright 2012 ZXing authors
  *
