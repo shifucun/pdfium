@@ -22,11 +22,11 @@
 
 #include "../barcode.h"
 #include "../BC_TwoDimWriter.h"
+#include "../common/BC_CommonBitArray.h"
+#include "../common/BC_CommonBitMatrix.h"
 #include "BC_PDF417Compaction.h"
 #include "BC_PDF417.h"
 #include "BC_PDF417BarcodeMatrix.h"
-#include "../common/BC_CommonBitArray.h"
-#include "../common/BC_CommonBitMatrix.h"
 #include "BC_PDF417Writer.h"
 CBC_PDF417Writer::CBC_PDF417Writer()
 {
