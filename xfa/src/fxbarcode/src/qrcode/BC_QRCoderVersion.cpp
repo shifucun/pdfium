@@ -22,8 +22,8 @@
 
 #include "../barcode.h"
 #include "../utils.h"
-#include "BC_QRCoderECB.h"
 #include "../common/BC_CommonBitMatrix.h"
+#include "BC_QRCoderECB.h"
 #include "BC_QRCoderFormatInformation.h"
 #include "BC_QRCoderErrorCorrectionLevel.h"
 #include "BC_QRCoderBitVector.h"

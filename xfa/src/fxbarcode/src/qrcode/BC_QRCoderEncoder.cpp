@@ -21,6 +21,11 @@
  */
 
 #include "../barcode.h"
+#include "../BC_UtilCodingConvert.h"
+#include "../common/BC_CommonByteArray.h"
+#include "../common/BC_CommonByteMatrix.h"
+#include "../common/reedsolomon/BC_ReedSolomon.h"
+#include "../common/reedsolomon/BC_ReedSolomonGF256.h"
 #include "BC_QRCoder.h"
 #include "BC_QRCoderEncoder.h"
 #include "BC_QRCoderMode.h"
@@ -31,12 +36,6 @@
 #include "BC_QRCoderMaskUtil.h"
 #include "BC_QRCoderMatrixUtil.h"
 #include "BC_QRCoderBitVector.h"
-#include "../common/BC_CommonByteArray.h"
-#include "../common/BC_CommonByteMatrix.h"
-#include "../common/reedsolomon/BC_ReedSolomon.h"
-#include "../common/reedsolomon/BC_ReedSolomonGF256.h"
-#include "../BC_UtilCodingConvert.h"
-
 const FX_INT32 CBC_QRCoderEncoder::m_alphaNumbericTable[] = {
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
