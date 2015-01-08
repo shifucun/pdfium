@@ -21,14 +21,14 @@
  */
 
 #include "../barcode.h"
+#include "../common/BC_CommonBitMatrix.h"
+#include "../common/reedsolomon/BC_ReedSolomonDecoder.h"
+#include "../common/reedsolomon/BC_ReedSolomonGF256.h"
 #include "BC_DataMatrixDecoder.h"
 #include "BC_DataMatrixBitMatrixParser.h"
 #include "BC_DataMatrixVersion.h"
 #include "BC_DataMatrixDataBlock.h"
 #include "BC_DataMatrixDecodedBitStreamParser.h"
-#include "../common/BC_CommonBitMatrix.h"
-#include "../common/reedsolomon/BC_ReedSolomonDecoder.h"
-#include "../common/reedsolomon/BC_ReedSolomonGF256.h"
 CBC_DataMatrixDecoder::CBC_DataMatrixDecoder()
 {
     m_rsDecoder = NULL;

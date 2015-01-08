@@ -22,8 +22,8 @@
 
 #include "../barcode.h"
 #include "../BC_Reader.h"
-#include "BC_OneDReader.h"
 #include "../common/BC_CommonBitArray.h"
+#include "BC_OneDReader.h"
 #include "BC_OnedCode39Reader.h"
 FX_LPCSTR CBC_OnedCode39Reader::ALPHABET_STRING = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. *$/+%";
 FX_LPCSTR CBC_OnedCode39Reader::CHECKSUM_STRING = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. $/+%";

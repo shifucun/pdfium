@@ -22,9 +22,9 @@
 
 #include "../barcode.h"
 #include "../BC_Reader.h"
+#include "../common/BC_CommonBitArray.h"
 #include "BC_OneDReader.h"
 #include "BC_OneDimReader.h"
-#include "../common/BC_CommonBitArray.h"
 #include "BC_OnedEAN13Reader.h"
 const FX_INT32 CBC_OnedEAN13Reader::FIRST_DIGIT_ENCODINGS[10] = {
     0x00, 0x0B, 0x0D, 0xE, 0x13, 0x19, 0x1C, 0x15, 0x16, 0x1A

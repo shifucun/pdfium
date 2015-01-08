@@ -23,12 +23,12 @@
 #include "../barcode.h"
 #include "../BC_Writer.h"
 #include "../BC_Reader.h"
-#include "BC_OneDReader.h"
+#include "../common/BC_CommonBitMatrix.h"
 #include "../common/BC_CommonBitArray.h"
+#include "BC_OneDReader.h"
 #include "BC_OneDimWriter.h"
 #include "BC_OnedCodaBarReader.h"
 #include "BC_OnedCodaBarWriter.h"
-#include "../common/BC_CommonBitMatrix.h"
 const FX_CHAR CBC_OnedCodaBarWriter::START_END_CHARS[] = {'A', 'B', 'C', 'D', 'T', 'N', '*', 'E', 'a', 'b', 'c', 'd', 't', 'n', 'e'};
 const FX_CHAR CBC_OnedCodaBarWriter::CONTENT_CHARS[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-', '$', '/', ':', '+', '.'};
 CBC_OnedCodaBarWriter::CBC_OnedCodaBarWriter()

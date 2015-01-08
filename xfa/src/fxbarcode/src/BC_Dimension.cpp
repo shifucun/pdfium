@@ -21,8 +21,8 @@
  */
 
 #include "barcode.h"
-#include "datamatrix/BC_Encoder.h"
 #include "BC_Dimension.h"
+#include "datamatrix/BC_Encoder.h"
 CBC_Dimension::CBC_Dimension()
 {
 }

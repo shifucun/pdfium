@@ -21,13 +21,13 @@
  */
 
 #include "../barcode.h"
-#include "BC_Encoder.h"
-#include "../common/BC_CommonBitMatrix.h"
 #include "../BC_Dimension.h"
+#include "../BC_UtilCodingConvert.h"
+#include "../common/BC_CommonBitMatrix.h"
+#include "BC_Encoder.h"
 #include "BC_SymbolShapeHint.h"
 #include "BC_SymbolInfo.h"
 #include "BC_EncoderContext.h"
-#include "../BC_UtilCodingConvert.h"
 CBC_EncoderContext::CBC_EncoderContext(const CFX_WideString msg, CFX_WideString ecLevel, FX_INT32 &e)
 {
     CFX_ByteString dststr;

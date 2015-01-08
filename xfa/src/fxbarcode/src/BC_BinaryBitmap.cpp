@@ -23,9 +23,9 @@
 #include "barcode.h"
 #include "BC_Binarizer.h"
 #include "BC_LuminanceSource.h"
+#include "BC_BinaryBitmap.h"
 #include "common/BC_CommonBitMatrix.h"
 #include "common/BC_CommonBitArray.h"
-#include "BC_BinaryBitmap.h"
 CBC_BinaryBitmap::CBC_BinaryBitmap(CBC_Binarizer *binarizer): m_binarizer(binarizer), m_matrix(NULL)
 {
 }

@@ -22,8 +22,8 @@
 
 #include "../barcode.h"
 #include "../BC_Reader.h"
-#include "BC_OneDReader.h"
 #include "../common/BC_CommonBitArray.h"
+#include "BC_OneDReader.h"
 #include "BC_OnedCode128Reader.h"
 const FX_INT32 CBC_OnedCode128Reader::CODE_PATTERNS[107][7] =  {
     {2, 1, 2, 2, 2, 2, 0},

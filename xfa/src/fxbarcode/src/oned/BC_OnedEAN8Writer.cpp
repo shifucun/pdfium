@@ -23,11 +23,11 @@
 #include "../barcode.h"
 #include "../BC_Writer.h"
 #include "../BC_Reader.h"
+#include "../common/BC_CommonBitMatrix.h"
 #include "BC_OneDReader.h"
 #include "BC_OneDimWriter.h"
 #include "BC_OneDimReader.h"
 #include "BC_OnedEAN8Writer.h"
-#include "../common/BC_CommonBitMatrix.h"
 CBC_OnedEAN8Writer::CBC_OnedEAN8Writer()
 {
     m_iDataLenth = 8;

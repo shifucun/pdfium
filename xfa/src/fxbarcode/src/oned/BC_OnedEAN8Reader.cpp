@@ -22,9 +22,9 @@
 
 #include "../barcode.h"
 #include "../BC_Reader.h"
+#include "../common/BC_CommonBitArray.h"
 #include "BC_OneDReader.h"
 #include "BC_OneDimReader.h"
-#include "../common/BC_CommonBitArray.h"
 #include "BC_OnedEAN8Reader.h"
 CBC_OnedEAN8Reader::CBC_OnedEAN8Reader()
 {
