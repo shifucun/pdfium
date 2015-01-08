@@ -302,7 +302,14 @@
         "xfa/src/fxbarcode/src/common/BC_WhiteRectangleDetector.h",
         "xfa/src/fxbarcode/src/common/BC_GlobalHistogramBinarizer.cpp",
         "xfa/src/fxbarcode/src/common/BC_GlobalHistogramBinarizer.h",
-
+        "xfa/src/fxbarcode/src/common/reedsolomon/BC_ReedSolomon.cpp",
+        "xfa/src/fxbarcode/src/common/reedsolomon/BC_ReedSolomonDecoder.cpp",
+        "xfa/src/fxbarcode/src/common/reedsolomon/BC_ReedSolomonGF256.cpp",
+        "xfa/src/fxbarcode/src/common/reedsolomon/BC_ReedSolomonGF256Poly.cpp",
+        "xfa/src/fxbarcode/src/common/reedsolomon/BC_ReedSolomon.h",
+        "xfa/src/fxbarcode/src/common/reedsolomon/BC_ReedSolomonDecoder.h",
+        "xfa/src/fxbarcode/src/common/reedsolomon/BC_ReedSolomonGF256.h",
+        "xfa/src/fxbarcode/src/common/reedsolomon/BC_ReedSolomonGF256Poly.h",
         "xfa/src/fxbarcode/src/datamatrix/BC_DataMatrixBitMatrixParser.cpp",
         "xfa/src/fxbarcode/src/datamatrix/BC_DataMatrixDataBlock.cpp",
         "xfa/src/fxbarcode/src/datamatrix/BC_DataMatrixDecodedBitStreamParser.cpp",
@@ -321,7 +328,6 @@
         "xfa/src/fxbarcode/src/datamatrix/BC_DataMatrixSymbolInfo144.h",
         "xfa/src/fxbarcode/src/datamatrix/BC_DataMatrixVersion.h",
         "xfa/src/fxbarcode/src/datamatrix/BC_DataMatrixWriter.h",
-
         "xfa/src/fxbarcode/src/datamatrix/BC_ASCIIEncoder.cpp",
         "xfa/src/fxbarcode/src/datamatrix/BC_Base256Encoder.cpp",
         "xfa/src/fxbarcode/src/datamatrix/BC_C40Encoder.cpp",
@@ -344,11 +350,6 @@
         "xfa/src/fxbarcode/src/datamatrix/BC_TextEncoder.h",
         "xfa/src/fxbarcode/src/datamatrix/BC_X12Encoder.h",
         "xfa/src/fxbarcode/src/datamatrix/BC_DefaultPlacement.h",
-
-
-
-
-
         "xfa/src/fxbarcode/src/oned/BC_OnedCodaBarReader.cpp",
         "xfa/src/fxbarcode/src/oned/BC_OnedCodaBarWriter.cpp",
         "xfa/src/fxbarcode/src/oned/BC_OnedCode128Reader.cpp",
@@ -379,8 +380,6 @@
         "xfa/src/fxbarcode/src/oned/BC_OneDReader.h",
         "xfa/src/fxbarcode/src/oned/BC_OnedUPCAReader.h",
         "xfa/src/fxbarcode/src/oned/BC_OnedUPCAWriter.h",
-
-
         "xfa/src/fxbarcode/src/pdf417/BC_PDF417.cpp",
         "xfa/src/fxbarcode/src/pdf417/BC_PDF417BarcodeMatrix.cpp",
         "xfa/src/fxbarcode/src/pdf417/BC_PDF417BarcodeMetadata.cpp",
@@ -408,7 +407,7 @@
         "xfa/src/fxbarcode/src/pdf417/BC_PDF417ScanningDecoder.cpp",
         "xfa/src/fxbarcode/src/pdf417/BC_PDF417Writer.cpp",
         "xfa/src/fxbarcode/src/pdf417/BC_PDF417.h",
-        "xfa/src/fxbarcode/src/pdf417/BC_PDF417BarcodeMatrix.cpp",
+        "xfa/src/fxbarcode/src/pdf417/BC_PDF417BarcodeMatrix.h",
         "xfa/src/fxbarcode/src/pdf417/BC_PDF417BarcodeMetadata.h",
         "xfa/src/fxbarcode/src/pdf417/BC_PDF417BarcodeRow.h",
         "xfa/src/fxbarcode/src/pdf417/BC_PDF417BarcodeValue.h",
@@ -433,7 +432,6 @@
         "xfa/src/fxbarcode/src/pdf417/BC_PDF417ResultMetadata.h",
         "xfa/src/fxbarcode/src/pdf417/BC_PDF417ScanningDecoder.h",
         "xfa/src/fxbarcode/src/pdf417/BC_PDF417Writer.h",
-
         "xfa/src/fxbarcode/src/qrcode/BC_QRAlignmentPattern.cpp",
         "xfa/src/fxbarcode/src/qrcode/BC_QRAlignmentPatternFinder.cpp",
         "xfa/src/fxbarcode/src/qrcode/BC_QRBitMatrixParser.cpp",
@@ -488,25 +486,12 @@
         "xfa/src/fxbarcode/src/qrcode/BC_QRGridSampler.h",
         "xfa/src/fxbarcode/src/qrcode/BC_FinderPatternInfo.cpp",
         "xfa/src/fxbarcode/src/qrcode/BC_FinderPatternInfo.h",
-
-        "xfa/src/fxbarcode/src/common/reedsolomon/BC_ReedSolomon.cpp",
-        "xfa/src/fxbarcode/src/common/reedsolomon/BC_ReedSolomonDecoder.cpp",
-        "xfa/src/fxbarcode/src/common/reedsolomon/BC_ReedSolomonGF256.cpp",
-        "xfa/src/fxbarcode/src/common/reedsolomon/BC_ReedSolomonGF256Poly.cpp",
-        "xfa/src/fxbarcode/src/common/reedsolomon/BC_ReedSolomon.h",
-        "xfa/src/fxbarcode/src/common/reedsolomon/BC_ReedSolomonDecoder.h",
-        "xfa/src/fxbarcode/src/common/reedsolomon/BC_ReedSolomonGF256.h",
-        "xfa/src/fxbarcode/src/common/reedsolomon/BC_ReedSolomonGF256Poly.h",
-
-
         "xfa/src/fxbarcode/src/BC_BarCode.cpp",
         "xfa/src/fxbarcode/src/BC_Binarizer.cpp",
         "xfa/src/fxbarcode/src/BC_BinaryBitmap.cpp",
         "xfa/src/fxbarcode/src/BC_BufferedImageLuminanceSource.cpp",
         "xfa/src/fxbarcode/src/BC_Dimension.cpp",
         "xfa/src/fxbarcode/src/BC_Encoder.cpp",
-
-
         "xfa/src/fxbarcode/src/BC_HighLevelEncoder.cpp",
         "xfa/src/fxbarcode/src/BC_Library.cpp",
         "xfa/src/fxbarcode/src/BC_LuminanceSource.cpp",
@@ -517,17 +502,12 @@
         "xfa/src/fxbarcode/src/BC_UtilRSS.cpp",
         "xfa/src/fxbarcode/src/BC_Utils.cpp",
         "xfa/src/fxbarcode/src/BC_Writer.cpp",
-
-
-
         "xfa/src/fxbarcode/src/BC_Binarizer.h",
         "xfa/src/fxbarcode/src/BC_BinaryBitmap.h",
         "xfa/src/fxbarcode/src/BC_BufferedImageLuminanceSource.h",
         "xfa/src/fxbarcode/src/BC_DecoderResult.h",
         "xfa/src/fxbarcode/src/BC_Dimension.h",
         "xfa/src/fxbarcode/src/BC_Encoder.h",
-
-
         "xfa/src/fxbarcode/src/BC_HighLevelEncoder.h",
         "xfa/src/fxbarcode/src/BC_LuminanceSource.h",
         "xfa/src/fxbarcode/src/BC_Reader.h",
@@ -538,7 +518,6 @@
         "xfa/src/fxbarcode/src/BC_Writer.h",
         "xfa/src/fxbarcode/src/barcode.h",
         "xfa/src/fxbarcode/src/utils.h",
-
         "xfa/src/fxfa/src/app/xfa_checksum.cpp",
         "xfa/src/fxfa/src/app/xfa_checksum.h",
         "xfa/src/fxfa/src/app/xfa_ffapp.cpp",
