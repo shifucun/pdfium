@@ -22,9 +22,9 @@
 
 #include "../barcode.h"
 #include "../BC_ResultPoint.h"
+#include "../common/BC_CommonBitMatrix.h"
 #include "BC_QRAlignmentPattern.h"
 #include "BC_QRAlignmentPatternFinder.h"
-#include "../common/BC_CommonBitMatrix.h"
 CBC_QRAlignmentPatternFinder::CBC_QRAlignmentPatternFinder(CBC_CommonBitMatrix *image,
         FX_INT32 startX,
         FX_INT32 startY,

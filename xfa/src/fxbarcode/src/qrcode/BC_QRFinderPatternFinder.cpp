@@ -22,9 +22,9 @@
 
 #include "../barcode.h"
 #include "../BC_ResultPoint.h"
+#include "../common/BC_CommonBitMatrix.h"
 #include "BC_QRFinderPatternFinder.h"
 #include "BC_FinderPatternInfo.h"
-#include "../common/BC_CommonBitMatrix.h"
 #include "BC_QRFinderPattern.h"
 const FX_INT32 CBC_QRFinderPatternFinder::CENTER_QUORUM = 2;
 const FX_INT32 CBC_QRFinderPatternFinder::MIN_SKIP = 3;

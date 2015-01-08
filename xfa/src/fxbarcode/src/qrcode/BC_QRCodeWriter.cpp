@@ -23,10 +23,10 @@
 #include "../barcode.h"
 #include "../BC_TwoDimWriter.h"
 #include "../BC_Reader.h"
+#include "../common/BC_CommonByteMatrix.h"
 #include "BC_QRCodeWriter.h"
 #include "BC_QRCoderEncoder.h"
 #include "BC_QRCoder.h"
-#include "../common/BC_CommonByteMatrix.h"
 #include "BC_QRCodeReader.h"
 #include "BC_QRCoderErrorCorrectionLevel.h"
 CBC_QRCodeWriter::CBC_QRCodeWriter()

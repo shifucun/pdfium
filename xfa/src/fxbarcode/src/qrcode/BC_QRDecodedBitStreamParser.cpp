@@ -21,13 +21,13 @@
  */
 
 #include "../barcode.h"
-#include "BC_QRCoderMode.h"
+#include "../BC_UtilCodingConvert.h"
 #include "../common/BC_CommonBitSource.h"
 #include "../common/BC_CommonECI.h"
-#include "BC_QRDecodedBitStreamParser.h"
 #include "../common/BC_CommonCharacterSetECI.h"
 #include "../common/BC_CommonDecoderResult.h"
-#include "../BC_UtilCodingConvert.h"
+#include "BC_QRCoderMode.h"
+#include "BC_QRDecodedBitStreamParser.h"
 FX_LPCSTR CBC_QRDecodedBitStreamParser::UTF_8 = "utf8";
 const FX_CHAR CBC_QRDecodedBitStreamParser::ALPHANUMERIC_CHARS[45] = {
     '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B',

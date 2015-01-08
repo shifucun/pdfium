@@ -21,9 +21,9 @@
  */
 
 #include "../barcode.h"
+#include "../common/BC_CommonByteMatrix.h"
 #include "BC_QRCoderErrorCorrectionLevel.h"
 #include "BC_QRCoderMode.h"
-#include "../common/BC_CommonByteMatrix.h"
 #include "BC_QRCoder.h"
 CBC_QRCoder::CBC_QRCoder()
 {
