@@ -21,7 +21,7 @@
  */
 
 #include "../barcode.h"
-#include "../BC_Encoder.h"
+#include "BC_Encoder.h"
 #include "../BC_Dimension.h"
 #include "../common/BC_CommonBitMatrix.h"
 #include "BC_SymbolShapeHint.h"
