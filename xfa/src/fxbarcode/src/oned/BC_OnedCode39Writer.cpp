@@ -23,11 +23,11 @@
 #include "../barcode.h"
 #include "../BC_Writer.h"
 #include "../BC_Reader.h"
+#include "../common/BC_CommonBitMatrix.h"
 #include "BC_OneDReader.h"
 #include "BC_OneDimWriter.h"
 #include "BC_OnedCode39Reader.h"
 #include "BC_OnedCode39Writer.h"
-#include "../common/BC_CommonBitMatrix.h"
 CBC_OnedCode39Writer::CBC_OnedCode39Writer()
 {
     m_extendedMode = FALSE;

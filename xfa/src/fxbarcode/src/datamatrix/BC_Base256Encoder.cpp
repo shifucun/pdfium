@@ -21,8 +21,8 @@
  */
 
 #include "../barcode.h"
-#include "BC_Encoder.h"
 #include "../BC_Dimension.h"
+#include "BC_Encoder.h"
 #include "BC_SymbolShapeHint.h"
 #include "BC_SymbolInfo.h"
 #include "BC_EncoderContext.h"

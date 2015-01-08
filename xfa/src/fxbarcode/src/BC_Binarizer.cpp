@@ -22,9 +22,9 @@
 
 #include "barcode.h"
 #include "BC_LuminanceSource.h"
+#include "BC_Binarizer.h"
 #include "common/BC_CommonBitMatrix.h"
 #include "common/BC_CommonBitArray.h"
-#include "BC_Binarizer.h"
 CBC_Binarizer::CBC_Binarizer(CBC_LuminanceSource *source)
 {
     m_source = source;

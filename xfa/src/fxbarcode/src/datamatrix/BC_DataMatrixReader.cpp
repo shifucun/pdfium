@@ -21,12 +21,12 @@
  */
 
 #include "../barcode.h"
-#include "BC_DataMatrixDecoder.h"
 #include "../BC_BinaryBitmap.h"
-#include "BC_DataMatrixDetector.h"
+#include "../BC_Reader.h"
 #include "../qrcode/BC_QRDetectorResult.h"
 #include "../common/BC_CommonDecoderResult.h"
-#include "../BC_Reader.h"
+#include "BC_DataMatrixDecoder.h"
+#include "BC_DataMatrixDetector.h"
 #include "BC_DataMatrixReader.h"
 CBC_DataMatrixReader::CBC_DataMatrixReader()
 {

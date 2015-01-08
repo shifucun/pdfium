@@ -22,9 +22,9 @@
 
 #include "../barcode.h"
 #include "../BC_Reader.h"
+#include "../common/BC_CommonBitArray.h"
 #include "../oned/BC_OneDReader.h"
 #include "../oned/BC_OnedCode39Reader.h"
-#include "../common/BC_CommonBitArray.h"
 #include "../oned/BC_OnedCodaBarReader.h"
 FX_LPCSTR CBC_OnedCodaBarReader::ALPHABET_STRING = "0123456789-$:/.+ABCDTN";
 const FX_INT32 CBC_OnedCodaBarReader::CHARACTER_ENCODINGS[22] = {

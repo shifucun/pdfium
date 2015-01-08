@@ -22,8 +22,8 @@
 
 #include "../barcode.h"
 #include "../BC_Reader.h"
-#include "BC_OneDReader.h"
 #include "../common/BC_CommonBitArray.h"
+#include "BC_OneDReader.h"
 #include "BC_OneDimReader.h"
 const FX_INT32 CBC_OneDimReader::MAX_AVG_VARIANCE = (FX_INT32)(256 * 0.48f);
 const FX_INT32 CBC_OneDimReader::MAX_INDIVIDUAL_VARIANCE = (FX_INT32)(256 * 0.7f);

@@ -22,9 +22,9 @@
 
 #include "../barcode.h"
 #include "../BC_Reader.h"
-#include "BC_OneDReader.h"
 #include "../BC_BinaryBitmap.h"
 #include "../common/BC_CommonBitArray.h"
+#include "BC_OneDReader.h"
 const FX_INT32 CBC_OneDReader::INTEGER_MATH_SHIFT = 8;
 const FX_INT32 CBC_OneDReader::PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << 8;
 CBC_OneDReader::CBC_OneDReader()
