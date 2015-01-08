@@ -23,8 +23,8 @@
 #include <stdlib.h>
 #include "../barcode.h"
 #include "../BC_DecoderResult.h"
-#include "BC_PDF417ResultMetadata.h"
 #include "../common/BC_CommonDecoderResult.h"
+#include "BC_PDF417ResultMetadata.h"
 #include "BC_PDF417DecodedBitStreamParser.h"
 #include "../../../../../third_party/bigint/BigIntegerLibrary.hh"
 #define    TEXT_COMPACTION_MODE_LATCH            900

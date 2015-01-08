@@ -22,10 +22,10 @@
 
 #include "../barcode.h"
 #include "../BC_ResultPoint.h"
-#include "BC_PDF417DetectorResult.h"
 #include "../BC_BinaryBitmap.h"
 #include "../common/BC_CommonBitMatrix.h"
 #include "../common/BC_CommonBitArray.h"
+#include "BC_PDF417DetectorResult.h"
 #include "BC_PDF417Detector.h"
 #define  INTERGER_MAX     2147483647
 FX_INT32 CBC_Detector::INDEXES_START_PATTERN[] = {0, 4, 1, 5};

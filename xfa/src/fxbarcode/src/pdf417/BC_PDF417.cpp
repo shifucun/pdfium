@@ -21,12 +21,12 @@
  */
 
 #include "../barcode.h"
+#include "BC_PDF417.h"
 #include "BC_PDF417Compaction.h"
 #include "BC_PDF417BarcodeRow.h"
 #include "BC_PDF417BarcodeMatrix.h"
 #include "BC_PDF417ErrorCorrection.h"
 #include "BC_PDF417HighLevelEncoder.h"
-#include "BC_PDF417.h"
 FX_INT32 CBC_PDF417::START_PATTERN = 0x1fea8;
 FX_INT32 CBC_PDF417::STOP_PATTERN = 0x3fa29;
 FX_INT32 CBC_PDF417::CODEWORD_TABLE[][1000] = {
