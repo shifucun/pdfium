@@ -21,7 +21,7 @@
  */
 
 #include "barcode.h"
-#include "include/BC_ResultPoint.h"
+#include "BC_ResultPoint.h"
 CBC_ResultPoint::CBC_ResultPoint(FX_FLOAT x, FX_FLOAT y): m_x(x), m_y(y)
 {
 }

@@ -21,8 +21,8 @@
  */
 
 #include "barcode.h"
-#include "include/BC_LuminanceSource.h"
-#include "include/BC_BufferedImageLuminanceSource.h"
+#include "BC_LuminanceSource.h"
+#include "BC_BufferedImageLuminanceSource.h"
 class CBC_Pause : public IFX_Pause
 {
 public:

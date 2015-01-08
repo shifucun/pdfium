@@ -21,7 +21,7 @@
  */
 
 #include "barcode.h"
-#include "include/BC_UtilRSS.h"
+#include "BC_UtilRSS.h"
 CBC_UtilRSS::CBC_UtilRSS()
 {
 }
