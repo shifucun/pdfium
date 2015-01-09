@@ -625,16 +625,17 @@ DLLEXPORT FPDF_DEST STDCALL FPDF_GetNamedDestByName(FPDF_DOCUMENT document,FPDF_
 // Parameters:
 //			document	-	Handle to a document
 //			index		-	The index of named destination.
-//			name		-	The name of the named destination.
-//			len		-	The length of name.
+//			buffer		-	The buffer to obtain destination name, used as wchar_t*.
+//			buflen		-	The length of the buffer in byte.
 // Return value:
 //			The destination handle of a named destination, NULL when retrieving the length.
 // Comments:
 //			Call this function twice to get the name of the named destination:
-//			1) First time pass in |name| as NULL and retrieve length of |name|, including the trailing '\0'.
-//			2) Second time pass in allocated |name| and its length to retrieve |name|.
+//			1) First time pass in |buffer| as NULL and get buflen.
+//			2) Second time pass in allocated |buffer| and buflen to retrieve |buffer|, which should be used as wchar_t*.
+//			   If buflen is not sufficiently large, it will be returned as -1.
 //
-DLLEXPORT FPDF_DEST STDCALL FPDF_GetNamedDest(FPDF_DOCUMENT document, int index, char* name, unsigned int& len);
+DLLEXPORT FPDF_DEST STDCALL FPDF_GetNamedDest(FPDF_DOCUMENT document, int index, void* buffer, unsigned long& buflen);
 
 
 #ifdef __cplusplus

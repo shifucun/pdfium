@@ -817,10 +817,10 @@ DLLEXPORT FPDF_DEST STDCALL FPDF_GetNamedDestByName(FPDF_DOCUMENT document,FPDF_
 	return name_tree.LookupNamedDest(pDoc, name);
 }
 
-DLLEXPORT FPDF_DEST STDCALL FPDF_GetNamedDest(FPDF_DOCUMENT document, int index, char* name, unsigned int& len)
+DLLEXPORT FPDF_DEST STDCALL FPDF_GetNamedDest(FPDF_DOCUMENT document, int index, void* buffer, unsigned long& buflen)
 {
-    if (!name)
-        len = 0;
+    if (!buffer)
+        buflen = 0;
     if (!document || index < 0) return NULL;
     CPDF_Document* pDoc = (CPDF_Document*)document;
 
@@ -851,13 +851,15 @@ DLLEXPORT FPDF_DEST STDCALL FPDF_GetNamedDest(FPDF_DOCUMENT document, int index,
     if (pDestObj->GetType() == PDFOBJ_DICTIONARY)
         pDestObj = ((CPDF_Dictionary*)pDestObj)->GetArray(FX_BSTRC("D"));
     if (pDestObj->GetType() != PDFOBJ_ARRAY) return NULL;
-    if (!name) {
-        len = bsName.GetLength() + 1;
-    } else if (len >= bsName.GetLength()+1) {
-        CFX_WideString wsName = PDF_DecodeText(bsName);
-        CFX_ByteString utf16Name = wsName.UTF16LE_Encode();
-        memcpy(name, utf16Name.c_str(), len-1);
-        name[len-1] = '\0';
+    CFX_WideString wsName = PDF_DecodeText(bsName);
+    CFX_ByteString utf16Name = wsName.UTF16LE_Encode();
+    unsigned int len = utf16Name.GetLength();
+    if (!buffer) {
+        buflen = len + 2;
+    } else if (buflen >= len + 2) {
+        memcpy(buffer, utf16Name.c_str(), len);
+        ((FX_BYTE*)buffer)[len] = 0;
+        ((FX_BYTE*)buffer)[len + 1] = 0;
     } else {
         len = -1;
     }
