@@ -29,22 +29,22 @@ static CPDF_Bookmark FindBookmark(const CPDF_BookmarkTree& tree, CPDF_Bookmark b
 
 DLLEXPORT FPDF_BOOKMARK STDCALL FPDFBookmark_GetFirstChild(FPDF_DOCUMENT document, FPDF_BOOKMARK pDict)
 {
-    if (!document)
-		return NULL;
+    if (!document || !pDict)
+        return NULL;
     CPDF_Document* pDoc = (CPDF_Document*)document;
     CPDF_BookmarkTree tree(pDoc);
-	CPDF_Bookmark bookmark = CPDF_Bookmark((CPDF_Dictionary*)pDict);
+    CPDF_Bookmark bookmark = CPDF_Bookmark((CPDF_Dictionary*)pDict);
     return tree.GetFirstChild(bookmark).GetDict();
 }
 
 DLLEXPORT FPDF_BOOKMARK STDCALL FPDFBookmark_GetNextSibling(FPDF_DOCUMENT document, FPDF_BOOKMARK pDict)
 {
     if (!document || !pDict)
-		return NULL;
+        return NULL;
     CPDF_Document* pDoc = (CPDF_Document*)document;
     CPDF_BookmarkTree tree(pDoc);
-	CPDF_Bookmark bookmark = CPDF_Bookmark((CPDF_Dictionary*)pDict);
-	return tree.GetNextSibling(bookmark).GetDict();
+    CPDF_Bookmark bookmark = CPDF_Bookmark((CPDF_Dictionary*)pDict);
+    return tree.GetNextSibling(bookmark).GetDict();
 }
 
 DLLEXPORT unsigned long STDCALL FPDFBookmark_GetTitle(FPDF_BOOKMARK pDict, void* buffer, unsigned long buflen)
@@ -54,11 +54,11 @@ DLLEXPORT unsigned long STDCALL FPDFBookmark_GetTitle(FPDF_BOOKMARK pDict, void*
     CPDF_Bookmark bookmark((CPDF_Dictionary*)pDict);
     CFX_WideString title = bookmark.GetTitle();
     CFX_ByteString encodedTitle = title.UTF16LE_Encode(FALSE);
-	unsigned long len = encodedTitle.GetLength();
+    unsigned long len = encodedTitle.GetLength();
     if (buffer && buflen >= len + 2) {
-		FXSYS_memcpy(buffer, encodedTitle.c_str(), len);
-		((FX_BYTE*)buffer)[len] = 0;
-		((FX_BYTE*)buffer)[len + 1] = 0;
+        FXSYS_memcpy(buffer, encodedTitle.c_str(), len);
+        ((FX_BYTE*)buffer)[len] = 0;
+        ((FX_BYTE*)buffer)[len + 1] = 0;
     }
     return len + 2;
 }

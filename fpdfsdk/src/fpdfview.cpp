@@ -853,11 +853,13 @@ DLLEXPORT FPDF_DEST STDCALL FPDF_GetNamedDest(FPDF_DOCUMENT document, int index,
     if (pDestObj->GetType() != PDFOBJ_ARRAY) return NULL;
     if (!name) {
         len = bsName.GetLength() + 1;
-    } else {
+    } else if (len >= bsName.GetLength()+1) {
         CFX_WideString wsName = PDF_DecodeText(bsName);
         CFX_ByteString utf16Name = wsName.UTF16LE_Encode();
         memcpy(name, utf16Name.c_str(), len-1);
         name[len-1] = '\0';
+    } else {
+        len = -1;
     }
     return (FPDF_DEST)pDestObj;
 }

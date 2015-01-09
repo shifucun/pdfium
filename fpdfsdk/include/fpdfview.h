@@ -8,7 +8,6 @@
 #ifndef _FPDFVIEW_H_
 #define _FPDFVIEW_H_
 
-#include <string>
 #if defined(_WIN32) && !defined(__WINDOWS__)
 #include <windows.h>
 #endif
