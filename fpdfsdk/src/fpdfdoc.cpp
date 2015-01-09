@@ -49,8 +49,8 @@ DLLEXPORT FPDF_BOOKMARK STDCALL FPDFBookmark_GetNextSibling(FPDF_DOCUMENT docume
 
 DLLEXPORT unsigned long STDCALL FPDFBookmark_GetTitle(FPDF_BOOKMARK pDict, void* buffer, unsigned long buflen)
 {
-    if (!NULL)
-		return 0;
+    if (!pDict)
+        return 0;
     CPDF_Bookmark bookmark((CPDF_Dictionary*)pDict);
     CFX_WideString title = bookmark.GetTitle();
     CFX_ByteString encodedTitle = title.UTF16LE_Encode(FALSE);
