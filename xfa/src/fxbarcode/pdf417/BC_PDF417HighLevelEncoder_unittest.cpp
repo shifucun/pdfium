@@ -3,7 +3,7 @@
 // found in the LICENSE file.
 
 #include "core/include/fxcrt/fx_basic.h"
-#include "include/BC_PDF417HighLevelEncoder.h"
+#include "BC_PDF417HighLevelEncoder.h"
 #include "testing/gtest/include/gtest/gtest.h"
 #include "testing/fx_string_testhelpers.h"
 
