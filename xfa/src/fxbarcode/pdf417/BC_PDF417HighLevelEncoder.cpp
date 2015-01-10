@@ -22,7 +22,7 @@
 
 #include "../barcode.h"
 #include "../BC_UtilCodingConvert.h"
-#include "../../../../../third_party/bigint/BigIntegerLibrary.hh"
+#include "../../../../third_party/bigint/BigIntegerLibrary.hh"
 #include "BC_PDF417Compaction.h"
 #include "BC_PDF417HighLevelEncoder.h"
 #define  SUBMODE_ALPHA  0

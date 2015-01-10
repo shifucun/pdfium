@@ -24,7 +24,7 @@
 #include "../barcode.h"
 #include "../BC_DecoderResult.h"
 #include "../common/BC_CommonDecoderResult.h"
-#include "../../../../../third_party/bigint/BigIntegerLibrary.hh"
+#include "../../../../third_party/bigint/BigIntegerLibrary.hh"
 #include "BC_PDF417ResultMetadata.h"
 #include "BC_PDF417DecodedBitStreamParser.h"
 #define    TEXT_COMPACTION_MODE_LATCH            900
