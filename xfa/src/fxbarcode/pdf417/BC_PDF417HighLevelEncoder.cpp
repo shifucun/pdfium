@@ -298,7 +298,7 @@ void CBC_PDF417HighLevelEncoder::encodeNumeric(CFX_WideString msg, FX_INT32 star
         CFX_WideString tmp;
         FX_INT32 len = 44 < count - idx ? 44 : count - idx;
         CFX_ByteString part = ((FX_WCHAR)'1' + msg.Mid(startpos + idx, len)).UTF8Encode();
-        BigInteger bigint = stringToBigInteger(FX_LPCSTR(part));
+        BigInteger bigint = stringToBigInteger(part.c_str());
         do {
             FX_INT32 c = (bigint % num900).toInt();
             tmp += (FX_WCHAR)(c);
