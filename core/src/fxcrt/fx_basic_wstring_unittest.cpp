@@ -6,25 +6,24 @@
 #include "../../../testing/fx_string_testhelpers.h"
 #include "../../include/fxcrt/fx_basic.h"
 
+#define ByteStringLiteral(str) CFX_ByteString(FX_BSTRC(str))
+
 TEST(fxcrt, WideStringUTF16LE_Encode) {
-  CFX_WideString wide_strings[] = {
-	  L"",
-	  L"abc",
-	  L"abcdef",
-	  L"abc\0def",
-	  L"23\0456",
-	  L"\x3132\x6162"  // This is wrong? Endianness matters here?
+  struct UTF16LEEncodeCase {
+	CFX_WideString ws;
+	CFX_ByteString bs;
+  } utf16le_encode_cases[] = {
+	{ L"", ByteStringLiteral("\0\0") },
+	{ L"abc", ByteStringLiteral("a\0b\0c\0\0\0") },
+	{ L"abcdef", ByteStringLiteral("a\0b\0c\0d\0e\0f\0\0\0") },
+	{ L"abc\0def", ByteStringLiteral("a\0b\0c\0\0\0") },
+	{ L"\xaabb\xccdd", ByteStringLiteral("\xbb\xaa\xdd\xcc\0\0") },
+	{ L"\x3132\x6162", ByteStringLiteral("\x32\x31\x62\x61\0\0") },
   };
-  CFX_ByteString byte_strings[] = {
-	  CFX_ByteString(FX_BSTRC("\0\0")),
-	  CFX_ByteString(FX_BSTRC("a\0b\0c\0\0\0")),
-	  CFX_ByteString(FX_BSTRC("a\0b\0c\0d\0e\0f\0\0\0")),
-	  CFX_ByteString(FX_BSTRC("a\0b\0c\0\0\0")),
-	  CFX_ByteString(FX_BSTRC("\x32\x00\x33\x00\045\x00\x36\x00\x00\x00")),
-	  CFX_ByteString(FX_BSTRC("12ab\0\0"))
-  };
-  for (size_t i = 0; i < FX_ArraySize(wide_strings); ++i) {
-	  EXPECT_EQ(byte_strings[i], wide_strings[i].UTF16LE_Encode())
-		  << " for case number " << i;
+
+  for (size_t i = 0; i < FX_ArraySize(utf16le_encode_cases); ++i) {
+    EXPECT_EQ(utf16le_encode_cases[i].bs,
+        utf16le_encode_cases[i].ws.UTF16LE_Encode())
+        << " for case number " << i;
   }
 }
