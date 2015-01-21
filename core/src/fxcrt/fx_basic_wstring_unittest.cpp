@@ -12,7 +12,7 @@ TEST(fxcrt, WideStringUTF16LE_Encode) {
 	  L"abc",
 	  L"abcdef",
 	  L"abc\0def",
-	  L"123\0456",
+	  L"23\0456",
 	  L"\x3132\x6162"  // This is wrong? Endianness matters here?
   };
   CFX_ByteString byte_strings[] = {
@@ -20,10 +20,11 @@ TEST(fxcrt, WideStringUTF16LE_Encode) {
 	  CFX_ByteString(FX_BSTRC("a\0b\0c\0\0\0")),
 	  CFX_ByteString(FX_BSTRC("a\0b\0c\0d\0e\0f\0\0\0")),
 	  CFX_ByteString(FX_BSTRC("a\0b\0c\0\0\0")),
-	  CFX_ByteString(FX_BSTRC("\x31\x00\x32\x00\x33\x00\045\x00\x36\x00\x00\x00")),
+	  CFX_ByteString(FX_BSTRC("\x32\x00\x33\x00\045\x00\x36\x00\x00\x00")),
 	  CFX_ByteString(FX_BSTRC("12ab\0\0"))
   };
   for (size_t i = 0; i < FX_ArraySize(wide_strings); ++i) {
-	  EXPECT_EQ(byte_strings[i], wide_strings[i].UTF16LE_Encode()) << " for case number " << i;
+	  EXPECT_EQ(byte_strings[i], wide_strings[i].UTF16LE_Encode())
+		  << " for case number " << i;
   }
 }
